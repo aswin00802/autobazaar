@@ -1,0 +1,229 @@
+/* Input field styling */
+.form-floating .form-control {
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #787878;
+    width: 80%;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.form-floating > label {
+    font-size: 20px;
+    color: #000000;
+    font-weight: 300;
+}
+
+.form-floating .form-control:focus {
+    border-color: #000;
+    box-shadow: none;
+}
+
+/* Password eye icon */
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+}
+
+/* Button styling */
+.btn-dark {
+    background-color: #1d2b45;
+    border: none;
+    border-radius: 6px;
+}
+
+.btn-dark:hover {
+    background-color: #162138;
+}
+
+.custom-upin{
+    font-size: 26px;
+    color: #424141;
+    font-weight: 400;
+}
+
+/* .nav-pills .nav-link.custom-upin.active,
+.nav-pills .show > .nav-link.custom-upin {
+    color: #fff;
+    background-color: #203555;
+} */
+
+.img-fluid-login{
+    width: auto;
+    height: 728px;
+}
+
+.custom-sign{
+    margin: 7% 0;
+}
+
+.class-btn{
+    width: 80%;
+    padding: 3% 5%;
+    font-size: 26px;
+    font-weight: 400;
+    background-color: #203555;
+    color: #FFFFFF;
+    border: 1px solid #203555;
+}
+
+.class-btn:hover{
+    background-color: #FFFFFF ;
+    color: #203555;
+}
+
+.custom-text{
+    font-size: 18px;
+    align-items: center;
+    margin: 0% 21%;
+}
+
+.custom-signinn{
+    color: #203555;
+    text-decoration: underline;
+    font-weight: 300;
+}
+
+.custom-up{
+    margin: 0 -6%;
+}
+
+.bi-eye,
+.bi-eye-slash {
+    color: #000 !important;
+}
+
+.custom-eye
+{
+    cursor: pointer;
+    left: 75%;
+    position: absolute;
+    top: 50%;
+}
+
+.custom-forgot{
+    margin: 0 20%;
+    color: #5C5C5C;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.custom-checkbox{
+    border: 1px solid #ABABAB !important;
+}
+
+.custom-formcheck{
+    color: #5C5C5C;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+/* .custom-tabs .nav-link {
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+} */
+
+.custom-tabs .nav-link.active{
+    border-bottom: 1px solid #203555;
+    align-items: center;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #203555;
+    border-radius: 0;
+}
+
+.otp-container {
+    background: white;
+    text-align: left;
+    width: 100%;
+}
+
+.otp-container h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+    color: #424141;
+    font-weight: 400;
+}
+
+.otp-container p {
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.otp-inputs {
+    display: flex;
+    justify-content: left;
+    gap: 5%;
+    margin: 0 5%;
+}
+
+.otp-inputs input {
+    width: 40px;
+    height: 50px;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    border-bottom: 2px solid #1d2e4f; /* Underline color */
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.otp-inputs input:focus {
+    border-bottom: 2px solid #3a7bff; /* Underline on focus */
+}
+
+.custom-conbtn {
+    background-color: #203555;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 8px;
+    width: 70%;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.resend-text {
+    font-size: 18px;
+    color: #111111;
+    margin: 0 10%;
+}
+@media (min-width: 477px) and (max-width: 1457px) {
+    .img-fluid-login {
+        width: 100%;
+        /* height: auto; */
+        object-fit: cover;
+    }
+
+    .form-floating .form-control {
+    padding-top: 1.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+    /* .custom-sign {
+        justify-content: center;
+    } */
+
+    /* .custom-tabs .nav-link {
+        padding: 8px 16px;
+    } */
+
+    .singform {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* .class-btn {
+        padding: 10px;
+    } */
+}
+

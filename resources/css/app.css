@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* ==========================================================================
+   AutoBazaar design tokens
+   Brand: green #0B5D3B + yellow #FFC107, tagline "Drive Your Tomorrow".
+   Derived from the client reference screens in /WhatsApp.
+   ========================================================================== */
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-script: 'Caveat', ui-serif, cursive;
+
+    /* Brand green — nav bar, primary buttons, headings */
+    --color-brand-50: #E8F3EE;
+    --color-brand-100: #C9E3D6;
+    --color-brand-200: #9BCBB4;
+    --color-brand-300: #6BB08F;
+    --color-brand-400: #3D8B68;
+    --color-brand-500: #0B5D3B;
+    --color-brand-600: #0A5334;
+    --color-brand-700: #08462C;
+    --color-brand-800: #063722;
+    --color-brand-900: #042818;
+
+    /* Accent yellow — Enquire Now CTA, active nav item, price highlights */
+    --color-accent-50: #FFF8E1;
+    --color-accent-100: #FFECB3;
+    --color-accent-200: #FFE082;
+    --color-accent-300: #FFD54F;
+    --color-accent-400: #FFCA28;
+    --color-accent-500: #FFC107;
+    --color-accent-600: #E6AD00;
+    --color-accent-700: #BF9000;
+
+    /* Neutrals */
+    --color-ink: #1A1D1B;
+    --color-ink-soft: #3F4744;
+    --color-muted: #6B7671;
+    --color-line: #E2E7E4;
+    --color-surface: #FFFFFF;
+    --color-canvas: #F5F7F6;
+
+    /* Semantic — incl. the buying-option tier colours from enquiry2.jpeg */
+    --color-success: #16A34A;
+    --color-info: #1D6FE0;      /* "Buying Assistance" tier */
+    --color-warn: #EA7317;      /* "Dealer Connect" tier */
+    --color-danger: #DC2626;
+
+    /* Elevation */
+    --shadow-card: 0 1px 2px rgb(16 24 20 / 0.04), 0 1px 3px rgb(16 24 20 / 0.06);
+    --shadow-card-hover: 0 4px 12px rgb(16 24 20 / 0.08), 0 2px 4px rgb(16 24 20 / 0.04);
+    --shadow-rail: 0 -2px 12px rgb(16 24 20 / 0.10);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--color-canvas);
+        color: var(--color-ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Alpine: hide templated markup until the component initialises */
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+/* ==========================================================================
+   Component shorthands used across many screens
+   ========================================================================== */
+@layer components {
+    .ab-card {
+        @apply rounded-xl border border-line bg-surface;
+        box-shadow: var(--shadow-card);
+    }
+
+    /* Base + variant compose in the markup: class="ab-btn ab-btn-primary".
+       Tailwind 4 cannot @apply a custom class, so variants only add colour. */
+    .ab-btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5
+               text-sm font-semibold transition-colors focus:outline-none
+               focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2;
+    }
+
+    .ab-btn-primary {
+        @apply bg-brand-500 text-white hover:bg-brand-600;
+    }
+
+    .ab-btn-accent {
+        @apply bg-accent-500 text-ink hover:bg-accent-600;
+    }
+
+    .ab-btn-outline {
+        @apply border border-brand-500 bg-transparent text-brand-500 hover:bg-brand-50;
+    }
+
+    .ab-btn-ghost {
+        @apply border border-line bg-surface text-ink-soft hover:bg-canvas;
+    }
+
+    .ab-field {
+        @apply w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-sm text-ink
+               placeholder:text-muted focus:border-brand-400 focus:outline-none
+               focus:ring-2 focus:ring-brand-100;
+    }
+
+    .ab-label {
+        @apply mb-1.5 block text-xs font-semibold text-ink-soft;
+    }
+
+    /* Page gutter — one place, so no screen can lose its side padding */
+    .ab-container {
+        @apply mx-auto w-full max-w-[1500px] px-4 sm:px-6 lg:px-8;
+    }
+
+    .ab-script {
+        font-family: var(--font-script);
+    }
+
+    /* Horizontal scrollers (category chips, model carousels) */
+    .ab-scroll-x {
+        @apply flex gap-3 overflow-x-auto pb-2;
+        scrollbar-width: thin;
+    }
+}
+
+/* ==========================================================================
+   Motion
+   Entrance animations, hover lift and a stagger helper.
+
+   Everything here is wrapped so that a visitor who has asked their OS for
+   reduced motion gets the finished state immediately and no movement at all.
+   ========================================================================== */
+@layer components {
+    /* Elements start hidden and are revealed by the IntersectionObserver in
+       app.js, which adds .is-visible. The no-js / no-observer fallback is the
+       :not([data-reveal]) default further down. */
+    [data-reveal] {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+            opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+            transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+    }
+
+    [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Sideways variants for split layouts */
+    [data-reveal='left']  { transform: translateX(-24px); }
+    [data-reveal='right'] { transform: translateX(24px); }
+    [data-reveal='scale'] { transform: scale(0.96); }
+
+    /* Cards lift slightly on hover. Kept subtle — these sit in dense grids. */
+    .ab-lift {
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .ab-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-card-hover);
+    }
+
+    /* Header cart badge pops when the count changes */
+    @keyframes ab-pop {
+        0%   { transform: scale(1); }
+        45%  { transform: scale(1.35); }
+        100% { transform: scale(1); }
+    }
+    .ab-pop { animation: ab-pop 0.35s ease-out; }
+
+    /* Soft pulse for the "current" step on an order tracker */
+    @keyframes ab-pulse-ring {
+        0%   { box-shadow: 0 0 0 0 var(--color-brand-200); }
+        70%  { box-shadow: 0 0 0 10px rgb(155 203 180 / 0); }
+        100% { box-shadow: 0 0 0 0 rgb(155 203 180 / 0); }
+    }
+    .ab-pulse { animation: ab-pulse-ring 2.4s ease-out infinite; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-reveal].is-visible {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    .ab-lift:hover { transform: none; }
+    .ab-pop, .ab-pulse { animation: none; }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

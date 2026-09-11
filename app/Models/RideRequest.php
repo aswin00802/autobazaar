@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class RideRequest extends Model
+{
+    protected $fillable = [
+        'customer_id',
+        'driver_id',
+        'target_driver_id',
+        'pickup_lat',
+        'pickup_lng',
+        'drop_lat',
+        'drop_lng',
+        'pickup',
+        'drop',
+        'fare',
+        'distance',
+        'duration',
+        'date',
+        'ride_for',
+        'passenger_count',
+        'booking_type',
+        'hire_type',
+        'purpose',
+        'booking_comment',
+        'is_round_trip',
+        'scheduled_at',
+        'pickup_at',
+        'drop_at',
+        'other_phone',
+        'base_fare',
+        'per_km_rate',
+        'per_min_rate',
+        'waiting_rate',
+        'waiting_mins',
+        'trip_distance_km',
+        'pickup_distance_km',
+        'trip_fare',
+        'pickup_fare',
+        'waiting_fare',
+        'estimated_fare',
+        'payment_status',
+        'collected_by',
+        'advance_amount',
+        'razorpay_order_id',
+        'razorpay_payment_id',
+        'razorpay_refund_id',
+        'refund_deduction_percent',
+        'refund_amount',
+        'paid_at',
+        'dispatched_at',
+        'waiting_started_at',
+        'waiting_ended_at',
+        'waiting_chargeable_mins',
+        'status',
+        'accepted_at',
+        'start_pin',
+        'start_pin_attempts',
+        'start_pin_verified_at',
+        'started_at',
+        'completed_at',
+        'cancelled_at',
+        'cancel_reason',
+        'cancelled_by',
+    ];
+
+    protected $casts = [
+        'id' => 'integer',
+        'customer_id' => 'integer',
+        'driver_id' => 'integer',
+        'target_driver_id' => 'integer',
+        'pickup_lat' => 'float',
+        'pickup_lng' => 'float',
+        'drop_lat' => 'float',
+        'drop_lng' => 'float',
+        'fare' => 'float',
+        'distance' => 'float',
+        'base_fare' => 'float',
+        'per_km_rate' => 'float',
+        'per_min_rate' => 'float',
+        'waiting_rate' => 'float',
+        'waiting_mins' => 'integer',
+        'trip_distance_km' => 'float',
+        'pickup_distance_km' => 'float',
+        'trip_fare' => 'float',
+        'pickup_fare' => 'float',
+        'waiting_fare' => 'float',
+        'estimated_fare' => 'float',
+        'advance_amount' => 'float',
+        'refund_deduction_percent' => 'float',
+        'refund_amount' => 'float',
+        'waiting_chargeable_mins' => 'integer',
+        'passenger_count' => 'integer',
+        'start_pin_attempts' => 'integer',
+        'scheduled_at' => 'datetime',
+        'pickup_at' => 'datetime',
+        'drop_at' => 'datetime',
+        'accepted_at' => 'datetime',
+        'start_pin_verified_at' => 'datetime',
+        'started_at' => 'datetime',
+        'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
+        'waiting_started_at' => 'datetime',
+        'waiting_ended_at' => 'datetime',
+        'paid_at' => 'datetime',
+        'dispatched_at' => 'datetime',
+        'is_round_trip' => 'boolean',
+    ];
+    public function driver()
+    {
+        return $this->belongsTo(User::class,'driver_id');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class,'customer_id');
+    }
+}

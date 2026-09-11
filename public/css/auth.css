@@ -1,0 +1,140 @@
+body {
+    background-color: #f5faff;
+    /* background-image: url('{{ asset("assets/image/home_images/backgroun_4.jpg") }}'); */
+    background-image: url('../assets/image/home_images/backgroun_4.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tagline {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(to right, red, blue, purple);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+.otp-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.otp-input {
+    width: 3rem;
+    height: 3rem;
+    text-align: center;
+    font-size: 1.25rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin: 0 0.3rem;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
+}
+
+.resend-link {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: #888;
+}
+
+
+
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-control {
+    border-radius: 25px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+}
+
+.login-btn {
+    border-radius: 25px;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.6rem;
+}
+
+.forgot-link {
+    font-size: 0.9rem;
+    text-align: center;
+    display: block;
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #888;
+    text-decoration: none;
+}
+
+.bottom-logo {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 100px;
+}
+
+
+
+.bg-shape {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(to bottom, #0099ff, #00ccff);
+    border-bottom-right-radius: 100%;
+    z-index: -1;
+}
+
+.bg-pattern {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+    background-image: url('{{ asset("images/pattern-bg.png") }}');
+    background-size: cover;
+    z-index: -2;
+}
+
+@media (max-width: 576px) {
+    .tagline {
+        font-size: 2rem;
+    }
+    .bottom-logo {
+        width: 70px;
+    }
+}
+
+@media (max-width: 576px) {
+    .tagline {
+        font-size: 1.8rem;
+    }
+    .otp-input {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+}
