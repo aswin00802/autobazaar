@@ -2,6 +2,19 @@
 
 {{-- Sidebar + content shell for every account page (my_orders.jpeg). --}}
 
+@php
+    // Account pages sit behind UserAuth, so this is the signed-in customer;
+    // the fixture only fills in when a view is rendered without one.
+    $authUser = auth()->user();
+    $person = $authUser
+        ? [
+            'name' => $authUser->name ?: 'AutoBazaar Customer',
+            'email' => $authUser->email ?: ($authUser->phone_number ?? $authUser->mobile ?? ''),
+          ]
+        : $account['user'];
+    $person['initial'] = mb_strtoupper(mb_substr($person['name'], 0, 1));
+@endphp
+
 <div class="ab-container py-6">
     <div class="grid gap-5 lg:grid-cols-12">
 
@@ -15,11 +28,11 @@
                 <div class="ab-card overflow-hidden">
                     <div class="flex items-center gap-3 border-b border-line p-4">
                         <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-brand-500 text-sm font-bold text-white">
-                            {{ $account['user']['initial'] }}
+                            {{ $person['initial'] }}
                         </span>
                         <span class="min-w-0 leading-tight">
-                            <span class="block truncate text-sm font-bold">{{ $account['user']['name'] }}</span>
-                            <span class="block truncate text-[11px] text-muted">{{ $account['user']['email'] }}</span>
+                            <span class="block truncate text-sm font-bold">{{ $person['name'] }}</span>
+                            <span class="block truncate text-[11px] text-muted">{{ $person['email'] }}</span>
                             <a href="{{ route('site.account.section', 'profile') }}"
                                class="text-[11px] font-semibold text-brand-500 underline underline-offset-2">Edit Profile</a>
                         </span>
@@ -28,6 +41,19 @@
                     <nav aria-label="Account">
                         <ul class="py-1">
                             @foreach ($account['menu'] as $item)
+                                @if (($item['action'] ?? null) === 'logout')
+                                    <li class="border-t border-line">
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit"
+                                                    class="flex w-full items-center gap-2.5 px-4 py-2.5 text-left text-xs font-semibold text-danger transition-colors hover:bg-canvas">
+                                                <x-ui.icon :name="$item['icon']" :size="16" />
+                                                {{ $item['label'] }}
+                                            </button>
+                                        </form>
+                                    </li>
+                                    @continue
+                                @endif
                                 @php
                                     $href = isset($item['param'])
                                         ? route($item['route'], $item['param'])

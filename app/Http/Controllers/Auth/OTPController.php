@@ -16,11 +16,6 @@ class OTPController extends Controller
         $this->otpService = $otpService;
     }
 
-    public function opt_send()
-    {
-        return view('auth.two-setp-verification');
-    }
-
     public function otpSend(Request $request)
     {
         $request->validate(['identifier' => 'required']);

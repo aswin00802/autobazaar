@@ -13,12 +13,13 @@ return [
     ],
 
     'contact' => [
-        'phone' => '90922 14143',
-        'phone_e164' => '+919092214143',
-        'whatsapp' => '919092214143',
-        'email' => 'support@autobazaar.in',
-        'address' => 'OMR, Chennai - 600096',
-        'hours' => 'Mon - Sat, 9:00 AM - 8:00 PM',
+        'phone' => '86088 60893',
+        'phone_alt' => '63840 88408',
+        'phone_e164' => '+918608860893',
+        'whatsapp' => '918608860893',
+        'email' => 'jpmoauto@gmail.com',
+        'address' => 'No: 7, PHR Road, Kathirvedu, Thiruvallur - 600 066',
+        'hours' => 'Mon - Sat, 9:30 AM - 7:00 PM',
     ],
 
     /* Nav bar, matching the reference screens.
@@ -73,52 +74,33 @@ return [
         ['icon' => 'headset', 'title' => 'Customer Support', 'note' => '90922 14143'],
     ],
 
+    /* Footer columns. Same links and business details as the original site;
+       only the presentation is new. */
     'footer' => [
         [
-            'heading' => 'Company',
-            'links' => [
-                ['label' => 'About Us', 'route' => 'site.about'],
-                ['label' => 'Contact', 'route' => 'site.contact'],
-                ['label' => 'FAQ', 'route' => 'site.faq'],
-                ['label' => 'Auto News', 'route' => 'site.news'],
-            ],
-        ],
-        [
-            'heading' => 'Vehicles',
+            'heading' => 'Quick Menu',
             'links' => [
                 ['label' => 'New Autos', 'route' => 'site.new-autos'],
                 ['label' => 'Used Autos', 'route' => 'site.used-autos'],
-                ['label' => 'Compare', 'route' => 'site.compare'],
-                ['label' => 'Offers', 'route' => 'site.offers'],
-                ['label' => 'Government Schemes', 'route' => 'site.schemes'],
-            ],
-        ],
-        [
-            'heading' => 'Shop',
-            'links' => [
-                ['label' => 'Accessories', 'route' => 'site.accessories'],
+                ['label' => 'Compare Autos', 'route' => 'site.compare'],
                 ['label' => 'Accessories Shop', 'route' => 'site.accessories.shop'],
-                ['label' => 'Track Order', 'route' => 'site.account.orders'],
-                ['label' => 'Shipping Policy', 'route' => 'site.page', 'param' => 'shipping-policy'],
-                ['label' => 'Returns & Refunds', 'route' => 'site.page', 'param' => 'returns-refunds'],
             ],
         ],
         [
-            'heading' => 'Policies',
+            'heading' => 'Auto Bazaar',
             'links' => [
-                ['label' => 'Buying Policy', 'route' => 'site.page', 'param' => 'buying-policy'],
-                ['label' => 'Privacy Policy', 'route' => 'site.page', 'param' => 'privacy-policy'],
+                ['label' => 'About Us', 'route' => 'site.about'],
                 ['label' => 'Terms & Conditions', 'route' => 'site.page', 'param' => 'terms-conditions'],
-                ['label' => 'Refund Policy', 'route' => 'site.page', 'param' => 'refund-policy'],
+                ['label' => 'Privacy Policy', 'route' => 'site.page', 'param' => 'privacy-policy'],
+                ['label' => 'Give Feedback', 'route' => 'site.contact'],
             ],
         ],
     ],
 
     'socials' => [
-        ['label' => 'Facebook', 'icon' => 'facebook', 'url' => '#'],
-        ['label' => 'Instagram', 'icon' => 'instagram', 'url' => '#'],
-        ['label' => 'YouTube', 'icon' => 'youtube', 'url' => '#'],
-        ['label' => 'WhatsApp', 'icon' => 'whatsapp', 'url' => 'https://wa.me/919092214143'],
+        ['label' => 'Instagram', 'icon' => 'instagram', 'url' => 'https://www.instagram.com/auto_bazaar_official_/'],
+        ['label' => 'Facebook', 'icon' => 'facebook', 'url' => 'https://www.facebook.com/profile.php?id=61573090112984'],
+        ['label' => 'WhatsApp', 'icon' => 'whatsapp', 'url' => 'https://wa.me/918608860893'],
     ],
 
     'testimonials' => [

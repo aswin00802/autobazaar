@@ -137,7 +137,8 @@ return [
             ['label' => 'Notifications', 'icon' => 'bell', 'route' => 'site.account.section', 'param' => 'notifications'],
             ['label' => 'Refer & Earn', 'icon' => 'users', 'route' => 'site.account.section', 'param' => 'refer'],
             ['label' => 'Support', 'icon' => 'headset', 'route' => 'site.account.section', 'param' => 'support'],
-            ['label' => 'Logout', 'icon' => 'logout', 'route' => 'site.home'],
+            // Rendered as a POST form by x-ui.account-shell, not as a link.
+            ['label' => 'Logout', 'icon' => 'logout', 'action' => 'logout'],
         ],
     ],
 ];

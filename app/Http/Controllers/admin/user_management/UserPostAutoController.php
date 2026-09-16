@@ -37,12 +37,4 @@ class UserPostAutoController extends Controller
         $auto->save();
         return redirect()->route('user-management.users-post-auto-list')->with('success','User Post Auto Approval Successfully Submitted!');
     }
-
-    public function user_info($id)
-    {
-        // $userId = Crypt::decryptString($id);
-        // $user = User::findOrFail($userId);
-        // $autos = Auto::where('user_id',$userId)->get();
-        // return view('admin.user_management.user_info',compact('user','autos'));
-    }
 }

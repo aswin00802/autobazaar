@@ -3,7 +3,6 @@ use GuzzleHttp\Client;
 use App\Models\Setting;
 use App\Mail\OTPMailSend;
 use App\Models\EmailTemplate;
-use NumberToWords\NumberToWords;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
@@ -84,35 +83,6 @@ if(!function_exists('uploadedAssetFile')){
     }
 }
 
-if(!function_exists('uploadedAsset_multiple')){
-    #upload the mutiple files
-    function uploadedAsset_multiple($request,$upload_file_name,$file_name,$path)
-    {
-        if($request->hasFile($upload_file_name)){
-            $others_files = [];
-            // if (!file_exists(public_path('uploads/'.$path,0777,true))) {
-            //     mkdir(public_path('uploads/'.$path,0777,true));
-            // }
-            $fullPath = public_path('uploads/'.$path);
-
-            if (!file_exists($fullPath)) {
-                mkdir($fullPath, 0777, true); // mode + recursive only mkdir ku podanum
-            }
-            foreach($request->file as $file){
-                $destinationPath = public_path('uploads/'.$path);
-                $filename = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                // $fileName = time().rand(100,999) . "." .$extension;
-                $file->move($destinationPath, $filename);
-                $others_files[]=$filename;
-            }
-            return $others_files;
-        } else {
-            $others_files = NULL;
-        }
-    }
-}
-
 if (!function_exists('cacheClear')) {
     # clear server cache
     function cacheClear()
@@ -187,15 +157,6 @@ if (!function_exists('deleteSettingFile')) {
         }
 
         return false;
-    }
-}
-
-if (! function_exists('amountInWords')) {
-    function amountInWords($total)
-    {
-        $numberToWords = new NumberToWords();
-        $numberTransformer = $numberToWords->getNumberTransformer('en');
-        return $numberTransformer->toWords($total);
     }
 }
 

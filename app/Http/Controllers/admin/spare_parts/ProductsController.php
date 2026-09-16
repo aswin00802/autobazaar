@@ -231,19 +231,6 @@ class ProductsController extends Controller
         }
     }
 
-    public function getDetails_old($id)
-    {
-        $product = Product::with([
-            'Category:id,name',
-            'subCategory:id,name',
-            'productBrandModel.autoBrands:id,brand_name',
-            'productBrandModel.autoModel:id,model_name',
-            'productBrandModel.images'
-        ])->findOrFail($id);
-
-        return response()->json($product);
-    }
-
     public function getDetails($id)
     {
         $product = ProductBrandModel::with([
