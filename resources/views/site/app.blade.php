@@ -75,7 +75,7 @@
                              aria-hidden="true" class="h-9 w-auto object-contain">
                     </div>
 
-                    <ul class="mt-3 grid grid-cols-4 border-t border-line pt-2 text-center">
+                    <ul class="mt-3 grid grid-cols-2 gap-y-2 border-t border-line pt-2 text-center sm:grid-cols-4">
                         @foreach ([['grid', 'Home'], ['scales', 'Compare'], ['doc', 'Enquiries'], ['user', 'Profile']] as [$icon, $label])
                             <li>
                                 <x-ui.icon :name="$icon" :size="13" class="mx-auto text-muted" />

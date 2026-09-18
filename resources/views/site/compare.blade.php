@@ -100,6 +100,7 @@
 
         {{-- ===================================================== compare table --}}
         <div class="lg:col-span-7">
+            <p class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold text-muted lg:hidden"><x-ui.icon name="arrow-right" :size="12" /> Swipe sideways to see all models</p>
             <div class="ab-card overflow-x-auto" data-reveal>
                 <table class="w-full min-w-3xl border-collapse text-xs">
                     <caption class="sr-only">Specification comparison across selected autorickshaw models</caption>

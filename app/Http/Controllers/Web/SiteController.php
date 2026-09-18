@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\spareparts\Product;
 use App\Models\spareparts\SparepartsSubCategories;
+use App\Services\VehicleCatalogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
@@ -13,12 +15,17 @@ use Illuminate\Support\Str;
 /**
  * Customer-facing AutoBazaar website.
  *
- * Accessories pages read the live catalogue (products / product_brand_models).
- * Vehicle, offer, scheme, news and account pages still read resources/fixtures
- * until their tables and admin modules are built.
+ * Vehicles come from the catalogue tables via VehicleCatalogService and the
+ * accessories shop from the live product tables. Offers, schemes, news and
+ * account sections still read resources/fixtures until their admin modules
+ * exist.
  */
 class SiteController extends Controller
 {
+    public function __construct(private VehicleCatalogService $catalog)
+    {
+    }
+
     /** Fixture files, memoised per request. */
     private array $cache = [];
 
@@ -36,9 +43,10 @@ class SiteController extends Controller
         ];
     }
 
+    /** Live catalogue cards (fixture-shaped), memoised per request. */
     private function vehicles(): array
     {
-        return $this->fixture('vehicles');
+        return $this->cache['__vehicles'] ??= $this->catalog->all();
     }
 
     private function vehicle(string $slug): ?array
@@ -110,22 +118,14 @@ class SiteController extends Controller
     {
         // URLs read /new-autos/tvs/king-deluxe, so resolve on brand + the
         // brand-relative model slug rather than the globally unique one.
-        $vehicle = Arr::first(
-            $this->vehicles(),
-            fn ($v) => $v['brand_slug'] === $brand && $v['model_slug'] === $model,
-        );
+        $record = $this->catalog->findByBrandModel($brand, $model);
 
-        abort_if(! $vehicle, 404);
-
-        $similar = array_values(array_filter(
-            $this->vehicles(),
-            fn ($v) => $v['slug'] !== $vehicle['slug'],
-        ));
+        abort_if(! $record, 404);
 
         return view('site.vehicles.show', [
             ...$this->shared(),
-            'vehicle' => $vehicle,
-            'similar' => array_slice($similar, 0, 4),
+            'vehicle' => $this->catalog->detail($record),
+            'similar' => $this->catalog->similar($record, 4),
         ]);
     }
 
@@ -142,12 +142,7 @@ class SiteController extends Controller
                 fn ($slug) => $this->vehicle($slug),
                 explode('-vs-', $combo),
             )))
-            : array_values(array_filter([
-                $this->vehicle('tvs-king-deluxe'),
-                $this->vehicle('bajaj-re'),
-                $this->vehicle('piaggio-ape-xtra'),
-                $this->vehicle('mahindra-treo-plus'),
-            ]));
+            : array_slice($all, 0, 4);
 
         return view('site.compare', [
             ...$this->shared(),
@@ -167,7 +162,7 @@ class SiteController extends Controller
     {
         return view('site.enquiry', [
             ...$this->shared(),
-            'vehicle' => $this->vehicle($model ?? 'tvs-king-deluxe') ?? $this->vehicles()[0],
+            'vehicle' => ($model ? $this->vehicle($model) : null) ?? $this->vehicles()[0],
             'vehicles' => $this->vehicles(),
         ]);
     }
@@ -471,6 +466,10 @@ class SiteController extends Controller
         ]);
     }
 
+    public function login()
+    {
+        return view('site.login', $this->shared());
+    }
 
     public function about()
     {

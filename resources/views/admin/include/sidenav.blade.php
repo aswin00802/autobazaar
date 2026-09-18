@@ -13,10 +13,11 @@
     $listingRoutes = [
         'auto-management.used-auto', 'auto-management.used-auto.create', 'auto-management.used-auto.edit', 'auto-management.used-auto.view-details',
         'auto-management.new-auto', 'auto-management.new-auto.create', 'auto-management.new-auto.edit', 'auto-management.new-auto.view-details',
+        'vehicles.catalogue', 'vehicles.catalogue.create', 'vehicles.catalogue.edit',
         'user-management.users-post-auto-list',
         'sold-auto.list',
     ];
-    $leadRoutes = ['enquiry-auto.list', 'quotation-list', 'pos-quotation', 'pos-quotation.create'];
+    $leadRoutes = ['vehicles.leads', 'vehicles.leads.view', 'enquiry-auto.list', 'quotation-list', 'pos-quotation', 'pos-quotation.create'];
     $legacyOrderRoutes = ['spare-parts.orders.pending', 'spare-parts.orders.success', 'spare-parts.orders.cancel'];
     $ecommerceRoutes = array_merge([
         'ecommerce.orders', 'ecommerce.orders.status', 'ecommerce.orders.view',
@@ -57,8 +58,8 @@
     ];
 
     $operationsPermissions = [
-        'used_auto', 'new_auto', 'user_post_auto_list', 'solid_autos_list',
-        'auto_enquiry_list', 'quotation', 'pos_quotation',
+        'vehicle_catalog', 'used_auto', 'new_auto', 'user_post_auto_list', 'solid_autos_list',
+        'vehicle_leads', 'auto_enquiry_list', 'quotation', 'pos_quotation',
         'ecommerce_orders', 'ecommerce_coupons', 'sparepart_categories', 'sparepart_subcategories', 'sparepart_product',
         'sparepart_pendingorders', 'sparepart_successorders', 'sparepart_cancelorders',
         'gas_station', 'mechanic', 'insurance', 're_finance', 'rto',
@@ -120,13 +121,21 @@
         @endcanany
 
         {{-- Listings: every auto on the marketplace, from approval to sale --}}
-        @canany(['used_auto','new_auto','user_post_auto_list','solid_autos_list'])
+        @canany(['vehicle_catalog','used_auto','new_auto','user_post_auto_list','solid_autos_list'])
         <li class="menu-item {{ areActiveRoutesList($listingRoutes) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ri ri-truck-line"></i>
                 <div data-i18n="Listings">Listings</div>
             </a>
             <ul class="menu-sub">
+                {{-- New-vehicle catalogue: models, variants, prices, offers, stock --}}
+                @can('vehicle_catalog')
+                <li class="menu-item {{ areActiveRoutes(['vehicles.catalogue','vehicles.catalogue.create','vehicles.catalogue.edit']) }}">
+                    <a href="{{ route('vehicles.catalogue') }}" class="menu-link">
+                        <div data-i18n="Vehicle Catalogue">Vehicle Catalogue</div>
+                    </a>
+                </li>
+                @endcan
                 @can('used_auto')
                 <li class="menu-item {{ areActiveRoutes(['auto-management.used-auto','auto-management.used-auto.create','auto-management.used-auto.edit','auto-management.used-auto.view-details']) }}">
                     <a href="{{ route('auto-management.used-auto') }}" class="menu-link">
@@ -160,13 +169,21 @@
         @endcanany
 
         {{-- Leads: buyers asking about an auto --}}
-        @canany(['auto_enquiry_list','quotation','pos_quotation'])
+        @canany(['vehicle_leads','auto_enquiry_list','quotation','pos_quotation'])
         <li class="menu-item {{ areActiveRoutesList($leadRoutes) }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon icon-base ri ri-user-search-fill"></i>
                 <div data-i18n="Leads">Leads</div>
             </a>
             <ul class="menu-sub">
+                {{-- Website leads: enquiry, quotation, test drive, loan --}}
+                @can('vehicle_leads')
+                <li class="menu-item {{ areActiveRoutes(['vehicles.leads','vehicles.leads.view']) }}">
+                    <a href="{{ route('vehicles.leads') }}" class="menu-link">
+                        <div data-i18n="Vehicle Leads">Vehicle Leads</div>
+                    </a>
+                </li>
+                @endcan
                 @can('auto_enquiry_list')
                 <li class="menu-item {{ areActiveRoutes(['enquiry-auto.list']) }}">
                     <a href="{{ route('enquiry-auto.list') }}" class="menu-link">
@@ -370,14 +387,26 @@
         @endcanany
 
         {{-- ================================================================ CONTENT --}}
-        @can('events_announce')
+        @canany(['events_announce','vehicle_reviews'])
         <li class="menu-header small mt-4">
             <span class="menu-header-text">Content</span>
         </li>
+        @endcanany
+
+        @can('events_announce')
         <li class="menu-item {{ areActiveRoutes(['events','events.create','events.edit']) }}">
             <a href="{{ route('events') }}" class="menu-link">
                 <i class="menu-icon icon-base ri ri-calendar-event-line"></i>
                 <div data-i18n="Events">Events</div>
+            </a>
+        </li>
+        @endcan
+        {{-- Customer reviews of catalogue models — shown on the site only after approval --}}
+        @can('vehicle_reviews')
+        <li class="menu-item {{ areActiveRoutes(['vehicles.reviews']) }}">
+            <a href="{{ route('vehicles.reviews') }}" class="menu-link">
+                <i class="menu-icon icon-base ri ri-star-line"></i>
+                <div data-i18n="Vehicle Reviews">Vehicle Reviews</div>
             </a>
         </li>
         @endcan

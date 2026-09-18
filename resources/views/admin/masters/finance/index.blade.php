@@ -37,6 +37,8 @@ Auto Finance
                                     <th>Location </th>
                                     <th>Address </th>
                                     <th>Contact</th>
+                                    <th>Interest Rate</th>
+                                    <th>Tenure</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -51,6 +53,16 @@ Auto Finance
                                             <td>{{ $finance->location ?? null }}</td>
                                             <td>{{ $finance->address ?? null }}</td>
                                             <td>{{ $finance->contact ?? null}}</td>
+                                            @php $rate = $rates[$finance->id] ?? null; @endphp
+                                            <td>
+                                                @if($rate)
+                                                    {{ number_format($rate->interest_rate, 2) }}% p.a.
+                                                    @if($rate->is_featured)<span class="badge bg-label-warning ms-1">Featured</span>@endif
+                                                @else
+                                                    <span class="text-muted">—</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ $rate ? $rate->min_tenure_months . ' – ' . $rate->max_tenure_months . ' months' : '—' }}</td>
                                             <td>
                                                 <label class="switch switch-success">
                                                     <input type="checkbox" data-id="{{ $finance->id }}" class="switch-input toggle-status" {{ $finance->status_id === 1 ? 'checked' : '' }} />

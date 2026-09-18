@@ -14,6 +14,11 @@ import emiCalculator from './components/emi-calculator';
 import operatingCost from './components/operating-cost';
 import locationPicker from './components/location-picker';
 import filterRail from './components/filter-rail';
+import financeOptions from './components/finance-options';
+import earningsCalculator from './components/earnings-calculator';
+import leadForm from './components/lead-form';
+import detailTabs from './components/detail-tabs';
+import vehicleGallery from './components/vehicle-gallery';
 
 import initReveal from './lib/reveal';
 
@@ -26,6 +31,11 @@ Alpine.data('emiCalculator', emiCalculator);
 Alpine.data('operatingCost', operatingCost);
 Alpine.data('locationPicker', locationPicker);
 Alpine.data('filterRail', filterRail);
+Alpine.data('financeOptions', financeOptions);
+Alpine.data('earningsCalculator', earningsCalculator);
+Alpine.data('leadForm', leadForm);
+Alpine.data('detailTabs', detailTabs);
+Alpine.data('vehicleGallery', vehicleGallery);
 
 window.Alpine = Alpine;
 Alpine.start();

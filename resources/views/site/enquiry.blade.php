@@ -55,7 +55,7 @@
                 </p>
             </div>
 
-            <ul class="ab-card grid grid-cols-4 gap-1 p-3 text-center">
+            <ul class="ab-card grid grid-cols-2 gap-1 p-3 text-center sm:grid-cols-4">
                 @foreach ([['shield', 'Trusted Brands'], ['headset', 'Expert Guidance'], ['rupee', 'Best Finance Options'], ['gear', 'Support Across India']] as [$icon, $label])
                     <li>
                         <x-ui.icon :name="$icon" :size="18" class="mx-auto text-brand-500" />

@@ -8,6 +8,7 @@
  */
 
 use App\Http\Controllers\Web\SiteController;
+use App\Http\Controllers\Web\VehicleLeadController;
 use App\Http\Controllers\Web\Shop\CartController;
 use App\Http\Controllers\Web\Shop\CheckoutController;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,12 @@ Route::name('site.')->group(function () {
     Route::get('/used-autos', [SiteController::class, 'usedAutos'])->name('used-autos');
     Route::get('/new-autos/{brand}', [SiteController::class, 'brand'])->name('brand');
     Route::get('/new-autos/{brand}/{model}', [SiteController::class, 'model'])->name('model');
+
+    /* ------------------------------------ vehicle leads + reviews (public) */
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::post('/vehicles/{slug}/lead', [VehicleLeadController::class, 'storeLead'])->name('vehicles.lead');
+        Route::post('/vehicles/{slug}/review', [VehicleLeadController::class, 'storeReview'])->name('vehicles.review');
+    });
 
     /* ------------------------------------------------------------- compare */
     Route::get('/compare', [SiteController::class, 'compare'])->name('compare');
@@ -58,12 +65,10 @@ Route::name('site.')->group(function () {
     });
 
     /* -------------------------------------------------------------- account */
-    Route::middleware('UserAuth')->group(function () {
-        Route::get('/account', [SiteController::class, 'account'])->name('account');
-        Route::get('/account/orders', [SiteController::class, 'orders'])->name('account.orders');
-        Route::get('/account/orders/{id}', [SiteController::class, 'order'])->name('account.order');
-        Route::get('/account/{section}', [SiteController::class, 'accountSection'])->name('account.section');
-    });
+    Route::get('/account', [SiteController::class, 'account'])->name('account');
+    Route::get('/account/orders', [SiteController::class, 'orders'])->name('account.orders');
+    Route::get('/account/orders/{id}', [SiteController::class, 'order'])->name('account.order');
+    Route::get('/account/{section}', [SiteController::class, 'accountSection'])->name('account.section');
 
     /* --------------------------------------------------------------- static */
     Route::get('/search', [SiteController::class, 'search'])->name('search');

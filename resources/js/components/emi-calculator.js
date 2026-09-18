@@ -1,4 +1,5 @@
 import { formatINR } from '../lib/format';
+import { calcEmi } from '../lib/emi';
 
 /**
  * Standard reducing-balance EMI.
@@ -23,15 +24,8 @@ export default (config = {}) => ({
     },
 
     get monthlyEmi() {
-        const p = this.loanAmount;
-        const n = this.num(this.tenure);
-        const r = this.num(this.rate) / 12 / 100;
-
-        if (p <= 0 || n <= 0) return 0;
-        if (r === 0) return Math.round(p / n);
-
-        const growth = Math.pow(1 + r, n);
-        return Math.round((p * r * growth) / (growth - 1));
+        // Shared with the Finance Options card and the PHP service — see lib/emi.js.
+        return calcEmi(this.loanAmount, this.rate, this.tenure);
     },
 
     get totalPayment() {

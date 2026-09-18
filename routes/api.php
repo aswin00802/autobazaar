@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\V1\AutoMeterController;
 use App\Http\Controllers\Api\V1\FarePriceController;
 use App\Http\Controllers\Api\V1\spare_parts\ProductsController;
 use App\Http\Controllers\Api\V1\TargetController;
+use App\Http\Controllers\Api\V1\VehicleController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -28,6 +29,17 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/test-v1', function () {
     return response()->json(['message' => 'API v1 is working']);
+});
+
+// New-vehicle catalogue (public): cards, detail, EMI maths, lead + review forms
+Route::prefix('vehicles')->group(function () {
+    Route::get('/', [VehicleController::class, 'index'])->name('api.vehicles.index');
+    Route::post('emi-calculate', [VehicleController::class, 'emiCalculate'])->name('api.vehicles.emi');
+    Route::get('{slug}', [VehicleController::class, 'show'])->name('api.vehicles.show');
+    Route::middleware('throttle:10,1')->group(function () {
+        Route::post('{slug}/leads', [VehicleController::class, 'storeLead'])->name('api.vehicles.leads');
+        Route::post('{slug}/reviews', [VehicleController::class, 'storeReview'])->name('api.vehicles.reviews');
+    });
 });
 
 //user register

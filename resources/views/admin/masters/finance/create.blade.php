@@ -8,7 +8,7 @@ Finance Add
 
 @section('content')
 <div class="row justify-content-md-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title" id="basic-layout-card-center">Finance Create</h4>
@@ -63,6 +63,8 @@ Finance Add
                                 <span style="color:red;">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        @include('admin.masters.finance._loan_terms')
 
                         <div class="form-actions center">
                             <a href="{{ route('masters.auto-finance') }}" class="btn btn-warning mr-1">

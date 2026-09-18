@@ -177,7 +177,7 @@
                     </a>
                 </div>
 
-                <ul class="grid grid-cols-4 gap-2 border-t border-line bg-brand-50 p-4 text-center">
+                <ul class="grid grid-cols-2 gap-2 border-t border-line bg-brand-50 p-4 text-center sm:grid-cols-4">
                     @foreach (['Accessories', 'Fitment', 'Servicing', 'Ready to Ride'] as $label)
                         <li class="text-[10px] font-semibold">
                             <x-ui.icon name="check" :size="14" class="mx-auto text-brand-500" />

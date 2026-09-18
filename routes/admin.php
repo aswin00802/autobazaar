@@ -192,6 +192,37 @@ Route::group(['middleware' => ['auth','check.Userstatus']], function () {
 
     });
 
+
+    /* ------------------------------------------------------------- Vehicles
+       New-vehicle catalogue (vehicle_models + children), customer reviews
+       and the lead pipeline fed by the vehicle detail page. */
+    Route::group(['prefix' => 'vehicles'], function () {
+        Route::get('/catalogue', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'index'])->name('vehicles.catalogue');
+        Route::get('/catalogue/create', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'create'])->name('vehicles.catalogue.create');
+        Route::post('/catalogue/store', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'store'])->name('vehicles.catalogue.store');
+        Route::get('/catalogue/edit/{id}', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'edit'])->name('vehicles.catalogue.edit');
+        Route::post('/catalogue/update/{id}', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'update'])->name('vehicles.catalogue.update');
+        Route::post('/catalogue/delete', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'delete'])->name('vehicles.catalogue.delete');
+        Route::post('/catalogue/status', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'statusToggle'])->name('vehicles.catalogue.status');
+        Route::post('/catalogue/image-delete', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'deleteImage'])->name('vehicles.catalogue.image-delete');
+        Route::post('/catalogue/document-delete', [App\Http\Controllers\admin\vehicles\VehicleModelsController::class, 'deleteDocument'])->name('vehicles.catalogue.document-delete');
+
+        Route::get('/reviews', [App\Http\Controllers\admin\vehicles\VehicleReviewsController::class, 'index'])->name('vehicles.reviews');
+        Route::post('/reviews/status', [App\Http\Controllers\admin\vehicles\VehicleReviewsController::class, 'status'])->name('vehicles.reviews.status');
+        Route::post('/reviews/delete', [App\Http\Controllers\admin\vehicles\VehicleReviewsController::class, 'delete'])->name('vehicles.reviews.delete');
+
+        Route::get('/leads', [App\Http\Controllers\admin\vehicles\VehicleLeadsController::class, 'index'])->name('vehicles.leads');
+        Route::get('/leads/view/{id}', [App\Http\Controllers\admin\vehicles\VehicleLeadsController::class, 'show'])->name('vehicles.leads.view');
+        Route::post('/leads/status', [App\Http\Controllers\admin\vehicles\VehicleLeadsController::class, 'updateStatus'])->name('vehicles.leads.status');
+        Route::post('/leads/assign', [App\Http\Controllers\admin\vehicles\VehicleLeadsController::class, 'assign'])->name('vehicles.leads.assign');
+        Route::post('/leads/note', [App\Http\Controllers\admin\vehicles\VehicleLeadsController::class, 'note'])->name('vehicles.leads.note');
+    });
+
+    /* ------------------------------------------------------------- E-commerce
+       Website storefront: orders placed through checkout, and the discount
+       codes those orders use. The legacy Auto Spare Parts screens still read
+       `sparepart_orders` and stay where they are. */
+
     /* ------------------------------------------------------------- E-commerce
        Website storefront: orders placed through checkout, and the discount
        codes those orders use. The legacy Auto Spare Parts screens still read
