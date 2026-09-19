@@ -554,3 +554,60 @@ Notes for full transparency:
 * **Outside the `autobazaar` database (caused by DEF-09):** six guest-session rows with `user_agent = 'UAT-Tester-curl'` were written by Apache into **`auto_bazar.sessions`**. I did not write to that database. They are inert and will expire; to remove them now: `DELETE FROM auto_bazar.sessions WHERE user_agent LIKE 'UAT-Tester-%';`
 * While stopping my throw-away static server I ran `taskkill /F /IM php.exe`, which ends every `php.exe` CLI process on the machine, not only mine. Apache/mod_php is unaffected, but if a `php artisan serve`, queue worker or similar was running in another terminal it will need to be restarted.
 * No file inside `C:\xampp\htdocs\jp_auto` was read or written. The only file added to `autobazaar` is this report.
+
+---
+
+## 6. Fix status (added 2026-09-19, after the UAT)
+
+Commits `0b88fc0`, `03326d9`, `9a06365`, `edc6f24`, `467c5a2` (tag `release-2026-09-19`).
+Re-test after the fixes: 75 admin + 31 public pages load, 411 routes all resolve to an existing
+controller method, 56 API GET endpoints return JSON with no 5xx, 29 business-rule checks pass
+(run inside a rolled-back transaction), security checks repeated over real HTTP.
+
+| ID | Status | What was done |
+|---|---|---|
+| DEF-01 | Fixed | Permission middleware on E-commerce Orders/Coupons and the other listed admin actions; new `staff` middleware on the whole admin group (customers get 403); public `/register` disabled. |
+| DEF-02 | Fixed | OTP valid 10 min, single use, 5 wrong guesses then discarded; `throttle` on send (5/min) and verify (10/min). Still 4 digits — the SMS template is fixed-length. |
+| DEF-03 | Config | Nothing to change in code. Set `APP_DEBUG=false`, `APP_ENV=production` on any shared/live host. API errors no longer carry traces when debug is off; branded error pages added (DEF-32). |
+| DEF-04 | Fixed locally | Root `.htaccess` returns 403 for everything outside `/public`. On live, point the domain at `/public`. |
+| DEF-05 | Fixed | Account routes behind login; dashboard, orders, order detail, addresses, enquiries and profile show the customer's own data. Sections without a backend say "coming soon" instead of sample data. |
+| DEF-06 | Fixed | Search filters autos, accessories, schemes and news on every word; empty state added. |
+| DEF-07/08 | Fixed | `min-w-0` on layout columns site-wide; verified at a true 390 px on New Autos, Home, Compare. |
+| DEF-09 | Fixed | `Env::disablePutenv()` in `bootstrap/app.php` — the app reads only its own `.env`. |
+| DEF-10 | Fixed | 10-digit mobile, 6-digit pincode, city and state required. |
+| DEF-11 | Fixed — confirm amount | Standard delivery ₹49 below ₹999, free at/above. The ₹49 is a placeholder: `CartService::DELIVERY`. |
+| DEF-12 | Fixed | Coupon valid through the end of `valid_to`. |
+| DEF-13 | Fixed | Percent ≤ 100, value > 0. |
+| DEF-14 | Fixed | Only active + available variants of active products can be added or ordered (checked again at order time). |
+| DEF-15 | Fixed | COD only; other methods shown disabled as "Coming soon". One constant re-enables them: `CheckoutController::ONLINE_PAYMENTS_ENABLED`. |
+| DEF-16 | Fixed | Forward-only status flow; cancel only before shipping; delivered/cancelled final; cancel releases the coupon usage. |
+| DEF-17 | Fixed | Admin login falls back to `phone_number`, not a non-existent `username` column. |
+| DEF-18 | Fixed | Upload extension taken from file content; `extensions:` rule added. |
+| DEF-19 | Fixed | `get-transmission-types` lists the master table; `get-auto-body-types` returns an empty list (table never existed). |
+| DEF-20 | Fixed | Public `/cart` page; header cart icon points to it. |
+| DEF-21 | Fixed | Leads can only be assigned to staff users. |
+| DEF-22 | Fixed | Cached rating = approved reviews (seeder + existing rows refreshed: 4.7 from 3). |
+| DEF-23 | Fixed | EMI comparison bars render. |
+| DEF-24 | Fixed | "Order Total" unless paid. |
+| DEF-25 | Fixed | Array query parameters ignored on search, vehicle API and admin leads. |
+| DEF-26 | Fixed | Real quotation marks in the search heading. |
+| DEF-27 | Fixed | TVS / OSM stay upper-case; BAJAJ → Bajaj. |
+| DEF-28 | Partly | All API framework errors (401/403/404/405/429/500) use `{success,status,message}`; brand filter case-insensitive. `ResponseService::validationError` left unchanged on purpose — the mobile app reads its current shape. |
+| DEF-29 | Fixed | Removed coupons leave the list and free their code; no coupon on an empty cart. |
+| DEF-30 | Fixed | Status toggle accepts 0/1 only; deleting a model keeps its leads (unlinked) and removes its reviews; history ordered by id; merged guest line removed. |
+| DEF-31 | Fixed | `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS on https. `ServerTokens`/`expose_php` are server settings. |
+| DEF-32 | Fixed | Branded 403, 405, 419, 429, 500, 503. |
+| DEF-33 | Fixed | Register page 1.6 MB → 7 KB; areas load per district. Title corrected. |
+| DEF-34 | Fixed | JSON requests get 401; signed-in customers are redirected away from the login form. |
+| DEF-35 | Fixed | Test drive within 60 days. |
+
+**Also fixed from the static-review notes:** `sendOTP` no longer crashes on an unknown `type`; login no longer
+overwrites `users.created_at`; SMS key read from `config('services.ping4sms.key')` (`PING4SMS_KEY` in `.env`,
+with the old value as fallback so SMS keeps working); order numbers take the highest suffix + 1 under a row lock;
+`api/auto_posts/create|edit` stubs removed; `fairprice/v2/v2-test` returns JSON.
+
+**Not changed (needs a decision or is outside code):**
+* `register` still creates the user row before the OTP is verified — changing it alters the mobile-web sign-up flow.
+* Admin vehicle form: removing a middle row before uploading a document can mis-match the file to its row (not reproduced; needs a form-level fix).
+* Lead/review throttle is one 10/min bucket per IP.
+* Online payment and courier integration remain future work.
