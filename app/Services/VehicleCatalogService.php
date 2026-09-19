@@ -51,7 +51,7 @@ class VehicleCatalogService
 
     public function byBrand(string $brandSlug): array
     {
-        return array_values(array_filter($this->all(), fn ($v) => $v['brand_slug'] === $brandSlug));
+        return array_values(array_filter($this->all(), fn ($v) => $v['brand_slug'] === strtolower(trim($brandSlug))));
     }
 
     public function findBySlug(string $slug): ?VehicleModel
@@ -405,7 +405,12 @@ class VehicleCatalogService
     {
         $name = $m->brand?->brand_name ?? '';
 
-        return $name === strtoupper($name) ? ucfirst(strtolower($name)) : $name;
+        // BAJAJ -> Bajaj, but TVS / OSM stay acronyms; mixed-case names are kept as typed.
+        if ($name !== strtoupper($name) || strlen($name) <= 3) {
+            return $name;
+        }
+
+        return ucfirst(strtolower($name));
     }
 
     private function brandSlug(VehicleModel $m): string

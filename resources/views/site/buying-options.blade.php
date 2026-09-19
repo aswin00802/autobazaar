@@ -12,7 +12,7 @@
     <div class="ab-container py-8 lg:py-10">
         <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
 
-            <div class="lg:col-span-4" data-reveal="left">
+            <div class="min-w-0 lg:col-span-4" data-reveal="left">
                 <p class="mb-3 inline-block rounded border border-brand-200 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-600">
                     Location Based Buying
                 </p>
@@ -26,7 +26,7 @@
             </div>
 
             {{-- Location form --}}
-            <div class="lg:col-span-5"
+            <div class="min-w-0 lg:col-span-5"
                  x-data="locationPicker({
                     states: {{ Js::from($locations['states']) }},
                     directPurchaseDistricts: {{ Js::from($locations['direct_purchase_districts']) }},
@@ -106,7 +106,7 @@
             </div>
 
             {{-- Service-area callout --}}
-            <div class="lg:col-span-3">
+            <div class="min-w-0 lg:col-span-3">
                 <div class="ab-card bg-accent-500 p-5">
                     <p class="text-sm font-extrabold leading-snug">
                         Direct Vehicle Purchase<br>Available in 4 Districts Only

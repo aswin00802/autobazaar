@@ -30,7 +30,7 @@
 
     <div class="ab-container relative py-9">
         <div class="grid gap-6 lg:grid-cols-12 lg:items-center">
-            <div class="lg:col-span-6">
+            <div class="min-w-0 lg:col-span-6">
                 <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
                     Auto Accessories <span class="text-accent-500">Shop</span>
                 </h1>
@@ -46,7 +46,7 @@
                 </ul>
             </div>
 
-            <div class="lg:col-span-3">
+            <div class="min-w-0 lg:col-span-3">
                 <img src="{{ asset('assets/image/auto_brands/tvs.png') }}" alt="" aria-hidden="true"
                      class="mx-auto w-full max-w-56" loading="lazy">
                 <p class="ab-script text-center text-lg leading-tight text-accent-500">
@@ -54,7 +54,7 @@
                 </p>
             </div>
 
-            <div class="lg:col-span-3">
+            <div class="min-w-0 lg:col-span-3">
                 <div class="rounded-xl bg-accent-50 p-4 text-ink">
                     <p class="flex items-center gap-2 text-sm font-extrabold">
                         <x-ui.icon name="box" :size="18" class="text-brand-500" />
@@ -109,7 +109,7 @@
         <div class="grid gap-6 lg:grid-cols-12">
 
             {{-- ======================================================= filters --}}
-            <aside class="lg:col-span-2">
+            <aside class="min-w-0 lg:col-span-2">
                 <button type="button" @click="mobileOpen = !mobileOpen" class="ab-btn ab-btn-ghost mb-3 w-full lg:hidden">
                     <x-ui.icon name="filter" :size="16" /> Filter Products
                     <span x-show="activeCount > 0" x-text="`(${activeCount})`" class="font-bold text-brand-500"></span>
@@ -171,7 +171,7 @@
             </aside>
 
             {{-- ================================================ product grid --}}
-            <div class="lg:col-span-7">
+            <div class="min-w-0 lg:col-span-7">
                 <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
                     <h2 class="text-lg font-extrabold">
                         All Accessories
@@ -209,7 +209,7 @@
             </div>
 
             {{-- ========================================================= aside --}}
-            <aside class="space-y-4 lg:col-span-3">
+            <aside class="min-w-0 space-y-4 lg:col-span-3">
                 <div class="ab-card overflow-hidden">
                     <h2 class="bg-brand-500 px-4 py-3 text-sm font-bold text-white">
                         Why Shop with AutoBazaar?

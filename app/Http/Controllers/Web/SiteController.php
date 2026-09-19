@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Shop\Address;
+use App\Models\Shop\Order;
+use App\Models\Vehicle\VehicleEnquiry;
 use App\Models\spareparts\Product;
 use App\Models\spareparts\SparepartsSubCategories;
+use App\Services\CartService;
 use App\Services\VehicleCatalogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -399,53 +404,101 @@ class SiteController extends Controller
 
     /* ================================================================ account */
 
-    public function account()
+    /**
+     * Account pages show the signed-in customer's own data (routes sit behind
+     * UserAuth). `account` still carries the sidebar menu from the fixture.
+     */
+    private function accountChrome(): array
     {
-        $commerce = $this->fixture('commerce');
+        return ['account' => $this->fixture('commerce')['account']];
+    }
+
+    /** Leads this customer sent, matched on their login or their mobile number. */
+    private function customerEnquiries()
+    {
+        $user = Auth::user();
+
+        return VehicleEnquiry::with('model')
+            ->where('status_id', 1)
+            ->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+                if ($user->phone_number) {
+                    $q->orWhere('mobile', $user->phone_number);
+                }
+            })
+            ->latest('id');
+    }
+
+    public function account(CartService $cart)
+    {
+        $user = Auth::user();
+        $orders = Order::where('user_id', $user->id)->where('status_id', 1);
 
         return view('site.account.dashboard', [
             ...$this->shared(),
-            'account' => $commerce['account'],
-            'order' => $commerce['order'],
+            ...$this->accountChrome(),
+            'firstName' => Str::of($user->name ?: 'there')->before(' ')->toString(),
+            'stats' => [
+                'orders' => (clone $orders)->count(),
+                'enquiries' => $this->customerEnquiries()->count(),
+                'addresses' => Address::where('user_id', $user->id)->where('status_id', 1)->count(),
+                'cart' => $cart->itemCount(),
+            ],
+            'latestOrder' => (clone $orders)->with('items')->latest('id')->first(),
         ]);
     }
 
     public function orders()
     {
-        $commerce = $this->fixture('commerce');
-
         return view('site.account.orders', [
             ...$this->shared(),
-            'account' => $commerce['account'],
-            'order' => $commerce['order'],
+            ...$this->accountChrome(),
+            'orders' => Order::where('user_id', Auth::id())->where('status_id', 1)
+                ->with('items')->latest('id')->get(),
         ]);
     }
 
+    /** One order — always scoped to the signed-in customer. */
     public function order(string $id)
     {
-        $commerce = $this->fixture('commerce');
+        $order = Order::where('order_number', $id)
+            ->where('user_id', Auth::id())
+            ->where('status_id', 1)
+            ->with(['items', 'history'])
+            ->firstOrFail();
 
-        return view('site.account.order', [
+        return view('site.order-confirmed', [
             ...$this->shared(),
-            'account' => $commerce['account'],
-            'order' => $commerce['order'],
+            'order' => $order,
         ]);
     }
 
     public function accountSection(string $section)
     {
-        $commerce = $this->fixture('commerce');
-
         $known = ['enquiries', 'saved', 'comparisons', 'addresses', 'payment-methods', 'notifications', 'refer', 'support', 'profile'];
         abort_unless(in_array($section, $known, true), 404);
 
+        $user = Auth::user();
+
+        $addresses = Address::where('user_id', $user->id)->where('status_id', 1)
+            ->orderByDesc('is_default')->orderBy('id')->get()
+            ->map(fn (Address $a) => [
+                'label' => $a->label,
+                'is_default' => (bool) $a->is_default,
+                'name' => $a->name,
+                'lines' => $a->lines,
+                'phone' => $a->mobile,
+            ])->all();
+
         return view('site.account.section', [
             ...$this->shared(),
-            'account' => $commerce['account'],
+            ...$this->accountChrome(),
             'section' => $section,
             'heading' => Str::headline($section),
-            'addresses' => $commerce['addresses'],
-            'paymentMethods' => $commerce['payment_methods'],
+            'addresses' => $addresses,
+            'enquiries' => $section === 'enquiries' ? $this->customerEnquiries()->limit(50)->get() : collect(),
+            'customer' => $user,
+            'paymentMethods' => [],
             'vehicles' => $this->vehicles(),
         ]);
     }
@@ -454,15 +507,44 @@ class SiteController extends Controller
 
     public function search(Request $request)
     {
-        $query = (string) $request->query('q', '');
+        $q = $request->query('q');
+        $query = is_string($q) ? trim($q) : '';   // ?q[]=x must not crash the page
+        $query = mb_substr($query, 0, 100);
+
+        // Every word must appear somewhere in the item's searchable text.
+        $words = array_values(array_filter(preg_split('/\s+/', mb_strtolower($query))));
+        $matches = function (array $haystack) use ($words): bool {
+            $text = mb_strtolower(implode(' ', array_filter($haystack, 'is_scalar')));
+            foreach ($words as $word) {
+                if (! str_contains($text, $word)) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+        $filter = fn (array $items, callable $fields) => $words
+            ? array_values(array_filter($items, fn ($item) => $matches($fields($item))))
+            : $items;
+
+        $content = $this->fixture('content');
 
         return view('site.search', [
             ...$this->shared(),
             'query' => $query,
-            'vehicles' => $this->vehicles(),
-            'products' => $this->liveProducts(),
-            'schemes' => $this->fixture('content')['schemes'],
-            'posts' => $this->fixture('content')['news'],
+            'vehicles' => $filter($this->vehicles(), fn ($v) => [
+                $v['name'], $v['brand'], $v['tagline'] ?? '', $v['description'] ?? '',
+                implode(' ', array_column($v['variants'] ?? [], 'label')),
+            ]),
+            'products' => $filter($this->liveProducts(), fn ($p) => [
+                $p['name'], $p['subtitle'] ?? '', $p['category'] ?? '', $p['brand'] ?? '',
+            ]),
+            'schemes' => $filter($content['schemes'], fn ($s) => [
+                $s['title'], $s['authority'] ?? '', $s['strap'] ?? '', implode(' ', $s['bullets'] ?? []),
+            ]),
+            'posts' => $filter($content['news'], fn ($n) => [
+                $n['title'], $n['category'] ?? '', $n['excerpt'] ?? '',
+            ]),
         ]);
     }
 

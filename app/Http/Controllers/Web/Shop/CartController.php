@@ -81,6 +81,16 @@ class CartController extends Controller
         return $this->respond($request, 'Coupon removed.');
     }
 
+    /** Public cart page — guests can review and edit before they sign in. */
+    public function show()
+    {
+        return view('site.cart', [
+            'site' => require resource_path('fixtures/site.php'),
+            'locations' => require resource_path('fixtures/locations.php'),
+            'totals' => $this->cart->totals('standard'),
+        ]);
+    }
+
     /** Powers the header cart badge. */
     public function count()
     {

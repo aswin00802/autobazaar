@@ -15,7 +15,7 @@
     <div class="grid gap-6 lg:grid-cols-12">
 
         {{-- Form --}}
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <div class="ab-card p-6" data-reveal="left">
                 <h2 class="text-lg font-extrabold">Send us a message</h2>
                 <p class="mt-1 text-sm text-muted">We usually reply within one working day.</p>
@@ -60,7 +60,7 @@
         </div>
 
         {{-- Details --}}
-        <aside class="space-y-4 lg:col-span-5">
+        <aside class="min-w-0 space-y-4 lg:col-span-5">
             <div class="ab-card p-5">
                 <h2 class="text-base font-extrabold">Reach us directly</h2>
 

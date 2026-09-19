@@ -55,6 +55,7 @@ Route::name('site.')->group(function () {
     Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->name('cart.coupon');
     Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
     Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+    Route::get('/cart', [CartController::class, 'show'])->name('cart');
 
     /* --------------------------------------- checkout + orders (login required) */
     Route::middleware('UserAuth')->group(function () {
@@ -64,11 +65,13 @@ Route::name('site.')->group(function () {
         Route::get('/order-confirmed/{orderNumber}', [CheckoutController::class, 'confirmed'])->name('order.confirmed');
     });
 
-    /* -------------------------------------------------------------- account */
-    Route::get('/account', [SiteController::class, 'account'])->name('account');
-    Route::get('/account/orders', [SiteController::class, 'orders'])->name('account.orders');
-    Route::get('/account/orders/{id}', [SiteController::class, 'order'])->name('account.order');
-    Route::get('/account/{section}', [SiteController::class, 'accountSection'])->name('account.section');
+    /* ------------------------------------------- account (the customer's own data) */
+    Route::middleware('UserAuth')->group(function () {
+        Route::get('/account', [SiteController::class, 'account'])->name('account');
+        Route::get('/account/orders', [SiteController::class, 'orders'])->name('account.orders');
+        Route::get('/account/orders/{id}', [SiteController::class, 'order'])->name('account.order');
+        Route::get('/account/{section}', [SiteController::class, 'accountSection'])->name('account.section');
+    });
 
     /* --------------------------------------------------------------- static */
     Route::get('/search', [SiteController::class, 'search'])->name('search');

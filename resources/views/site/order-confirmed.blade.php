@@ -43,7 +43,7 @@
 
     <div class="mt-5 grid gap-5 lg:grid-cols-12">
 
-        <div class="space-y-5 lg:col-span-8">
+        <div class="min-w-0 space-y-5 lg:col-span-8">
 
             {{-- Tracker --}}
             <div class="ab-card p-5">
@@ -137,7 +137,7 @@
                         </dd>
                     </div>
                     <div class="flex justify-between border-t border-line pt-2 text-base">
-                        <dt class="font-extrabold">Total Paid</dt>
+                        <dt class="font-extrabold">{{ $order->payment_status === 'paid' ? 'Total Paid' : 'Order Total' }}</dt>
                         <dd class="font-extrabold">₹{{ number_format($order->total_amount) }}</dd>
                     </div>
                 </dl>
@@ -193,7 +193,7 @@
         </div>
 
         {{-- Aside --}}
-        <aside class="space-y-4 lg:col-span-4">
+        <aside class="min-w-0 space-y-4 lg:col-span-4">
             <div class="ab-card p-4">
                 <p class="mb-1 flex items-center gap-2 text-sm font-extrabold">
                     <x-ui.icon name="headset" :size="17" class="text-brand-500" /> Need Help?

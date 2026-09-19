@@ -11,7 +11,7 @@
         <div class="grid gap-10 lg:grid-cols-12 lg:items-center">
 
             {{-- Copy --}}
-            <div class="lg:col-span-5" data-reveal="left">
+            <div class="min-w-0 lg:col-span-5" data-reveal="left">
                 <p class="text-xs font-bold uppercase tracking-[0.14em] text-ink-soft">Introducing the All-New</p>
                 <h1 class="mt-1 text-4xl font-extrabold tracking-tight text-brand-600 sm:text-5xl">
                     AutoBazaar App
@@ -141,7 +141,7 @@
         </div>
 
         {{-- Why choose --}}
-        <div class="lg:col-span-8">
+        <div class="min-w-0 lg:col-span-8">
             <h2 class="mb-4 text-lg font-extrabold">Why Choose AutoBazaar App?</h2>
 
             <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5" data-reveal-group>
@@ -167,7 +167,7 @@
 <section class="ab-container pb-10">
     <div class="grid gap-6 lg:grid-cols-12">
 
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <h2 class="mb-4 text-lg font-extrabold">Our Users Love Us</h2>
 
             <ul class="grid gap-3 sm:grid-cols-3" data-reveal-group>
@@ -190,7 +190,7 @@
         </div>
 
         {{-- Community + help --}}
-        <div class="space-y-4 lg:col-span-5">
+        <div class="min-w-0 space-y-4 lg:col-span-5">
             <div class="ab-card flex items-center gap-4 p-5">
                 <x-ui.icon name="users" :size="34" class="shrink-0 text-brand-500" />
                 <div class="flex-1">

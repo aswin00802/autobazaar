@@ -19,7 +19,7 @@
     <div class="ab-container relative py-10">
         <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
 
-            <div class="lg:col-span-6">
+            <div class="min-w-0 lg:col-span-6">
                 <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">
                     Auto Accessories
                 </h1>
@@ -135,7 +135,7 @@
 <section class="ab-container pb-10">
     <div class="grid gap-6 lg:grid-cols-12">
 
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <x-ui.section-heading title="Popular Accessories"
                                   :href="route('site.accessories.shop')" />
 
@@ -147,7 +147,7 @@
         </div>
 
         {{-- Professional installation --}}
-        <div class="lg:col-span-5">
+        <div class="min-w-0 lg:col-span-5">
             <div class="ab-card h-full overflow-hidden">
                 <div class="p-5">
                     <h2 class="flex items-center gap-2 text-base font-extrabold">

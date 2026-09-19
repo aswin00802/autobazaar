@@ -37,7 +37,7 @@
     <div class="grid gap-8 lg:grid-cols-12">
 
         {{-- Contents --}}
-        <aside class="lg:col-span-3">
+        <aside class="min-w-0 lg:col-span-3">
             <nav aria-label="On this page" class="ab-card sticky top-40 p-4">
                 <p class="mb-2 text-xs font-bold uppercase tracking-wide text-muted">On this page</p>
                 <ul class="space-y-1.5">
@@ -54,7 +54,7 @@
         </aside>
 
         {{-- Body --}}
-        <div class="lg:col-span-9">
+        <div class="min-w-0 lg:col-span-9">
             <p class="mb-6 flex items-start gap-2 rounded-lg bg-accent-50 px-4 py-3 text-xs text-ink-soft">
                 <x-ui.icon name="info" :size="15" class="mt-0.5 shrink-0 text-accent-600" />
                 This is placeholder copy for the design prototype. Final policy text is supplied by the

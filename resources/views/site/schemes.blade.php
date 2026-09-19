@@ -10,7 +10,7 @@
     <div class="ab-container py-8 lg:py-10">
         <div class="grid gap-8 lg:grid-cols-12 lg:items-center">
 
-            <div class="lg:col-span-6">
+            <div class="min-w-0 lg:col-span-6">
                 <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Government Schemes</h1>
                 <p class="mt-1 text-lg font-bold text-brand-600">Support for a Better Tomorrow</p>
                 <p class="mt-2 max-w-lg text-sm text-muted">
@@ -53,7 +53,7 @@
 <section class="ab-container py-8" x-data="{ category: 'all', query: '' }">
     <div class="grid gap-6 lg:grid-cols-12">
 
-        <div class="lg:col-span-9">
+        <div class="min-w-0 lg:col-span-9">
 
             {{-- Category tabs --}}
             <div class="ab-scroll-x mb-5" role="tablist" aria-label="Scheme categories">
@@ -109,7 +109,7 @@
         </div>
 
         {{-- ============================================================ aside --}}
-        <aside class="space-y-4 lg:col-span-3">
+        <aside class="min-w-0 space-y-4 lg:col-span-3">
 
             <div class="relative">
                 <x-ui.icon name="search" :size="16"

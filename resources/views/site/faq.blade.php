@@ -43,7 +43,7 @@
 <section class="ab-container py-10">
     <div class="grid gap-8 lg:grid-cols-12">
 
-        <div class="space-y-8 lg:col-span-8">
+        <div class="min-w-0 space-y-8 lg:col-span-8">
             @foreach ($faqs as $group => $items)
                 <div>
                     <h2 class="mb-3 text-lg font-extrabold">{{ $group }}</h2>
@@ -76,7 +76,7 @@
             @endforeach
         </div>
 
-        <aside class="lg:col-span-4">
+        <aside class="min-w-0 lg:col-span-4">
             <div class="ab-card p-5">
                 <p class="flex items-center gap-2 text-sm font-extrabold">
                     <x-ui.icon name="headset" :size="17" class="text-brand-500" />

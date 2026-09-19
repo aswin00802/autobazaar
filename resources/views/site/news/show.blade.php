@@ -14,7 +14,7 @@
 
     <div class="grid gap-8 lg:grid-cols-12">
 
-        <div class="lg:col-span-8">
+        <div class="min-w-0 lg:col-span-8">
             <span class="rounded-full bg-brand-50 px-2.5 py-1 text-[10px] font-bold text-brand-600">
                 {{ $post['category'] }}
             </span>
@@ -70,7 +70,7 @@
         </div>
 
         {{-- Related --}}
-        <aside class="lg:col-span-4">
+        <aside class="min-w-0 lg:col-span-4">
             <h2 class="mb-4 text-base font-extrabold">Related Stories</h2>
 
             <ul class="space-y-3">

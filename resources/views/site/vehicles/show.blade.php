@@ -632,7 +632,7 @@
         <x-ui.section-heading title="Full Specifications" level="h2"
                               lede="Every figure from the manufacturer's spec sheet, plus our score breakdown." />
         <div class="grid gap-5 lg:grid-cols-3">
-            <div class="lg:col-span-2" data-reveal>
+            <div class="min-w-0 lg:col-span-2" data-reveal>
                 <x-ui.spec-table :specifications="$vehicle['specifications']" :full="true" />
             </div>
             <div data-reveal>
@@ -673,7 +673,7 @@
                 <x-ui.review-form :vehicle="$vehicle" :url="$reviewUrl" />
             </div>
 
-            <ul class="space-y-3 lg:col-span-2" data-reveal-group>
+            <ul class="min-w-0 space-y-3 lg:col-span-2" data-reveal-group>
                 @forelse ($reviewList as $review)
                     <li class="ab-card p-4" data-reveal>
                         <article>

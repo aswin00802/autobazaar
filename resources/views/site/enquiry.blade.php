@@ -20,7 +20,7 @@
     <div class="grid gap-6 lg:grid-cols-12">
 
         {{-- ====================================================== left rail --}}
-        <aside class="space-y-3 lg:col-span-3">
+        <aside class="min-w-0 space-y-3 lg:col-span-3">
             <div class="ab-card bg-accent-500 p-4">
                 <p class="flex items-start gap-2.5 text-sm font-bold leading-snug">
                     <x-ui.icon name="pin" :size="22" class="mt-0.5 shrink-0" />
@@ -66,7 +66,7 @@
         </aside>
 
         {{-- ========================================================== form --}}
-        <div class="lg:col-span-6">
+        <div class="min-w-0 lg:col-span-6">
             <div class="ab-card p-5 sm:p-6" data-reveal>
                 <div class="mb-5 flex items-start gap-3">
                     <x-ui.tone-icon icon="doc" tone="brand" :size="20" shape="circle" />
@@ -245,7 +245,7 @@
         </div>
 
         {{-- ===================================================== right rail --}}
-        <aside class="space-y-3 lg:col-span-3">
+        <aside class="min-w-0 space-y-3 lg:col-span-3">
             <div class="ab-card p-4">
                 <h2 class="mb-3 text-sm font-bold">Selected Vehicle</h2>
 

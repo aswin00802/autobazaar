@@ -51,11 +51,11 @@
          })">
     <div class="grid gap-6 lg:grid-cols-12">
 
-        <aside class="lg:col-span-2">
+        <aside class="min-w-0 lg:col-span-2">
             <x-ui.vehicle-filters :vehicles="$vehicles" />
         </aside>
 
-        <div class="lg:col-span-10">
+        <div class="min-w-0 lg:col-span-10">
             <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <p class="text-sm text-muted">
                     Showing <span class="font-bold text-ink" x-text="resultCount">{{ $listings->count() }}</span>

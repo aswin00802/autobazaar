@@ -35,7 +35,7 @@
 <section class="relative overflow-hidden bg-gradient-to-br from-brand-50 to-canvas">
     <div class="ab-container py-8 lg:py-10">
         <div class="grid items-center gap-6 lg:grid-cols-12">
-            <div class="lg:col-span-7">
+            <div class="min-w-0 lg:col-span-7">
                 <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Compare Auto Rickshaws</h1>
                 <p class="mt-2 max-w-xl text-sm text-muted">
                     Find the right auto for your needs. Compare specs, price, mileage, features and more.
@@ -94,12 +94,12 @@
     <div class="grid gap-6 lg:grid-cols-12">
 
         {{-- =========================================================== filters --}}
-        <aside class="lg:col-span-2">
+        <aside class="min-w-0 lg:col-span-2">
             <x-ui.vehicle-filters :vehicles="$all" />
         </aside>
 
         {{-- ===================================================== compare table --}}
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <p class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold text-muted lg:hidden"><x-ui.icon name="arrow-right" :size="12" /> Swipe sideways to see all models</p>
             <div class="ab-card overflow-x-auto" data-reveal>
                 <table class="w-full min-w-3xl border-collapse text-xs">
@@ -235,7 +235,7 @@
                                 $height = max(12, round(($emi / $maxEmi) * 100));
                                 $fills = ['bg-accent-500', 'bg-brand-300', 'bg-brand-500', 'bg-info'];
                             @endphp
-                            <li class="flex flex-1 flex-col items-center justify-end gap-1">
+                            <li class="flex h-full flex-1 flex-col items-center justify-end gap-1">
                                 <span class="text-[11px] font-bold">₹{{ number_format($emi) }}</span>
                                 <span class="w-full rounded-t {{ $fills[$i % 4] }}"
                                       style="height: {{ $height }}%"
@@ -282,7 +282,7 @@
         </div>
 
         {{-- ============================================================ aside --}}
-        <aside class="space-y-4 lg:col-span-3">
+        <aside class="min-w-0 space-y-4 lg:col-span-3">
 
             <div class="ab-card p-4">
                 <h2 class="mb-3 flex items-center gap-2 text-sm font-bold">

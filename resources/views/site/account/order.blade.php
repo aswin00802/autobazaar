@@ -9,7 +9,7 @@
     <div class="grid gap-5 lg:grid-cols-12">
 
         {{-- ============================================================ main --}}
-        <div class="space-y-5 lg:col-span-9">
+        <div class="min-w-0 space-y-5 lg:col-span-9">
 
             {{-- Confirmation banner --}}
             <div class="ab-card flex flex-wrap items-start justify-between gap-4 bg-brand-50 p-5">
@@ -184,7 +184,7 @@
         </div>
 
         {{-- =========================================================== aside --}}
-        <aside class="space-y-4 lg:col-span-3">
+        <aside class="min-w-0 space-y-4 lg:col-span-3">
 
             <div class="relative overflow-hidden rounded-xl bg-brand-50 p-4">
                 <img src="{{ asset($order['vehicle']['image']) }}" alt="" aria-hidden="true"

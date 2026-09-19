@@ -26,33 +26,76 @@
     <h1 class="text-xl font-extrabold">{{ $active }}</h1>
 
     {{-- ============================================================ enquiries --}}
-    @if ($section === 'enquiries')
+    {{-- Sections whose backend is not built yet: say so, never show sample data --}}
+    @if (in_array($section, ['saved', 'comparisons', 'payment-methods', 'notifications', 'refer'], true))
+        <div class="ab-card mt-5 p-10 text-center">
+            <x-ui.icon name="sparkle" :size="32" class="mx-auto text-line" />
+            <p class="mt-3 text-base font-extrabold">{{ $active }} — coming soon</p>
+            <p class="mx-auto mt-1 max-w-md text-sm text-muted">
+                We are still building this part of your account. Your orders, enquiries and
+                addresses are already here.
+            </p>
+            <a href="{{ route('site.account') }}" class="ab-btn ab-btn-primary mt-4 text-xs">Back to My Account</a>
+        </div>
+
+    {{-- ============================================================== profile --}}
+    @elseif ($section === 'profile')
+        <p class="mt-1 text-sm text-muted">The details on your AutoBazaar account.</p>
+
+        <dl class="ab-card mt-5 divide-y divide-line">
+            @foreach ([
+                ['user', 'Name', $customer->name ?: '—'],
+                ['phone', 'Mobile', $customer->phone_number ?: '—'],
+                ['mail', 'Email', $customer->email ?: '—'],
+            ] as [$icon, $label, $value])
+                <div class="flex items-center gap-3 p-4">
+                    <x-ui.icon :name="$icon" :size="18" class="text-brand-500" />
+                    <dt class="w-24 text-xs text-muted">{{ $label }}</dt>
+                    <dd class="text-sm font-semibold">{{ $value }}</dd>
+                </div>
+            @endforeach
+        </dl>
+        <p class="mt-3 text-xs text-muted">To change these details, please contact support.</p>
+
+    {{-- ============================================================ enquiries --}}
+    @elseif ($section === 'enquiries')
         <p class="mt-1 text-sm text-muted">Every enquiry you have sent, and where it stands.</p>
 
-        <ul class="mt-5 space-y-3">
-            @foreach ([
-                ['TVS King Deluxe', '03 Sep 2026', 'Contacted', 'brand'],
-                ['Bajaj RE', '27 Aug 2026', 'In Progress', 'info'],
-                ['Mahindra Treo Plus', '12 Aug 2026', 'Closed', 'muted'],
-            ] as $i => [$model, $date, $status, $tone])
-                @php $vehicle = $vehicles[$i] ?? $vehicles[0]; @endphp
-                <li class="ab-card flex flex-wrap items-center gap-4 p-4">
-                    <img src="{{ asset($vehicle['image']) }}" alt="" aria-hidden="true"
-                         class="h-14 w-20 shrink-0 object-contain" loading="lazy">
+        @if ($enquiries->isEmpty())
+            <div class="ab-card mt-5 p-8 text-center">
+                <x-ui.icon name="message" :size="30" class="mx-auto text-line" />
+                <p class="mt-3 text-sm font-semibold">No enquiries yet</p>
+                <p class="mt-1 text-xs text-muted">Enquiries, quotation requests, test drives and loan requests appear here.</p>
+                <a href="{{ route('site.new-autos') }}" class="ab-btn ab-btn-primary mt-4 text-xs">Browse New Autos</a>
+            </div>
+        @else
+            <ul class="mt-5 space-y-3">
+                @foreach ($enquiries as $enquiry)
+                    @php
+                        $done = in_array($enquiry->lead_status, ['delivered', 'closed'], true);
+                        $sources = \App\Models\Vehicle\VehicleEnquiry::SOURCES;
+                    @endphp
+                    <li class="ab-card flex flex-wrap items-center gap-4 p-4">
+                        <span class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-canvas text-brand-500">
+                            <x-ui.icon name="auto" :size="22" />
+                        </span>
 
-                    <span class="min-w-40 flex-1 leading-tight">
-                        <span class="block text-sm font-bold">{{ $model }}</span>
-                        <span class="block text-xs text-muted">Enquired on {{ $date }}</span>
-                    </span>
+                        <span class="min-w-40 flex-1 leading-tight">
+                            <span class="block text-sm font-bold">{{ $enquiry->model->name ?? 'General enquiry' }}</span>
+                            <span class="block text-xs text-muted">
+                                {{ $sources[$enquiry->source] ?? 'Enquiry' }} · {{ $enquiry->enquiry_no }} ·
+                                {{ $enquiry->created_at?->format('d M Y') }}
+                            </span>
+                        </span>
 
-                    <span class="rounded-full px-2.5 py-1 text-[10px] font-bold
-                                 {{ $tone === 'brand' ? 'bg-brand-50 text-brand-600'
-                                    : ($tone === 'info' ? 'bg-blue-50 text-info' : 'bg-canvas text-muted') }}">
-                        {{ $status }}
-                    </span>
-                </li>
-            @endforeach
-        </ul>
+                        <span class="rounded-full px-2.5 py-1 text-[10px] font-bold
+                                     {{ $done ? 'bg-canvas text-muted' : ($enquiry->lead_status === 'new' ? 'bg-accent-100 text-ink' : 'bg-brand-50 text-brand-600') }}">
+                            {{ \Illuminate\Support\Str::headline($enquiry->lead_status) }}
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
 
     {{-- ================================================================ saved --}}
     @elseif ($section === 'saved')
@@ -113,9 +156,6 @@
                                 </span>
                             @endif
                         </span>
-                        <button type="button" class="text-[11px] font-semibold text-brand-500 underline underline-offset-2">
-                            Edit
-                        </button>
                     </div>
 
                     <p class="mt-2 text-xs">{{ $address['name'] }}</p>
@@ -127,11 +167,11 @@
             @endforeach
 
             <li>
-                <button type="button"
+                <a href="{{ route('site.checkout') }}"
                         class="flex h-full w-full items-center justify-center gap-2 rounded-xl border border-dashed
                                border-line p-6 text-sm font-semibold text-brand-500 transition-colors hover:bg-canvas">
                     <x-ui.icon name="plus" :size="18" /> Add New Address
-                </button>
+                        </a>
             </li>
         </ul>
 

@@ -135,7 +135,7 @@
                 @endauth
 
                 {{-- Cart --}}
-                <a href="{{ route('site.checkout') }}" class="relative rounded-lg p-2 transition-colors hover:bg-canvas"
+                <a href="{{ route('site.cart') }}" class="relative rounded-lg p-2 transition-colors hover:bg-canvas"
                    aria-label="Cart">
                     <x-ui.icon name="cart" class="text-ink-soft" :size="22" />
                     {{-- Re-triggers the pop by swapping the class off and on --}}

@@ -35,11 +35,11 @@
 
     <div class="grid gap-6 lg:grid-cols-12">
 
-        <aside class="lg:col-span-2">
+        <aside class="min-w-0 lg:col-span-2">
             <x-ui.vehicle-filters :vehicles="$vehicles" />
         </aside>
 
-        <div class="lg:col-span-10">
+        <div class="min-w-0 lg:col-span-10">
             {{-- Brand strip: quick hop between makers --}}
             @unless (isset($brand))
                 <ul class="ab-scroll-x mb-6">

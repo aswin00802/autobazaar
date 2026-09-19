@@ -78,7 +78,7 @@ class CheckoutController extends Controller
         $request->validate([
             'address_id'      => 'required|integer',
             'delivery_option' => 'required|in:standard,express',
-            'payment_mode'    => 'required|in:upi,card,netbanking,wallet,cod',
+            'payment_mode'    => 'required|in:' . implode(',', $this->enabledPaymentModes()),
         ]);
 
         try {
@@ -115,7 +115,26 @@ class CheckoutController extends Controller
             ->firstOrFail();
     }
 
+    /**
+     * Online payment is switched on here once the gateway is connected.
+     * Until then only Cash on Delivery can be chosen — nothing may look paid.
+     */
+    private const ONLINE_PAYMENTS_ENABLED = false;
+
+    private function enabledPaymentModes(): array
+    {
+        return self::ONLINE_PAYMENTS_ENABLED ? ['upi', 'card', 'netbanking', 'wallet', 'cod'] : ['cod'];
+    }
+
     private function paymentMethods(): array
+    {
+        return array_map(
+            fn (array $m) => $m + ['enabled' => in_array($m['id'], $this->enabledPaymentModes(), true)],
+            $this->allPaymentMethods(),
+        );
+    }
+
+    private function allPaymentMethods(): array
     {
         return [
             ['id' => 'upi',        'label' => 'UPI',                    'note' => '(Google Pay, PhonePe, Paytm, etc.)', 'brands' => ['GPay', 'PhonePe', 'Paytm']],

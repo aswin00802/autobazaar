@@ -4,7 +4,7 @@
 
 @section('content')
 
-<x-ui.page-hero :title="$query ? 'Results for &quot;' . $query . '&quot;' : 'Search AutoBazaar'"
+<x-ui.page-hero :title="$query ? 'Results for “' . $query . '”' : 'Search AutoBazaar'"
                 lede="Autos, accessories, government schemes and news — all in one place."
                 :breadcrumb="[
                     ['label' => 'Home', 'href' => route('site.home')],
@@ -46,6 +46,15 @@
             </button>
         @endforeach
     </div>
+
+    @if ($query !== '' && ! count($vehicles) && ! count($products) && ! count($schemes) && ! count($posts))
+        <div class="ab-card mb-6 p-10 text-center">
+            <x-ui.icon name="search" :size="34" class="mx-auto text-line" />
+            <p class="mt-3 text-base font-extrabold">Nothing matched “{{ $query }}”</p>
+            <p class="mt-1 text-sm text-muted">Check the spelling or try a brand, model or accessory name.</p>
+            <a href="{{ route('site.new-autos') }}" class="ab-btn ab-btn-primary mt-4 text-xs">Browse New Autos</a>
+        </div>
+    @endif
 
     {{-- Autos --}}
     <ul x-show="tab === 'autos'" class="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-5">

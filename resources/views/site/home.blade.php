@@ -22,7 +22,7 @@
         <div class="grid items-center gap-10 lg:grid-cols-12">
 
             {{-- Copy + search --}}
-            <div class="lg:col-span-7" data-reveal="left">
+            <div class="min-w-0 lg:col-span-7" data-reveal="left">
                 <p class="mb-4 inline-block rounded border border-white/30 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em]">
                     India's Trusted Auto Marketplace
                 </p>
@@ -105,7 +105,7 @@
                  55% to 100% of the width, where the reference's stops near 79%,
                  so this card sits over the tail of it. Fix is a banner whose
                  lettering ends by ~75%, not a layout change here. --}}
-            <div class="lg:col-span-5" data-reveal="right">
+            <div class="min-w-0 lg:col-span-5" data-reveal="right">
                 @php $featured = collect($offers)->firstWhere('featured', true); @endphp
 
                 @if ($featured)
@@ -161,7 +161,7 @@
     <div class="grid gap-8 lg:grid-cols-12">
 
         {{-- Popular models --}}
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <x-ui.section-heading title="Popular Autorickshaw Models"
                                   :href="route('site.new-autos')" />
 
@@ -196,7 +196,7 @@
         </div>
 
         {{-- Latest offers + popular accessories --}}
-        <div class="lg:col-span-5">
+        <div class="min-w-0 lg:col-span-5">
             <x-ui.section-heading title="Latest Offers" :href="route('site.offers')" />
 
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1" data-reveal-group>

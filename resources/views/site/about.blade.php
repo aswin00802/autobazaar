@@ -15,7 +15,7 @@
 <section class="ab-container py-10">
     <div class="grid gap-10 lg:grid-cols-12">
 
-        <div class="lg:col-span-7">
+        <div class="min-w-0 lg:col-span-7">
             <h2 class="text-xl font-extrabold">Why we exist</h2>
 
             <div class="mt-3 space-y-4 text-sm leading-relaxed text-ink-soft">
@@ -54,7 +54,7 @@
             </ul>
         </div>
 
-        <aside class="space-y-4 lg:col-span-5">
+        <aside class="min-w-0 space-y-4 lg:col-span-5">
             <div class="ab-card overflow-hidden">
                 <img src="{{ asset('assets/image/auto_brands/tvs.png') }}" alt=""
                      aria-hidden="true" class="w-full bg-brand-50 object-contain p-8" loading="lazy">
