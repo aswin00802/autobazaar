@@ -21,8 +21,8 @@ require __DIR__ . '/site.php';
 Route::get('user/login', [App\Http\Controllers\Web\Auth\LoginController::class, 'index'])->name('user.login');
 Route::get('user/register', [App\Http\Controllers\Web\Auth\RegisterController::class, 'index'])->name('user.register');
 Route::get('/user/otp/{mobile}/{otp_type}', [App\Http\Controllers\Web\Auth\OtpController::class, 'Otp_page'])->name('user.otp-page');
-Route::post('/user/otp/send', [App\Http\Controllers\Web\Auth\OtpController::class, 'sendOTP'])->name('user.otp.send');
-Route::post('/user/otp/verify', [App\Http\Controllers\Web\Auth\OtpController::class, 'verifyOTP'])->name('user.otp.verify');
+Route::post('/user/otp/send', [App\Http\Controllers\Web\Auth\OtpController::class, 'sendOTP'])->middleware('throttle:5,1')->name('user.otp.send');
+Route::post('/user/otp/verify', [App\Http\Controllers\Web\Auth\OtpController::class, 'verifyOTP'])->middleware('throttle:10,1')->name('user.otp.verify');
 
 /* ------------------------------------------- Policy and account-deletion pages
    These URLs are linked from the Play Store / App Store listings, so the paths
@@ -46,7 +46,7 @@ Route::get('login/{provider}/callback', [App\Http\Controllers\Auth\WebSocialLogi
 Route::post('admin/logout', [App\Http\Controllers\Auth\LoginController::class, 'admin_logout'])->name('admin.logout');
 
 // login, logout (POST), register, password reset — shared by admin and customers.
-Auth::routes();
+Auth::routes(['register' => false]);
 
 // Admin panel (auth + active-user check).
 require __DIR__ . '/admin.php';

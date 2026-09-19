@@ -14,6 +14,7 @@ class OrdersController extends Controller
         $this->middleware(['permission:sparepart_successorders'])->only(['successOrders']);
         $this->middleware(['permission:sparepart_cancelorders'])->only(['cancelOrders']);
         $this->middleware(['permission:sparepart_deleteorders'])->only(['deleteOrder']);
+        $this->middleware(['permission:sparepart_pendingorders|sparepart_successorders|sparepart_cancelorders'])->only(['statusUpdate']);
     }
     public function pendingOrders()
     {

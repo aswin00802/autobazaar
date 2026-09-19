@@ -16,7 +16,7 @@ class AutoFinanceController extends Controller
     {
         $this->middleware(['permission:auto_finance'])->only('index');
         $this->middleware(['permission:add_auto_finance'])->only(['create','store']);
-        $this->middleware(['permission:edit_auto_finance'])->only(['edit', 'update']);
+        $this->middleware(['permission:edit_auto_finance'])->only(['edit', 'update', 'statusToggle']);
         $this->middleware(['permission:delete_auto_finance'])->only(['destroy']);
     }
 

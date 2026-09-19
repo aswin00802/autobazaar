@@ -3,7 +3,12 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Log;
+
+// Two Laravel apps under one Apache (mod_php) leak putenv() values into each
+// other, which sent requests to the wrong database. Read $_ENV/$_SERVER only.
+Env::disablePutenv();
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -89,8 +94,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'check.Userstatus' => \App\Http\Middleware\CheckUserStatus::class,
             'UserAuth' => \App\Http\Middleware\UserAuth::class,
+            'staff' => \App\Http\Middleware\EnsureStaff::class,
             'sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+
+        $middleware->web(append: [\App\Http\Middleware\SecurityHeaders::class]);
         
     })
     ->withExceptions(function (Exceptions $exceptions): void {

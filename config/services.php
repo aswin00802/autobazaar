@@ -66,4 +66,9 @@ return [
         'secret' => env('RAZORPAY_SECRET'),
     ],
 
+    // SMS gateway used for customer OTPs (Web\Auth\OtpController)
+    'ping4sms' => [
+        'key' => env('PING4SMS_KEY', '0bc8ea57e5adc287cc8d163c82693450'),
+    ],
+
 ];

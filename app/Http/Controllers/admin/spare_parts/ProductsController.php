@@ -16,7 +16,7 @@ class ProductsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:sparepart_product'])->only(['index']);
+        $this->middleware(['permission:sparepart_product'])->only(['index', 'getDetails']);
         $this->middleware(['permission:add_sparepart_product'])->only(['create','store']);
         $this->middleware(['permission:edit_sparepart_product'])->only(['edit','update']);
         $this->middleware(['permission:delete_sparepart_product'])->only(['delete']);

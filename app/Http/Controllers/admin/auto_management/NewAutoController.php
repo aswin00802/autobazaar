@@ -20,7 +20,7 @@ class NewAutoController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:new_auto'])->only(['index']);
+        $this->middleware(['permission:new_auto'])->only(['index', 'getQuotation']);
         $this->middleware(['permission:add_new_auto'])->only(['create','store']);
         $this->middleware(['permission:edit_new_auto'])->only(['edit','update']);
         $this->middleware(['permission:delete_new_auto'])->only(['delete']);

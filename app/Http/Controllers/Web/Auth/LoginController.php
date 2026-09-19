@@ -9,6 +9,11 @@ class LoginController extends Controller
 {
     public function index()
     {
+        // Already signed in: the login form has nothing to offer.
+        if (auth()->check()) {
+            return redirect()->route('site.account');
+        }
+
         return view('web.auth.login');
     }
 }

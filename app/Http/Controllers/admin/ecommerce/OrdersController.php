@@ -18,6 +18,7 @@ class OrdersController extends Controller
 {
     public function __construct(private OrderService $orders)
     {
+        $this->middleware(['permission:ecommerce_orders']);
     }
 
     public function index(Request $request, ?string $status = null)

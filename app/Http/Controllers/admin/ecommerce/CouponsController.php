@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Auth;
 /** Discount codes used at accessory checkout. */
 class CouponsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:ecommerce_coupons'])->only(['index']);
+        $this->middleware(['permission:add_ecommerce_coupons'])->only(['create', 'store']);
+        $this->middleware(['permission:edit_ecommerce_coupons'])->only(['edit', 'update']);
+        $this->middleware(['permission:delete_ecommerce_coupons'])->only(['delete']);
+    }
+
     public function index()
     {
         return view('admin.ecommerce.coupons.index', [

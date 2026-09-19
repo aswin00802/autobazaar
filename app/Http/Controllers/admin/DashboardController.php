@@ -12,6 +12,11 @@ use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:dashboard']);
+    }
+
     public function index()
     {
         $dt    = date('Y-m-d'); //get current date

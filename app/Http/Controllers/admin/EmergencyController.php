@@ -11,7 +11,7 @@ class EmergencyController extends Controller
     public function __construct()
     {
         $this->middleware(['permission:auto_emergency_list'])->only(['index']);
-        $this->middleware(['permission:auto_emergency_update'])->only(['update_stauts']);
+        $this->middleware(['permission:auto_emergency_update'])->only(['status_update']);
     }
 
     public function index()

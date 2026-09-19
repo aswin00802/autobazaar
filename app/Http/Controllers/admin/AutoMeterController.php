@@ -13,7 +13,7 @@ class AutoMeterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:auto_meter'])->only(['index']);
+        $this->middleware(['permission:auto_meter'])->only(['index', 'invoice', 'invoiceDownload']);
     }
     public function index(Request $request)
     {

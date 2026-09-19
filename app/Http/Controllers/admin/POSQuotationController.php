@@ -11,7 +11,7 @@ class POSQuotationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:pos_quotation'])->only(['index']);
+        $this->middleware(['permission:pos_quotation'])->only(['index', 'create', 'getAutoModel']);
         // $this->middleware(['permission:add_pos_quotation'])->only(['create']);
     }
 

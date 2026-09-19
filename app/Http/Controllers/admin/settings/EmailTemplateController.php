@@ -10,7 +10,7 @@ class EmailTemplateController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['permission:emailtemplate_setting'])->only(['index','update']);
+        $this->middleware(['permission:emailtemplate_setting'])->only(['index', 'create', 'store', 'edit', 'update', 'delete']);
     }
 
     public function index()

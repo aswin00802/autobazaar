@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['auth','check.Userstatus']], function () {
+Route::group(['middleware' => ['auth', 'check.Userstatus', 'staff']], function () {
     Route::get('/dashboard', [App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
     Route::post('/brand/get-model', [App\Http\Controllers\admin\CommonController::class, 'get_model'])->name('brand.get-model');
     Route::group(['prefix' => 'masters'], function () {

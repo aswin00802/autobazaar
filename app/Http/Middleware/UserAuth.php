@@ -24,6 +24,10 @@ class UserAuth
                 session()->put('url.intended', $request->fullUrl());
             }
 
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Please log in to continue.', 'login_url' => url('/user/login')], 401);
+            }
+
             return redirect('/user/login');
         }
 

@@ -43,7 +43,7 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         $loginField = $request->input('email');
-        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
         // Find user first
         $user = \App\Models\User::where($fieldType, $loginField)->first();
@@ -65,7 +65,7 @@ class LoginController extends Controller
         $loginField = $request->input('email'); // form field name is usually "email"
 
         // check if input is email or username
-        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
         return [
             $fieldType => $loginField,
@@ -80,7 +80,7 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         $loginField = $request->input('email');
-        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($loginField, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone_number';
 
         $user = \App\Models\User::where($fieldType, $loginField)->first();
 
