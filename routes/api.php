@@ -87,7 +87,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //store user device token using notificatiion
     Route::post('device-token',[UserController::class,'deviceToken'])->name('device-token');
     //auto apis
-    Route::resource('auto_posts', AutoDetailsController::class);
+    // API resource: no HTML create/edit form routes (they returned an empty 200).
+    Route::resource('auto_posts', AutoDetailsController::class)->except(['create', 'edit']);
     Route::get('get-posts/{id}', [AutoDetailsController::class, 'getAutoPost'])->name('get-posts');
     Route::get('get-all-posts', [AutoDetailsController::class, 'getAllAutoPosts'])->name('get-all-posts');
     // Filters
@@ -215,7 +216,7 @@ Route::prefix('fairprice/v1')->group(function () {
 Route::prefix('fairprice/v2')->group(function () {
 
     Route::get('/v2-test', function () {
-        return "V2 WORKING";
+        return response()->json(["success" => true, "message" => "V2 WORKING"]);
     });
 
     Route::middleware(['auth:customer'])->group(function () {

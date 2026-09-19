@@ -24,7 +24,8 @@ class VehicleController extends Controller
     /** GET /api/vehicles?brand=tvs */
     public function index(Request $request)
     {
-        $brand = trim((string) $request->query('brand', ''));
+        $brand = $request->query('brand');
+        $brand = is_string($brand) ? trim($brand) : '';   // ?brand[]=x must not crash
         $vehicles = $brand !== '' ? $this->catalog->byBrand($brand) : $this->catalog->all();
 
         return ResponseService::success([

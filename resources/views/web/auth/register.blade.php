@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Auto Bazaar</title>
+    <title>Register - Auto Bazaar</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @if(getSetting('fav_icon'))
         <link rel="icon" type="image/x-icon" href="{{ asset(getSetting('fav_icon')) }}" />
@@ -27,15 +27,38 @@
             @csrf
             <input type="hidden" name="type" value="register">
             <div class="mb-3">
-                <select class="form-control" name='auto_area_id' id="auto_area_id">
-                    <option value="" selected>Select area form dropdown</option>
-                    @if(!empty($areas))
-                        @foreach($areas as $area)
-                            <option value="{{$area['id']}}">{{$area['name']}}</option>
-                        @endforeach
-                    @endif
+                <select class="form-control" id="auto_city_id" aria-label="District">
+                    <option value="" selected>Select your district</option>
+                    @foreach($cities as $city)
+                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                    @endforeach
+                    <option value="0">Other district</option>
                 </select>
             </div>
+            <div class="mb-3">
+                <select class="form-control" name='auto_area_id' id="auto_area_id" disabled>
+                    <option value="" selected>Select area form dropdown</option>
+                </select>
+            </div>
+            <script>
+                // Areas for the chosen district only — the full list is 16,000+ rows.
+                document.getElementById('auto_city_id').addEventListener('change', function () {
+                    var area = document.getElementById('auto_area_id');
+                    area.innerHTML = '<option value="">Loading areas…</option>';
+                    area.disabled = true;
+                    if (this.value === '') { area.innerHTML = '<option value="">Select area form dropdown</option>'; return; }
+                    fetch(@json(url('user/areas')) + '/' + this.value, { headers: { 'Accept': 'application/json' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (data) {
+                            area.innerHTML = '<option value="">Select area form dropdown</option>';
+                            (data.areas || []).forEach(function (a) {
+                                var o = document.createElement('option'); o.value = a.id; o.textContent = a.name; area.appendChild(o);
+                            });
+                            area.disabled = false;
+                        })
+                        .catch(function () { area.innerHTML = '<option value="">Could not load areas — reload the page</option>'; });
+                });
+            </script>
             <div class="mb-3">
                 <input type="text" id="name" name="name" class="form-control" placeholder="Enter Username">
             </div>

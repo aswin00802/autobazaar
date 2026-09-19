@@ -20,6 +20,7 @@ require __DIR__ . '/site.php';
 /* ---------------------------------------------------------- Customer auth (OTP) */
 Route::get('user/login', [App\Http\Controllers\Web\Auth\LoginController::class, 'index'])->name('user.login');
 Route::get('user/register', [App\Http\Controllers\Web\Auth\RegisterController::class, 'index'])->name('user.register');
+Route::get('user/areas/{city}', [App\Http\Controllers\Web\Auth\RegisterController::class, 'areas'])->whereNumber('city')->name('user.areas');
 Route::get('/user/otp/{mobile}/{otp_type}', [App\Http\Controllers\Web\Auth\OtpController::class, 'Otp_page'])->name('user.otp-page');
 Route::post('/user/otp/send', [App\Http\Controllers\Web\Auth\OtpController::class, 'sendOTP'])->middleware('throttle:5,1')->name('user.otp.send');
 Route::post('/user/otp/verify', [App\Http\Controllers\Web\Auth\OtpController::class, 'verifyOTP'])->middleware('throttle:10,1')->name('user.otp.verify');

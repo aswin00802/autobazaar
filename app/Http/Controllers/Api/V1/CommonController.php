@@ -38,6 +38,31 @@ class CommonController extends Controller
         return $this->masterService->getActiveRecords(AutoFuelType::class, 'Fuel Type');
     } 
 
+    /** GET api/get-transmission-types — read straight from the master table. */
+    public function getAutoTransmissionType()
+    {
+        return $this->masterList('auto_transmission_types', 'Transmission Types');
+    }
+
+    /** GET api/get-auto-body-types — the master table was never created; answer with an empty list, not a 500. */
+    public function getAutoBodyTypes()
+    {
+        return $this->masterList('auto_body_types', 'Auto Body Types');
+    }
+
+    private function masterList(string $table, string $label)
+    {
+        try {
+            $rows = \Illuminate\Support\Facades\Schema::hasTable($table)
+                ? \Illuminate\Support\Facades\DB::table($table)->where('status', 1)->orderBy('id')->get()
+                : collect();
+
+            return ResponseService::success($rows, "{$label} Listed Successfully.");
+        } catch (\Throwable $e) {
+            return ResponseService::error('An error occurred. Please try again.', [], 500);
+        }
+    }
+
     public function getAutoPriceRange(){
        
         return $this->masterService->getActiveRecords(AutoPriceRange::class, 'Price Range');

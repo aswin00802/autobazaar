@@ -18,13 +18,16 @@ class VehicleLeadsController extends Controller
 
     public function index(Request $request)
     {
+        // Filters are plain strings; an array (?model_id[]=1) is ignored instead of crashing the page.
+        $text = fn (string $key) => is_scalar($request->query($key)) ? trim((string) $request->query($key)) : '';
+
         $filters = [
-            'source'      => $request->get('source', ''),
-            'lead_status' => $request->get('lead_status', ''),
-            'from'        => $request->get('from', ''),
-            'to'          => $request->get('to', ''),
-            'q'           => trim((string) $request->get('q', '')),
-            'model_id'    => $request->get('model_id', ''),
+            'source'      => $text('source'),
+            'lead_status' => $text('lead_status'),
+            'from'        => $text('from'),
+            'to'          => $text('to'),
+            'q'           => $text('q'),
+            'model_id'    => $text('model_id'),
         ];
 
         $leads = VehicleEnquiry::with(['model:id,name', 'variant:id,name', 'assignee:id,name'])

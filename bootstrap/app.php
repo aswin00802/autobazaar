@@ -105,4 +105,25 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(function ($request, $throwable) {
             return $request->is('api/*') || $request->expectsJson();
         });
+
+        // API errors use the same {success, status, message} envelope as ResponseService.
+        // Validation errors keep Laravel's own shape; stack traces are never sent.
+        $exceptions->render(function (\Throwable $e, $request) {
+            if (! $request->is('api/*') || $e instanceof \Illuminate\Validation\ValidationException) {
+                return null;
+            }
+
+            [$status, $message] = match (true) {
+                $e instanceof \Illuminate\Auth\AuthenticationException => [401, 'Unauthenticated.'],
+                $e instanceof \Illuminate\Auth\Access\AuthorizationException => [403, 'This action is not allowed.'],
+                $e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException,
+                $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException => [404, 'Not found.'],
+                $e instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException => [405, 'Method not allowed.'],
+                $e instanceof \Illuminate\Http\Exceptions\ThrottleRequestsException => [429, 'Too many requests. Please try again shortly.'],
+                $e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface => [$e->getStatusCode(), $e->getMessage() ?: 'Request failed.'],
+                default => [500, config('app.debug') ? $e->getMessage() : 'Something went wrong. Please try again.'],
+            };
+
+            return response()->json(['success' => false, 'status' => $status, 'message' => $message], $status);
+        });
     })->create();
