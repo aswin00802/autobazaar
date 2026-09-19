@@ -38,6 +38,12 @@ class OrderService
             throw new \RuntimeException('Your cart is empty.');
         }
 
+        foreach ($totals['lines'] as $line) {
+            if (! $this->cart->sellableVariant((int) $line['product_model_id'])) {
+                throw new \RuntimeException('"' . $line['name'] . '" is no longer available. Please remove it from your cart.');
+            }
+        }
+
         $address = Address::where('id', $addressId)
             ->where('user_id', $userId)
             ->where('status_id', 1)
@@ -48,6 +54,7 @@ class OrderService
         }
 
         return DB::transaction(function () use ($userId, $totals, $address, $deliveryOption, $paymentMode) {
+            // The order number is read under a lock (see nextOrderNumber); deadlocks are retried up to 3 times.
             $order = new Order();
             $order->order_number = $this->nextOrderNumber();
             $order->user_id = $userId;
@@ -119,7 +126,35 @@ class OrderService
             }
 
             return $order;
-        });
+        }, 3);
+    }
+
+    /**
+     * May this order move to $status? Forward along FLOW only; cancel only
+     * before it ships; delivered and cancelled are final.
+     */
+    public function canMoveTo(Order $order, string $status): bool
+    {
+        $current = $order->order_status;
+
+        if (in_array($current, ['delivered', 'cancelled'], true)) {
+            return false;
+        }
+
+        if ($status === 'cancelled') {
+            return in_array($current, ['placed', 'confirmed', 'packed'], true);
+        }
+
+        $from = array_search($current, Order::FLOW, true);
+        $to = array_search($status, Order::FLOW, true);
+
+        return $from !== false && $to !== false && $to > $from;
+    }
+
+    /** Cancelling gives the customer their coupon back. */
+    public function releaseCoupon(Order $order): void
+    {
+        CouponUsage::where('order_id', $order->id)->delete();
     }
 
     public function recordStatus(Order $order, string $status, ?string $note = null): void
@@ -141,8 +176,13 @@ class OrderService
     {
         $prefix = 'ABZ' . now()->format('Ymd') . 'C';
 
-        $todayCount = Order::where('order_number', 'like', $prefix . '%')->count();
+        $last = Order::where('order_number', 'like', $prefix . '%')
+            ->lockForUpdate()
+            ->orderByDesc('order_number')
+            ->value('order_number');
 
-        return $prefix . str_pad((string) ($todayCount + 1), 3, '0', STR_PAD_LEFT);
+        $next = $last ? ((int) substr($last, strlen($prefix))) + 1 : 1;
+
+        return $prefix . str_pad((string) $next, 3, '0', STR_PAD_LEFT);
     }
 }

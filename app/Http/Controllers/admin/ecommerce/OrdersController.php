@@ -68,7 +68,16 @@ class OrdersController extends Controller
             return redirect()->back()->with('error', 'Order is already marked ' . $request->order_status . '.');
         }
 
+        // DEF-16: forward only; cancel only before shipping; delivered/cancelled are final
+        if (! $this->orders->canMoveTo($order, $request->order_status)) {
+            return redirect()->back()->with('error', 'An order that is ' . $order->order_status . ' cannot be changed to ' . $request->order_status . '.');
+        }
+
         $this->orders->recordStatus($order, $request->order_status, $request->note);
+
+        if ($request->order_status === 'cancelled') {
+            $this->orders->releaseCoupon($order);
+        }
 
         return redirect()->back()->with('success', 'Order status updated successfully.');
     }

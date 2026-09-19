@@ -198,6 +198,10 @@ class VehicleCatalogSeeder extends Seeder
                     $model->reviews()->create($r + ['review_status' => 'approved', 'created_at' => now()->subDays(14 * ($ri + 1))]);
                 }
             }
+
+            // Headline rating = the approved reviews that really exist, so it cannot
+            // jump the first time a review is moderated.
+            $model->refreshRating();
         }
 
         // Every master model without a catalogue row -> draft.

@@ -43,13 +43,16 @@ class CheckoutController extends Controller
         $request->validate([
             'label'          => 'required|string|max:50',
             'name'           => 'required|string|max:255',
-            'mobile'         => 'required|string|max:20',
+            'mobile'         => ['required', 'regex:/^[6-9][0-9]{9}$/'],
             'address_line_1' => 'required|string|max:255',
             'address_line_2' => 'nullable|string|max:255',
-            'city'           => 'nullable|string|max:100',
+            'city'           => 'required|string|max:100',
             'district'       => 'nullable|string|max:100',
-            'state'          => 'nullable|string|max:100',
-            'pincode'        => 'nullable|string|max:10',
+            'state'          => 'required|string|max:100',
+            'pincode'        => ['required', 'regex:/^[1-9][0-9]{5}$/'],
+        ], [
+            'mobile.regex'  => 'Enter a valid 10-digit mobile number.',
+            'pincode.regex' => 'Enter a valid 6-digit pincode.',
         ]);
 
         $isFirst = ! Address::where('user_id', Auth::id())->where('status_id', 1)->exists();

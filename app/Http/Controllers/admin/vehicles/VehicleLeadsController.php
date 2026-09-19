@@ -88,7 +88,7 @@ class VehicleLeadsController extends Controller
     {
         $request->validate([
             'id'          => 'required|integer',
-            'assigned_to' => 'nullable|integer',
+            'assigned_to' => ['nullable', 'integer', \Illuminate\Validation\Rule::in($this->admins()->pluck('id')->all())],
         ]);
 
         $lead = VehicleEnquiry::findOrFail($request->id);

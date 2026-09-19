@@ -26,7 +26,7 @@ class Order extends Model
 
     public function history()
     {
-        return $this->hasMany(OrderStatusHistory::class, 'order_id');
+        return $this->hasMany(OrderStatusHistory::class, 'order_id')->orderBy('id');
     }
 
     public function user()

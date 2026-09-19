@@ -23,7 +23,13 @@ class CartController extends Controller
             'qty'              => 'nullable|integer|min:1|max:10',
         ]);
 
-        $this->cart->add((int) $request->product_model_id, (int) ($request->qty ?? 1));
+        try {
+            $this->cart->add((int) $request->product_model_id, (int) ($request->qty ?? 1));
+        } catch (\RuntimeException $e) {
+            return $request->expectsJson()
+                ? response()->json(['success' => false, 'message' => $e->getMessage()], 422)
+                : redirect()->back()->with('error', $e->getMessage());
+        }
 
         if ($request->expectsJson()) {
             return response()->json([

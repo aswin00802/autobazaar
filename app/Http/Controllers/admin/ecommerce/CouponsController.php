@@ -21,7 +21,8 @@ class CouponsController extends Controller
     public function index()
     {
         return view('admin.ecommerce.coupons.index', [
-            'coupons' => Coupon::withCount('usages')->latest('id')->paginate(20),
+            // Removed coupons (status_id 2) are hidden; inactive ones (0) stay listed.
+            'coupons' => Coupon::withCount('usages')->where('status_id', '!=', 2)->latest('id')->paginate(20),
         ]);
     }
 
@@ -34,7 +35,7 @@ class CouponsController extends Controller
     {
         $request->validate($this->rules());
 
-        if (Coupon::where('code', strtoupper($request->code))->exists()) {
+        if (Coupon::where('code', strtoupper($request->code))->where('status_id', '!=', 2)->exists()) {
             return redirect()->route('ecommerce.coupons.create')->with('error', 'This coupon code already exists');
         }
 
@@ -58,7 +59,7 @@ class CouponsController extends Controller
 
         $coupon = Coupon::findOrFail($id);
 
-        if (Coupon::where('code', strtoupper($request->code))->where('id', '!=', $id)->exists()) {
+        if (Coupon::where('code', strtoupper($request->code))->where('id', '!=', $id)->where('status_id', '!=', 2)->exists()) {
             return redirect()->back()->with('error', 'This coupon code already exists');
         }
 
@@ -74,7 +75,9 @@ class CouponsController extends Controller
         $request->validate(['id' => 'required|integer']);
 
         $coupon = Coupon::findOrFail($request->id);
-        $coupon->status_id = 0;
+        // Removed = status 2, with the code freed so it can be used again later.
+        $coupon->status_id = 2;
+        $coupon->code = substr($coupon->code, 0, 30) . '#DEL' . $coupon->id;
         $coupon->save();
 
         return redirect()->route('ecommerce.coupons')->with('success', 'Coupon removed successfully');
@@ -86,7 +89,8 @@ class CouponsController extends Controller
             'code'                => 'required|string|max:50',
             'label'               => 'nullable|string|max:255',
             'discount_type'       => 'required|in:percent,flat',
-            'discount_value'      => 'required|numeric|min:0',
+            // A percentage can never exceed 100; a discount of 0 is not a coupon.
+            'discount_value'      => ['required', 'numeric', 'gt:0', request('discount_type') === 'percent' ? 'max:100' : 'max:1000000'],
             'min_order_amount'    => 'nullable|numeric|min:0',
             'max_discount_amount' => 'nullable|numeric|min:0',
             'usage_limit'         => 'nullable|integer|min:1',

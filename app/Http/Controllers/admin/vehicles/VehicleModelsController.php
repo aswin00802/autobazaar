@@ -151,6 +151,11 @@ class VehicleModelsController extends Controller
                 VehicleFeature::class, VehicleSuitability::class, VehicleOffer::class, VehicleStock::class] as $class) {
                 $class::where('vehicle_model_id', $model->id)->delete();
             }
+            // Leads are business records: keep them, just unlink the deleted model.
+            \App\Models\Vehicle\VehicleEnquiry::where('vehicle_model_id', $model->id)
+                ->update(['vehicle_model_id' => null, 'vehicle_variant_id' => null]);
+            \App\Models\Vehicle\VehicleReview::where('vehicle_model_id', $model->id)->delete();
+
             $this->unlinkFile($model->image);
             $model->delete();
         });
@@ -165,7 +170,10 @@ class VehicleModelsController extends Controller
         if (! $model) {
             return response()->json(['success' => false, 'message' => 'Vehicle model not found'], 404);
         }
-        $model->status_id = $request->has('status_id') ? (int) $request->status_id : ($model->status_id == 1 ? 0 : 1);
+        // Only live (1) or draft (0) — anything else posted is treated as a toggle.
+        $model->status_id = in_array($request->input('status_id'), [0, 1, '0', '1'], true)
+            ? (int) $request->status_id
+            : ($model->status_id == 1 ? 0 : 1);
         $model->save();
 
         return response()->json(['success' => true, 'status_id' => $model->status_id]);
@@ -270,11 +278,11 @@ class VehicleModelsController extends Controller
             'stock'                         => 'nullable|array',
             'stock.*.qty'                   => 'nullable|integer|min:0',
             'images'                        => 'nullable|array',
-            'images.*'                      => 'image|mimes:jpeg,png,jpg,gif,webp|max:4096',
+            'images.*'                      => 'image|mimes:jpeg,png,jpg,gif,webp|extensions:jpeg,jpg,png,gif,webp|max:4096',
             'documents'                     => 'nullable|array',
             'documents.*.title'             => 'nullable|string|max:255',
             'documents.*.type'              => 'nullable|in:' . implode(',', array_keys(VehicleDocument::TYPES)),
-            'documents.*.file'              => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240',
+            'documents.*.file'              => 'nullable|file|mimes:pdf,jpg,jpeg,png|extensions:pdf,jpg,jpeg,png|max:10240',
         ], [
             'slug.regex'       => 'Slug may only contain lowercase letters, numbers and dashes.',
             'model_slug.regex' => 'Model slug may only contain lowercase letters, numbers and dashes.',
@@ -561,7 +569,7 @@ class VehicleModelsController extends Controller
         if (! file_exists($destination)) {
             mkdir($destination, 0777, true);
         }
-        $name = uniqid() . '.' . strtolower($file->getClientOriginalExtension());
+        $name = uniqid() . '.' . ($file->extension() ?: 'bin');
         $file->move($destination, $name);
 
         return $folder . '/' . $name;

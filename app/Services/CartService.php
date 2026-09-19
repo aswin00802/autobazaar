@@ -25,7 +25,8 @@ class CartService
     public const FREE_SHIPPING_ABOVE = 999;
 
     public const DELIVERY = [
-        'standard' => ['label' => 'Standard Delivery', 'note' => '3 - 6 business days', 'price' => 0,  'free_above' => true],
+        // Free at or above FREE_SHIPPING_ABOVE, otherwise this fee. Change the amount here.
+        'standard' => ['label' => 'Standard Delivery', 'note' => '3 - 6 business days', 'price' => 49, 'free_above' => true],
         'express'  => ['label' => 'Express Delivery',  'note' => '1 - 3 business days', 'price' => 69, 'free_above' => false],
     ];
 
@@ -95,6 +96,7 @@ class CartService
                 if ($existing) {
                     $existing->qty = min(10, $existing->qty + $item->qty);
                     $existing->save();
+                    $item->delete();
                 } else {
                     $item->cart_id = $target->id;
                     $item->save();
@@ -108,7 +110,11 @@ class CartService
 
     public function add(int $productModelId, int $qty = 1): CartItem
     {
-        $variant = ProductBrandModel::with('product')->findOrFail($productModelId);
+        $variant = $this->sellableVariant($productModelId);
+
+        if (! $variant) {
+            throw new \RuntimeException('This item is no longer available.');
+        }
 
         $price = (float) ($variant->offer_price ?: $variant->price);
         $cart = $this->current();
@@ -134,6 +140,17 @@ class CartService
         $item->save();
 
         return $item;
+    }
+
+    /** A variant that may be sold right now: active + available, on an active product. */
+    public function sellableVariant(int $productModelId): ?ProductBrandModel
+    {
+        return ProductBrandModel::with('product')
+            ->where('id', $productModelId)
+            ->where('status_id', 1)
+            ->where('is_available', 1)
+            ->whereHas('product', fn ($q) => $q->where('status_id', 1))
+            ->first();
     }
 
     public function updateQty(int $itemId, int $qty): void
@@ -294,6 +311,11 @@ class CartService
         }
 
         $subtotal = (float) collect($this->lines())->sum('line_total');
+
+        if ($subtotal <= 0) {
+            return ['ok' => false, 'message' => 'Add something to your cart before applying a coupon.'];
+        }
+
         $coupon = Coupon::where('code', $code)->where('status_id', 1)->first();
 
         if (! $coupon) {
@@ -304,7 +326,7 @@ class CartService
             return ['ok' => false, 'message' => 'This coupon is not active yet.'];
         }
 
-        if ($coupon->valid_to && $coupon->valid_to->isPast()) {
+        if ($coupon->valid_to && $coupon->valid_to->copy()->endOfDay()->isPast()) {
             return ['ok' => false, 'message' => 'This coupon has expired.'];
         }
 
@@ -347,7 +369,7 @@ class CartService
 
         if (! $coupon
             || ($coupon->valid_from && $coupon->valid_from->isFuture())
-            || ($coupon->valid_to && $coupon->valid_to->isPast())
+            || ($coupon->valid_to && $coupon->valid_to->copy()->endOfDay()->isPast())
             || $subtotal < (float) $coupon->min_order_amount
             || (Auth::check() && ! $this->userMayUse($coupon, (int) Auth::id()))
         ) {
