@@ -1,0 +1,18 @@
+# The application is served from /public. Everything else in the project
+# root (.env, .git, storage, vendor, docs…) must never be reachable over HTTP.
+# On a real host, point the domain's DocumentRoot at /public instead and this
+# file is never consulted.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(?!public/) - [F,L]
+</IfModule>
+
+# Fallback when mod_rewrite is unavailable
+<FilesMatch "^\.|\.(env|log|sql|md|json|lock|xml|yml|yaml|sh|bat|php)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
