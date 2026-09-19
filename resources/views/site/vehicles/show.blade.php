@@ -239,7 +239,7 @@
         </div>
 
         {{-- Why choose ---------------------------------------------------- --}}
-        <aside class="min-w-0 lg:col-span-3" data-reveal="right" aria-labelledby="why-choose-title">
+        <aside class="min-w-0 lg:col-span-3 lg:self-start" data-reveal="right" aria-labelledby="why-choose-title">
             <div class="ab-card h-full border-brand-100 bg-brand-50/60 p-5">
                 <h2 id="why-choose-title" class="flex items-center gap-2 text-base font-bold">
                     <x-ui.tone-icon icon="shield" tone="brand" :size="18" shape="circle" />
