@@ -52,8 +52,10 @@
         ['id' => 'running-cost', 'label' => 'Running Cost', 'icon' => 'gauge'],
         ['id' => 'offers', 'label' => 'Offers', 'icon' => 'gift'],
         ['id' => 'reviews', 'label' => 'Reviews', 'icon' => 'star'],
-        ['id' => 'gallery', 'label' => 'Gallery', 'icon' => 'image'],
     ];
+    if (count($images) > 1) {
+        $tabs[] = ['id' => 'gallery', 'label' => 'Gallery', 'icon' => 'image'];
+    }
 
     $scrollTo = fn (string $id) => "document.getElementById('{$id}')?.scrollIntoView({ behavior: 'smooth', block: 'start' })";
     $openLead = fn (string $source) => "window.dispatchEvent(new CustomEvent('lead-open', { detail: { source: '{$source}' } }))";
@@ -73,7 +75,7 @@
     <section class="mt-4 grid gap-5 lg:grid-cols-12" aria-labelledby="vehicle-title" x-data>
 
         {{-- Gallery ------------------------------------------------------ --}}
-        <div class="lg:col-span-4" data-reveal="left"
+        <div class="min-w-0 lg:col-span-4" data-reveal="left"
              x-data="vehicleGallery({ images: {{ Js::from($images) }}, name: @js($vehicle['name']), url: @js($pageUrl) })">
 
             <figure class="ab-card relative overflow-hidden">
@@ -160,7 +162,7 @@
         </div>
 
         {{-- Title block --------------------------------------------------- --}}
-        <div class="lg:col-span-5" data-reveal>
+        <div class="min-w-0 lg:col-span-5" data-reveal>
             <div class="flex items-center gap-3">
                 <img src="{{ asset($vehicle['brand_logo']) }}" alt="" class="h-8 w-auto max-w-24 object-contain">
                 <p class="text-xs font-bold uppercase tracking-widest text-muted">{{ $vehicle['brand'] }}</p>
@@ -237,7 +239,7 @@
         </div>
 
         {{-- Why choose ---------------------------------------------------- --}}
-        <aside class="lg:col-span-3" data-reveal="right" aria-labelledby="why-choose-title">
+        <aside class="min-w-0 lg:col-span-3" data-reveal="right" aria-labelledby="why-choose-title">
             <div class="ab-card h-full border-brand-100 bg-brand-50/60 p-5">
                 <h2 id="why-choose-title" class="flex items-center gap-2 text-base font-bold">
                     <x-ui.tone-icon icon="shield" tone="brand" :size="18" shape="circle" />
@@ -294,7 +296,7 @@
     <section id="overview" class="mt-5 grid gap-5 lg:grid-cols-12" aria-label="Overview">
 
         {{-- Left column --}}
-        <div class="space-y-5 lg:col-span-4" data-reveal-group>
+        <div class="min-w-0 space-y-5 lg:col-span-4" data-reveal-group>
 
             {{-- Key specifications --}}
             <div class="ab-card p-5" data-reveal>
@@ -387,7 +389,7 @@
         </div>
 
         {{-- Centre column --}}
-        <div class="space-y-5 lg:col-span-5" data-reveal-group>
+        <div class="min-w-0 space-y-5 lg:col-span-5" data-reveal-group>
 
             <div data-reveal>
                 <x-ui.finance-options :vehicle="$vehicle" id="price-emi" />
@@ -427,16 +429,11 @@
                     @endif
                 </div>
 
-                <x-ui.earnings-calculator :vehicle="$vehicle" />
-
-                @if (! empty($vehicle['operating_cost_fuels']))
-                    <x-ui.operating-cost-panel :vehicle="$vehicle" />
-                @endif
             </div>
         </div>
 
         {{-- Right column --}}
-        <div class="space-y-5 lg:col-span-3" data-reveal-group>
+        <div class="min-w-0 space-y-5 lg:col-span-3" data-reveal-group>
 
             {{-- Availability --}}
             @if ($stock)
@@ -616,6 +613,20 @@
         </div>
     </section>
 
+    {{-- ===================================================== cost calculators
+         Side by side under the three columns, so the centre column stays the
+         same height as its neighbours instead of leaving blank space. --}}
+    <section class="mt-5 grid items-start gap-5 lg:grid-cols-2" aria-label="Cost calculators" data-reveal-group>
+        <div class="min-w-0" data-reveal>
+            <x-ui.earnings-calculator :vehicle="$vehicle" :open="true" />
+        </div>
+        @if (! empty($vehicle['operating_cost_fuels']))
+            <div class="min-w-0" data-reveal>
+                <x-ui.operating-cost-panel :vehicle="$vehicle" />
+            </div>
+        @endif
+    </section>
+
     {{-- ====================================================== specifications --}}
     <section id="specifications" class="mt-10" aria-labelledby="specs-title">
         <x-ui.section-heading title="Full Specifications" level="h2"
@@ -695,6 +706,7 @@
         </div>
     </section>
 
+    @if (count($images) > 1)
     {{-- ============================================================= gallery --}}
     <section id="gallery" class="mt-10" aria-labelledby="gallery-title">
         <x-ui.section-heading title="Gallery" level="h2" :lede="count($images) . ' ' . (count($images) === 1 ? 'photo' : 'photos') . ' of the ' . $vehicle['name']" />
@@ -707,6 +719,7 @@
             @endforeach
         </ul>
     </section>
+    @endif
 
     {{-- ============================================================= similar --}}
     @if (! empty($similar))

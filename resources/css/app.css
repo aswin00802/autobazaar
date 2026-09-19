@@ -142,8 +142,10 @@
 @layer components {
     /* The sticky action bar carries its own WhatsApp button, so the global
        floating FAB (rendered by the layout) steps aside on this page. */
+    /* !important: Tailwind's .flex utility sits in a later layer and would
+       otherwise win over this component-layer rule. */
     body:has(#vehicle-sticky-actions) a.fixed[href^='https://wa.me/'] {
-        display: none;
+        display: none !important;
     }
 
     /* Tab strip: hide the scrollbar but keep it scrollable on narrow screens */

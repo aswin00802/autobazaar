@@ -1,4 +1,4 @@
-@props(['vehicle'])
+@props(['vehicle', 'open' => false])
 
 {{--
     "Calculate Your Earnings" — fare per km × km/day minus the running cost
@@ -14,6 +14,7 @@
         farePerKm: 12,
         kmPerDay: {{ (int) ($running['daily_km'] ?? 150) }},
         costPerKm: {{ (float) ($running['per_km'] ?? 0) }},
+        open: {{ $open ? 'true' : 'false' }},
      })">
 
     <button type="button" @click="toggle()" :aria-expanded="open"

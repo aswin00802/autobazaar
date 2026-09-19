@@ -1,7 +1,7 @@
 -- =====================================================================
 -- AutoBazaar vehicle catalogue tables for the LIVE database
 -- New tables only. No existing table is altered. Safe to re-run.
--- Run AFTER 01_live_ecommerce_upgrade.sql; then run 03_vehicle_catalog_permissions.sql.
+-- Run after 02; then run 04_vehicle_catalog_permissions.sql.
 -- Take a full backup before running.
 -- =====================================================================
 
