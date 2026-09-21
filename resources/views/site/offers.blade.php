@@ -65,8 +65,9 @@
     <x-ui.section-heading title="Models with Active Offers" class="mt-10"
                           :href="route('site.new-autos')" />
 
-    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-        @foreach (collect($vehicles)->filter(fn ($v) => ! empty($v['offers'])) as $vehicle)
+    @php $offerModels = collect($vehicles)->filter(fn ($v) => ! empty($v['offers'])); @endphp
+    <ul class="grid grid-cols-2 gap-4 sm:grid-cols-3 {{ $offerModels->count() % 4 === 0 ? 'xl:grid-cols-4' : '' }}">
+        @foreach ($offerModels as $vehicle)
             <li><x-ui.vehicle-card :vehicle="$vehicle" class="h-full" /></li>
         @endforeach
     </ul>

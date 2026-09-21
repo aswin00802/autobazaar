@@ -148,6 +148,18 @@
         display: none !important;
     }
 
+    /* The fixed action bar needs clearance at the very END of the page. It goes
+       inside the footer's dark bottom bar — not as a blank band between the
+       last section and the footer. */
+    body:has(#vehicle-sticky-actions) footer > div:last-child {
+        padding-bottom: 4.25rem;
+    }
+    @media (min-width: 1024px) {
+        body:has(#vehicle-sticky-actions) footer > div:last-child {
+            padding-bottom: 5.5rem;
+        }
+    }
+
     /* Tab strip: hide the scrollbar but keep it scrollable on narrow screens */
     .ab-tabs-scroll {
         scrollbar-width: none;

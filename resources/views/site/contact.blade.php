@@ -16,11 +16,11 @@
 
         {{-- Form --}}
         <div class="min-w-0 lg:col-span-7">
-            <div class="ab-card p-6" data-reveal="left">
+            <div class="ab-card flex h-full flex-col p-6" data-reveal="left">
                 <h2 class="text-lg font-extrabold">Send us a message</h2>
                 <p class="mt-1 text-sm text-muted">We usually reply within one working day.</p>
 
-                <form @submit.prevent class="mt-5 space-y-4">
+                <form @submit.prevent class="mt-5 flex flex-1 flex-col gap-4">
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label for="ct-name" class="ab-label">Full Name <span class="text-danger">*</span></label>
@@ -46,9 +46,9 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="flex flex-1 flex-col">
                         <label for="ct-msg" class="ab-label">Message</label>
-                        <textarea id="ct-msg" rows="6" class="ab-field resize-none"
+                        <textarea id="ct-msg" rows="6" class="ab-field min-h-36 flex-1 resize-none"
                                   placeholder="How can we help?"></textarea>
                     </div>
 

@@ -61,8 +61,9 @@
     $openLead = fn (string $source) => "window.dispatchEvent(new CustomEvent('lead-open', { detail: { source: '{$source}' } }))";
 @endphp
 
-{{-- Bottom padding keeps the fixed action bar clear of the last section --}}
-<div class="ab-container pb-28 pt-4 lg:pb-32">
+{{-- The fixed action bar's clearance lives in the footer (see app.css), so there is
+     no blank band between the last section and the footer. --}}
+<div class="ab-container pb-10 pt-4">
 
     <x-ui.breadcrumb :items="[
         ['label' => 'Home', 'href' => route('site.home')],
@@ -296,7 +297,7 @@
     <section id="overview" class="mt-5 grid gap-5 lg:grid-cols-12" aria-label="Overview">
 
         {{-- Left column --}}
-        <div class="min-w-0 space-y-5 lg:col-span-4" data-reveal-group>
+        <div class="flex min-w-0 flex-col gap-5 lg:col-span-4 lg:[&>*:last-child]:flex-1" data-reveal-group>
 
             {{-- Key specifications --}}
             <div class="ab-card p-5" data-reveal>
@@ -344,7 +345,7 @@
             </div>
 
             {{-- Current offers --}}
-            <div id="offers" class="ab-card p-5" data-reveal>
+            <div id="offers" class="ab-card flex flex-col p-5" data-reveal>
                 <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
                     <h2 class="flex items-center gap-2 text-base font-bold">
                         <x-ui.tone-icon icon="gift" tone="danger" :size="18" shape="circle" />
@@ -382,22 +383,40 @@
                 @endif
 
                 <button type="button" @click="{{ $openLead('quotation') }}" x-data
-                        class="mt-3 flex w-full items-center justify-center gap-1.5 text-xs font-semibold text-brand-500 underline-offset-2 hover:underline">
+                        class="mt-auto flex w-full items-center justify-center gap-1.5 pt-3 text-xs font-semibold text-brand-500 underline-offset-2 hover:underline">
                     Get a quotation with these offers <x-ui.icon name="arrow-right" :size="14" />
                 </button>
+            </div>
+
+            {{-- Help card: last in the column, so it takes up whatever height the
+                 neighbouring columns add; its content stays centred at any size. --}}
+            <div class="ab-card flex flex-col items-center justify-center bg-brand-50 p-5 text-center" data-reveal>
+                <x-ui.tone-icon icon="headset" tone="brand" :size="20" shape="circle" />
+                <p class="mt-2 text-sm font-extrabold">Need help choosing?</p>
+                <p class="mt-1 max-w-xs text-xs leading-relaxed text-muted">
+                    Talk to our auto expert about price, finance and exchange — in Tamil or English.
+                </p>
+                <div class="mt-3 flex flex-wrap justify-center gap-2">
+                    <a href="tel:{{ $site['contact']['phone_e164'] }}" class="ab-btn ab-btn-primary px-3 py-2 text-xs">
+                        <x-ui.icon name="phone-call" :size="14" /> {{ $site['contact']['phone'] }}
+                    </a>
+                    <button type="button" x-data @click="{{ $openLead('enquiry') }}" class="ab-btn ab-btn-outline px-3 py-2 text-xs">
+                        Request a Call Back
+                    </button>
+                </div>
             </div>
         </div>
 
         {{-- Centre column --}}
-        <div class="min-w-0 space-y-5 lg:col-span-5" data-reveal-group>
+        <div class="flex min-w-0 flex-col gap-5 lg:col-span-5 lg:[&>*:last-child]:flex-1" data-reveal-group>
 
             <div data-reveal>
                 <x-ui.finance-options :vehicle="$vehicle" id="price-emi" />
             </div>
 
             {{-- Running cost --}}
-            <div id="running-cost" class="space-y-5" data-reveal>
-                <div class="ab-card p-5">
+            <div id="running-cost" class="flex flex-col" data-reveal>
+                <div class="ab-card flex-1 p-5">
                     <h2 class="flex items-center gap-2 text-base font-bold">
                         <x-ui.tone-icon icon="gauge" tone="info" :size="18" shape="circle" />
                         Running Cost Estimate
@@ -433,7 +452,7 @@
         </div>
 
         {{-- Right column --}}
-        <div class="min-w-0 space-y-5 lg:col-span-3" data-reveal-group>
+        <div class="flex min-w-0 flex-col gap-5 lg:col-span-3 lg:[&>*:last-child]:flex-1" data-reveal-group>
 
             {{-- Availability --}}
             @if ($stock)
@@ -616,13 +635,13 @@
     {{-- ===================================================== cost calculators
          Side by side under the three columns, so the centre column stays the
          same height as its neighbours instead of leaving blank space. --}}
-    <section class="mt-5 grid items-start gap-5 lg:grid-cols-2" aria-label="Cost calculators" data-reveal-group>
+    <section class="mt-5 grid gap-5 lg:grid-cols-2" aria-label="Cost calculators" data-reveal-group>
         <div class="min-w-0" data-reveal>
-            <x-ui.earnings-calculator :vehicle="$vehicle" :open="true" />
+            <x-ui.earnings-calculator :vehicle="$vehicle" :open="true" class="h-full" />
         </div>
         @if (! empty($vehicle['operating_cost_fuels']))
             <div class="min-w-0" data-reveal>
-                <x-ui.operating-cost-panel :vehicle="$vehicle" />
+                <x-ui.operating-cost-panel :vehicle="$vehicle" class="h-full" />
             </div>
         @endif
     </section>
@@ -633,10 +652,10 @@
                               lede="Every figure from the manufacturer's spec sheet, plus our score breakdown." />
         <div class="grid gap-5 lg:grid-cols-3">
             <div class="min-w-0 lg:col-span-2" data-reveal>
-                <x-ui.spec-table :specifications="$vehicle['specifications']" :full="true" />
+                <x-ui.spec-table :specifications="$vehicle['specifications']" :full="true" class="h-full" />
             </div>
             <div data-reveal>
-                <x-ui.score-panel :scores="$scores" />
+                <x-ui.score-panel :scores="$scores" class="h-full" />
             </div>
         </div>
         <div class="mt-5" data-reveal>
@@ -650,8 +669,8 @@
                               :lede="'What ' . $vehicle['name'] . ' owners say — ' . number_format($vehicle['reviews']) . ' verified and community reviews.'" />
 
         <div class="grid gap-5 lg:grid-cols-3">
-            <div class="space-y-5" data-reveal>
-                <div class="ab-card p-5">
+            <div class="flex flex-col gap-5" data-reveal>
+                <div class="ab-card p-5 lg:flex-1">
                     <p class="text-4xl font-extrabold">{{ number_format($vehicle['rating'], 1) }}</p>
                     <x-ui.rating :rating="$vehicle['rating']" :show-value="false" :size="16" class="mt-1" />
                     <p class="mt-1 text-xs text-muted">Based on {{ number_format($vehicle['reviews']) }} reviews</p>
@@ -670,7 +689,16 @@
                     @endif
                 </div>
 
-                <x-ui.review-form :vehicle="$vehicle" :url="$reviewUrl" />
+                <div x-data="{ writing: false }">
+                    <button type="button" x-show="! writing"
+                            @click="writing = true; $nextTick(() => $refs.reviewForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))"
+                            class="ab-btn ab-btn-primary w-full text-sm">
+                        <x-ui.icon name="star" :size="16" /> Write a Review
+                    </button>
+                    <div x-show="writing" x-cloak x-transition.opacity x-ref="reviewForm">
+                        <x-ui.review-form :vehicle="$vehicle" :url="$reviewUrl" />
+                    </div>
+                </div>
             </div>
 
             <ul class="min-w-0 space-y-3 lg:col-span-2" data-reveal-group>
