@@ -11,31 +11,41 @@ changes it.
 
 ## Before you start, from the OLD server
 
-Two things to take a copy of:
+**One thing to take a copy of: the database.** In phpMyAdmin, export
+`auto_bazar` — structure and data — as a `.sql` file.
 
-**1. The database.** In phpMyAdmin, export `auto_bazar` — structure and data,
-as a `.sql` file.
+### The pictures are already sorted
 
-**2. The pictures.** Download the whole `public/uploads` folder.
+The database pointed at 761 pictures that were not on the development machine —
+they had only ever existed on the live server. They have since been downloaded,
+so **`public/uploads` now holds them and the zip carries them across**. Nothing
+to copy by hand.
 
-That second one matters more than it sounds. **761 pictures the database points
-at are not on the development machine**, so they are not in the zip either:
-
-| Folder | Files missing from the zip | Used for |
+| Folder | Fetched | Used for |
 |---|---:|---|
-| `uploads/auto_images/` | 457 | Photos on customers' auto listings |
-| `uploads/profile_pictures/` | 133 | User profile pictures |
+| `uploads/auto_images/` | 439 | Photos on customers' auto listings |
+| `uploads/profile_pictures/` | 131 | User profile pictures |
 | `uploads/spareparts/products/` | 130 | Accessory product photos |
 | `uploads/events/` | 26 | Event pictures |
 | `uploads/authorize_seller/` | 6 | Dealer logos |
-| `uploads/finance/` | 6 | **Finance Options lender logos** |
+| `uploads/finance/` | 5 | Finance Options lender logos |
 | `uploads/brands/` | 3 | Brand logos |
 
-The full list is in `docs/uploads-to-copy.txt`. Regenerate it any time with:
+21 more were missing from the live server too — the database points at files
+that were deleted there at some point. None of them reach a page: 18 belong to
+three listings that are not active, 2 are profile pictures the website never
+shows, and 1 is the logo of a lender that is switched off. Those pages use their
+own fallback.
+
+To check the position at any time, or after uploading more pictures:
 
 ```bash
-php docs/tests/missing-uploads-report.php
+php docs/tests/missing-uploads-report.php     # what is referenced but not here
+php docs/tools/fetch-missing-uploads.php      # fetch them from the old server
 ```
+
+The second one takes the address as an argument if the old site moves:
+`php docs/tools/fetch-missing-uploads.php https://old-address.com`
 
 ---
 
@@ -94,11 +104,8 @@ tables — the catalogue and the finance lenders. No personal data.
 
 ## 3. Put the files on the server
 
-1. Extract the zip into the web folder.
-2. Copy the `public/uploads` folder you downloaded from the old server **over the
-   top** of the one in the zip. Merge, do not replace — the zip has a few files
-   the old server does not, and the old server has the 761 the zip does not.
-3. Make `storage/` and `bootstrap/cache/` writable:
+1. Extract the zip into the web folder. The pictures come with it.
+2. Make `storage/` and `bootstrap/cache/` writable:
 
 ```bash
 chmod -R 775 storage bootstrap/cache
