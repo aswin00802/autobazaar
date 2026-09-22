@@ -225,8 +225,12 @@
     <div class="section">
         <h2>Delete Your Account</h2>
         <p>
-            <a href="https://autobazaar.online/fareprice/account-delete" target="_blank">
-                https://autobazaar.online/fareprice/account-delete
+            {{-- Built from the site's own address, so it follows wherever this is
+                 hosted. It used to be typed out as autobazaar.online, which would
+                 have pointed back at the old server after a move — and Google Play
+                 checks this link when the app is reviewed. --}}
+            <a href="{{ route('fareprice.account-delete') }}" target="_blank">
+                {{ route('fareprice.account-delete') }}
             </a>
         </p>
         <p>Deletion is immediate after confirmation.</p>
