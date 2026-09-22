@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('auto_meters', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('auto_meters') || Schema::create('auto_meters', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->string('invoice_no')->unique()->nullable();

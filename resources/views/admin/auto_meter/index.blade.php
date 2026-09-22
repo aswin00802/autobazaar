@@ -96,5 +96,5 @@
 <script src="{{asset('admin/js/custom-datatable.js')}}"></script>
 <script src="{{asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 <script src="{{asset('admin/assets/js/extended-ui-sweetalert2.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+<script src="{{ asset('admin/assets/vendor/libs/block-ui/jquery.blockUI.min.js') }}"></script>
 @endpush

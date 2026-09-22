@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasColumn('ride_requests', 'booking_type')) {
+            return;
+        }
+
         Schema::table('ride_requests', function (Blueprint $table) {
             $table->string('booking_type')->default('instant')->after('passenger_count');
             $table->dateTime('scheduled_at')->nullable()->after('booking_type');

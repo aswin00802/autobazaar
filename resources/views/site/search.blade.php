@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', $query ? 'Search: ' . $query : 'Search')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

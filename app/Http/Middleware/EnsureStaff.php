@@ -17,17 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EnsureStaff
 {
-    /** users.role_id values that mark a customer account. */
-    private const CUSTOMER_ROLE_IDS = [null, 0, 1000];
 
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
 
-        $isStaff = $user && (
-            ! in_array($user->role_id, self::CUSTOMER_ROLE_IDS, false)
-            || $user->roles()->where('name', '!=', 'user')->exists()
-        );
+        $isStaff = $user && $user->isStaff();
 
         if (! $isStaff) {
             abort(403, 'This area is for AutoBazaar staff only.');

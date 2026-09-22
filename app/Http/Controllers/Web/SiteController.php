@@ -43,7 +43,7 @@ class SiteController extends Controller
     private function shared(): array
     {
         return [
-            'site' => $this->fixture('site'),
+            'site' => \App\Support\SiteData::site(),
             'locations' => $this->fixture('locations'),
         ];
     }
@@ -88,15 +88,33 @@ class SiteController extends Controller
         ]);
     }
 
-    public function usedAutos()
+    public function usedAutos(\App\Services\UsedAutoService $used)
     {
-        // The used tree is a listing product, not a catalogue one — the cards
-        // carry year/km/owner rather than variants and scores.
+        // Real listings: the same active used autos the mobile app and admin show.
         return view('site.vehicles.used', [
             ...$this->shared(),
             'title' => 'Used Autos',
-            'lede' => 'Verified pre-owned autorickshaws with documented RC, FC and permit status.',
-            'vehicles' => $this->vehicles(),
+            'lede' => 'Pre-owned autorickshaws with RC, FC and permit status shown up front.',
+            'listings' => $used->all(),
+        ]);
+    }
+
+    public function usedAuto(\App\Services\UsedAutoService $used, int $id, ?string $slug = null)
+    {
+        $listing = $used->find($id);
+
+        // Sold, removed or never existed: a clean 404 rather than a half-empty page.
+        abort_if(! $listing, 404);
+
+        // One address per auto, so a renamed model does not create duplicate pages for Google.
+        if ($slug !== $listing['slug']) {
+            return redirect()->route('site.used-auto', [$listing['id'], $listing['slug']], 301);
+        }
+
+        return view('site.vehicles.used-show', [
+            ...$this->shared(),
+            'listing' => $listing,
+            'similar' => $used->similar($listing, 3),
         ]);
     }
 
@@ -140,14 +158,15 @@ class SiteController extends Controller
     {
         $all = $this->vehicles();
 
-        // /compare/tvs-king-deluxe-vs-bajaj-re -> the named models, else a
-        // sensible default set that mirrors compare.jpeg.
+        // /compare/tvs-king-deluxe-vs-bajaj-re -> the named models. With no selection the
+        // page starts empty and asks the visitor to pick (it used to preload four, which
+        // made "remove" look like it was undoing itself).
         $selected = $combo
             ? array_values(array_filter(array_map(
                 fn ($slug) => $this->vehicle($slug),
                 explode('-vs-', $combo),
             )))
-            : array_slice($all, 0, 4);
+            : [];   // the visitor chooses; the page invites them to pick 2 to 4
 
         return view('site.compare', [
             ...$this->shared(),
@@ -167,9 +186,33 @@ class SiteController extends Controller
     {
         return view('site.enquiry', [
             ...$this->shared(),
-            'vehicle' => ($model ? $this->vehicle($model) : null) ?? $this->vehicles()[0],
+            // A server whose vehicle catalogue has not been filled in yet has no
+            // vehicles at all, and reaching straight for [0] took this page down
+            // with a server error. The enquiry form is still useful without one.
+            'vehicle' => ($model ? $this->vehicle($model) : null) ?? $this->vehicles()[0] ?? $this->placeholderVehicle(),
             'vehicles' => $this->vehicles(),
         ]);
+    }
+
+    /**
+     * Stands in for a real auto when the catalogue is empty, carrying only the
+     * keys the enquiry page reads.
+     */
+    private function placeholderVehicle(): array
+    {
+        return [
+            'name'       => 'Autorickshaw',
+            'brand'      => '',
+            'brand_slug' => '',
+            'model_slug' => '',
+            'slug'       => '',
+            'image'      => 'assets/site/no-image.png',
+            'brand_logo' => 'assets/site/no-image.png',
+            'from_price' => null,
+            'rating'     => null,
+            'reviews'    => 0,
+            'variants'   => [],
+        ];
     }
 
     /* ================================================================ content */

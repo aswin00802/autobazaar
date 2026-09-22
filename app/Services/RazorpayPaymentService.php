@@ -23,13 +23,14 @@ class RazorpayPaymentService
 
         $disabled = ['key' => null, 'secret' => null, 'webhook_secret' => null, 'enabled' => false];
 
-        $setting = Setting::where('key', 'razorpay')->first();
+        $setting = Setting::cachedRow('razorpay');
 
-        if (!$setting || (int) $setting->status_id !== 1) {
+        if (!$setting || (int) $setting['status_id'] !== 1) {
             return $cached = $disabled;
         }
 
-        $values = json_decode($setting->value, true) ?: [];
+        // Secrets are stored encrypted; older plaintext rows still read fine.
+        $values = Setting::decodeCredentials($setting['value'], ['key_secret', 'webhook_secret']);
 
         if (empty($values['key_id']) || empty($values['key_secret'])) {
             return $cached = $disabled;
@@ -38,7 +39,7 @@ class RazorpayPaymentService
         return $cached = [
             'key'            => $values['key_id'],
             'secret'         => $values['key_secret'],
-            'webhook_secret' => $values['webhook_secret'] ?: null,
+            'webhook_secret' => ($values['webhook_secret'] ?? null) ?: null,
             'enabled'        => true,
         ];
     }

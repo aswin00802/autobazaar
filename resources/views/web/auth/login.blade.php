@@ -1,100 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login - Auto Bazaar</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if(getSetting('fav_icon'))
-        <link rel="icon" type="image/x-icon" href="{{ asset(getSetting('fav_icon')) }}" />
-    @else
-        <link rel="icon" type="image/x-icon" href="{{asset('assets/images/favicon-32x32.png')}}" />
-    @endif
-    <!-- <link rel="icon" href="{{url('/')}}/assets/images/favicon-32x32.png" type="image/png" /> -->
+@extends('site.layout')
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/auth.css')}}">
+@section('title', 'Sign In')
+@section('description', 'Sign in to AutoBazaar with your mobile number and a one-time code to track your enquiries, orders, saved autos and addresses.')
+@section('robots', 'noindex, follow')
 
-</head>
-<body>
+@section('content')
 
+<x-ui.auth-shell
+    heading="Welcome back to AutoBazaar"
+    lede="One app for all auto needs — sales, spares and support. Sign in with your mobile number; there is no password to remember."
+    :points="[
+        ['doc', 'Follow your enquiries and quotations'],
+        ['cart', 'See your accessory orders and delivery status'],
+        ['heart', 'Keep your saved autos and comparisons'],
+        ['shield', 'A fresh code every time — nothing to leak'],
+    ]">
 
-    <!-- Tagline -->
-    <div class="tagline">“One App for All Auto Needs - Sales, Spares & Support.”</div>
+    <h1 class="text-2xl font-extrabold tracking-tight">Sign in</h1>
+    <p class="mt-1.5 text-sm text-muted">We will text a 4-digit code to your mobile.</p>
 
-    <!-- Login Box -->
-    <div class="login-box">
-        <h3 class="text-center mb-3">Login</h3>
-        <form class="singform" method="POST">
-            @csrf
-            <input type="hidden" name="type" value="login">
-            <input type="hidden" name="auto_area_id" value="1">
-            <div class="mb-3">
-                <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="Enter Mobile Number" value="{{ old('phone_number') }}">
-                @error('username')
-                    <div class="text-danger mt-1">{{ $message }}</div>
-                @enderror
+    <form id="ab-auth-form" method="POST" novalidate class="mt-7 space-y-4">
+        @csrf
+        <input type="hidden" name="type" value="login">
+
+        <div>
+            <label for="phone_number" class="ab-label">Mobile Number</label>
+            <div class="ab-phone">
+                <span class="cc">+91</span>
+                <input id="phone_number" name="phone_number" type="tel" inputmode="numeric"
+                       autocomplete="tel-national" maxlength="10" required autofocus
+                       placeholder="10-digit mobile number" class="ab-field"
+                       value="{{ old('phone_number') }}">
             </div>
+        </div>
 
-            <button type="submit" class="btn btn-primary login-btn">Send OTP</button>
-        </form>
-        <p class="pt-3">Don’t have an account? <a href="{{ route('user.register') }}">Sign up</a></p>
+        <p id="ab-auth-msg" class="ab-auth-msg" role="alert" aria-live="polite" hidden></p>
+
+        <button type="submit" class="ab-btn ab-btn-primary w-full py-3">Send OTP</button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-muted">
+        New here?
+        <a href="{{ route('user.register') }}" class="font-semibold text-brand-500 hover:underline">Create an account</a>
+    </p>
+
+    <div class="mt-6 flex items-center gap-2 border-t border-line pt-5 text-xs text-muted">
+        <x-ui.icon name="lock" :size="14" class="text-brand-500" />
+        <span>We never ask for your OTP on a call. Keep it to yourself.</span>
     </div>
 
-    <!-- Bottom Logo -->
-    
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @include('web.auth.partials.send-otp')
+</x-ui.auth-shell>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.singform').on('submit', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    url: "{{ route('user.otp.send') }}",
-                    type: "POST",
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        if (response.success == true) {
-                            Swal.fire({
-                                icon: 'Success',
-                                title: 'OTP!',
-                                text: response.message,
-                                timer: 2000,
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false
-                            }).then(function() {
-                                let baseUrl = "{{ url('/') }}"; 
-                                let url = `${baseUrl}/user/otp/${encodeURIComponent(response.mobile)}/${encodeURIComponent(response.otp_type)}`;
-                                window.location.replace(url);
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: response.message,
-                                timer: 2000,
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false
-                            });
-                        }
-
-                    },
-                    error: function(xhr) {
-                        let errors = xhr.responseJSON.errors;
-                        let allErrors = Object.values(errors).map(err => err[0]).join('<br>');
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Validation Error',
-                            html: allErrors
-                        });
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+@endsection

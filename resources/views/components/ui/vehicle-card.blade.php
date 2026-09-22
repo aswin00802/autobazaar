@@ -20,7 +20,7 @@
     </div>
 
     {{-- Image --}}
-    <a href="{{ $url }}" class="block px-4 py-3">
+    <a href="{{ $url }}" class="ab-photo block px-4 py-3">
         <img src="{{ asset($vehicle['image']) }}" alt="{{ $vehicle['name'] }}"
              class="mx-auto h-28 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
              loading="lazy">
@@ -32,13 +32,21 @@
             <a href="{{ $url }}" class="transition-colors hover:text-brand-500">{{ $vehicle['name'] }}</a>
         </h3>
 
-        <p class="mt-1 line-clamp-1 text-[11px] text-muted">{{ $fuels }}</p>
+        @if (config('site_design.fuel_chips'))
+            <ul class="ab-fuels" aria-label="Fuel options">
+                @foreach (collect($vehicle['variants'])->pluck('label')->unique() as $fuel)
+                    <li class="ab-fuel ab-fuel--{{ \Illuminate\Support\Str::slug($fuel) }}">{{ $fuel }}</li>
+                @endforeach
+            </ul>
+        @else
+            <p class="mt-1 line-clamp-1 text-[11px] text-muted">{{ $fuels }}</p>
+        @endif
 
         <x-ui.rating :rating="$vehicle['rating']" :reviews="$vehicle['reviews']" :size="13" compact class="mt-2" />
 
         <p class="mt-2 text-sm">
             <span class="text-muted">From</span>
-            <span class="font-extrabold">₹{{ number_format($vehicle['from_price'] / 100000, 2) }} Lakh*</span>
+            <span class="ab-price font-extrabold">₹{{ number_format($vehicle['from_price'] / 100000, 2) }} Lakh*</span>
         </p>
 
         @unless ($compact)

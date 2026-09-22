@@ -15,7 +15,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('shop_addresses', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('shop_addresses') || Schema::create('shop_addresses', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->index();
             $table->string('label', 50)->default('Home');       // Home | Office | Other

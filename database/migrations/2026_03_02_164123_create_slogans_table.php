@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('slogans', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('slogans') || Schema::create('slogans', function (Blueprint $table) {
             $table->id();
             $table->string('line_1')->nullable();
             $table->string('line_2')->nullable();

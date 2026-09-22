@@ -51,6 +51,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Idle Expiry (mobile API tokens)
+    |--------------------------------------------------------------------------
+    |
+    | A token that has not been used for this many days stops working. Tokens
+    | created before "idle_applies_after" are never affected, so apps that were
+    | already installed keep their sessions. Set idle_days to 0 to switch off.
+    |
+    */
+
+    'idle_days' => (int) env('SANCTUM_IDLE_DAYS', 90),
+
+    'idle_applies_after' => env('SANCTUM_IDLE_APPLIES_AFTER', '2026-09-21'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Token Prefix
     |--------------------------------------------------------------------------
     |

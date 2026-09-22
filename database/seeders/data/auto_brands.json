@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "brand_name": "BAJAJ",
+        "profile": "uploads/brand_images/bajaj_logo.png",
+        "status": 1,
+        "created_at": "2024-12-13 12:54:53",
+        "updated_at": "2024-12-24 07:58:18"
+    },
+    {
+        "id": 2,
+        "brand_name": "PIAGGIO",
+        "profile": "uploads/brand_images/piaggio_logo.png",
+        "status": 1,
+        "created_at": "2024-12-13 12:54:53",
+        "updated_at": "2024-12-23 11:31:26"
+    },
+    {
+        "id": 3,
+        "brand_name": "TVS",
+        "profile": "uploads/brand_images/tvs_logo.png",
+        "status": 1,
+        "created_at": "2024-12-13 12:54:53",
+        "updated_at": "2024-12-13 12:54:53"
+    },
+    {
+        "id": 4,
+        "brand_name": "ATUL",
+        "profile": "uploads/brand_images/atul_logo.png",
+        "status": 1,
+        "created_at": "2024-12-13 12:54:53",
+        "updated_at": "2024-12-13 12:54:53"
+    },
+    {
+        "id": 24,
+        "brand_name": "Euler",
+        "profile": "uploads/brands/brand_image_Euler.jpeg",
+        "status": 1,
+        "created_at": "2024-12-24 05:50:04",
+        "updated_at": "2025-12-11 23:19:36"
+    },
+    {
+        "id": 33,
+        "brand_name": "MAHINDRA",
+        "profile": "uploads/brand_images/689d69bbb26f8.png",
+        "status": 1,
+        "created_at": "2025-08-14 19:44:43",
+        "updated_at": "2025-08-14 19:44:43"
+    },
+    {
+        "id": 34,
+        "brand_name": "OSM",
+        "profile": "uploads/brands/brand_image_OSM.jpeg",
+        "status": 1,
+        "created_at": "2025-12-11 23:24:23",
+        "updated_at": "2025-12-11 23:24:23"
+    },
+    {
+        "id": 35,
+        "brand_name": "MONTRA",
+        "profile": "uploads/brands/brand_image_MONTRA.jpeg",
+        "status": 1,
+        "created_at": "2025-12-11 23:26:13",
+        "updated_at": "2025-12-11 23:26:13"
+    }
+]

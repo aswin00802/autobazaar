@@ -32,7 +32,7 @@ class SocialLoginController extends Controller
                 //     "services.{$this->provider}.redirect"      => $social_api['redirect'] ?? null,
                 // ]);
                 $clientId       = $social_api['client_id'];
-                $clientSecret   = $social_api['client_secret'];
+                $clientSecret   = Setting::decryptSecret($social_api['client_secret'] ?? null);
                 $redirect       = $social_api['redirect'];
                 
                 config([
@@ -166,7 +166,7 @@ class SocialLoginController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Login failed',
-                'message' => $e->getMessage(),
+                'message' => safeApiMessage($e),
             ], 400);
         }
 

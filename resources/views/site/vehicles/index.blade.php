@@ -1,7 +1,10 @@
 @extends('site.layout')
 
 @section('title', $title)
-@section('description', $lede)
+{{-- Brand pages get a fuller search description than the short on-page intro --}}
+@section('description', ! empty($brand['brand'])
+    ? 'Compare all ' . $brand['brand'] . ' autorickshaw models at AutoBazaar: on-road price, mileage, specifications, EMI and current offers. Petrol, CNG and electric options with finance help.'
+    : $lede)
 
 @section('content')
 

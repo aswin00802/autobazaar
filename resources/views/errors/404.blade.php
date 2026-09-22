@@ -11,7 +11,7 @@
      * It also degrades if the Vite build is missing — see $hasBuild below.
      * An error page that can itself error is worse than no error page.
      */
-    $site = require resource_path('fixtures/site.php');
+    $site = \App\Support\SiteData::site();
 
     $isAdmin = request()->is('dashboard*') || request()->is('masters/*')
         || request()->is('auto-management/*') || request()->is('spare-parts/*')

@@ -8,7 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('ride_messages', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('ride_messages') || Schema::create('ride_messages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('conversation_id');
             $table->unsignedBigInteger('ride_id');

@@ -66,7 +66,7 @@ class TargetController extends Controller
             return response()->json([
                 'status'    => false,
                 'message'   => 'Something went wrong',
-                'error'     => $e->getMessage()
+                'error'     => safeApiMessage($e)
             ], 500);
         }
 
@@ -134,7 +134,7 @@ class TargetController extends Controller
             return response()->json([
                 'status'    => false,
                 'message'   => 'Something went wrong',
-                'error'     => $e->getMessage()
+                'error'     => safeApiMessage($e)
             ], 500);
         }
     }
@@ -283,7 +283,7 @@ class TargetController extends Controller
             return response()->json([
                 'status'    => false,
                 'message'   => 'Something went wrong',
-                'error'     => $e->getMessage()
+                'error'     => safeApiMessage($e)
             ], 500);
         }
     }
@@ -528,7 +528,7 @@ class TargetController extends Controller
             return response()->json([
                 'status'=> false,
                 'message'=> 'Something went wrong',
-                'error'=> $e->getMessage()
+                'error'=> safeApiMessage($e)
             ],500);
 
         }
@@ -566,7 +566,7 @@ class TargetController extends Controller
             return response()->json([
                 'status'  => false,
                 'message' => 'Something went wrong',
-                'error'   => $e->getMessage()
+                'error'   => safeApiMessage($e)
             ], 500);
         }
     }

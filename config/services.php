@@ -66,9 +66,12 @@ return [
         'secret' => env('RAZORPAY_SECRET'),
     ],
 
-    // SMS gateway used for customer OTPs (Web\Auth\OtpController)
+    // SMS gateway used for every OTP the site and both apps send.
+    // The key lives in .env (PING4SMS_KEY) and never in the repository.
+    // If it is missing, no OTP can be sent, so the deploy checklist calls it out.
     'ping4sms' => [
-        'key' => env('PING4SMS_KEY', '0bc8ea57e5adc287cc8d163c82693450'),
+        'key' => env('PING4SMS_KEY'),
+        'url' => env('PING4SMS_URL', 'http://site.ping4sms.com/api/smsapi'),
     ],
 
 ];

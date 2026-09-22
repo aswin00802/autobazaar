@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasColumn('ride_requests', 'ride_for')) {
+            return;
+        }
+
         Schema::table('ride_requests', function (Blueprint $table) {
             $table->string('ride_for')->nullable()->after('date');
             $table->unsignedTinyInteger('passenger_count')->default(1)->after('ride_for');

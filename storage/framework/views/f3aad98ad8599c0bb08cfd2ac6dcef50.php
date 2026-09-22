@@ -2,6 +2,8 @@
 Payments Setting
 <?php $__env->stopSection(); ?>
 
+<?php echo $__env->make('admin.include.secret-toggle', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="row">
     <div class="col-12">
@@ -40,7 +42,7 @@ Payments Setting
                             <?php $__currentLoopData = $gateway['fields']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $field => $meta): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php $input = "{$key}_{$field}"; ?>
                                 <div class="form-floating form-floating-outline mb-4 <?php echo e($key); ?> d-none">
-                                    <input type="text"
+                                    <input type="<?php echo e(!empty($meta['secret']) ? 'password' : 'text'); ?>" <?php if(!empty($meta['secret'])): ?> data-secret autocomplete="new-password" <?php endif; ?>
                                            class="form-control <?php $__errorArgs = [$input];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

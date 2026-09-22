@@ -17,7 +17,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vehicle_models', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('vehicle_models') || Schema::create('vehicle_models', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('auto_brand_id')->index();          // auto_brands.id
             $table->unsignedBigInteger('auto_model_id')->nullable()->index(); // auto_models.id (master link)
@@ -68,7 +70,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
         });
 
-        Schema::create('vehicle_variants', function (Blueprint $table) {
+        Schema::hasTable('vehicle_variants') || Schema::create('vehicle_variants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('name', 60);                                      // Petrol / CNG / Electric
@@ -88,7 +90,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('vehicle_specifications', function (Blueprint $table) {
+        Schema::hasTable('vehicle_specifications') || Schema::create('vehicle_specifications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('spec_group', 40)->default('General');            // Engine / Dimensions / Capacity …
@@ -99,7 +101,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('vehicle_images', function (Blueprint $table) {
+        Schema::hasTable('vehicle_images') || Schema::create('vehicle_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('image');
@@ -111,7 +113,7 @@ return new class extends Migration
 
         // On-road price per location. ex_showroom is stored per row so a
         // district can differ; on_road = ex_showroom + rto + insurance + registration + other + accessories.
-        Schema::create('vehicle_prices', function (Blueprint $table) {
+        Schema::hasTable('vehicle_prices') || Schema::create('vehicle_prices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->unsignedBigInteger('vehicle_variant_id')->nullable()->index(); // null = applies to default variant
@@ -128,7 +130,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('vehicle_scores', function (Blueprint $table) {
+        Schema::hasTable('vehicle_scores') || Schema::create('vehicle_scores', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('label', 60);                                     // Mileage, Comfort …
@@ -139,7 +141,7 @@ return new class extends Migration
         });
 
         // Feature strip + "Why choose this auto" benefit points
-        Schema::create('vehicle_features', function (Blueprint $table) {
+        Schema::hasTable('vehicle_features') || Schema::create('vehicle_features', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('icon', 30)->default('check');
@@ -148,7 +150,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('vehicle_suitability', function (Blueprint $table) {
+        Schema::hasTable('vehicle_suitability') || Schema::create('vehicle_suitability', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('type', 20)->default('suitable');                 // suitable | not_recommended
@@ -158,7 +160,7 @@ return new class extends Migration
         });
 
         // Offers auto-hide outside valid_from..valid_to
-        Schema::create('vehicle_offers', function (Blueprint $table) {
+        Schema::hasTable('vehicle_offers') || Schema::create('vehicle_offers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('title');
@@ -171,7 +173,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('vehicle_documents', function (Blueprint $table) {
+        Schema::hasTable('vehicle_documents') || Schema::create('vehicle_documents', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->string('type', 30)->default('brochure');                 // brochure | price_list | specification | other
@@ -183,7 +185,7 @@ return new class extends Migration
         });
 
         // Availability & delivery card
-        Schema::create('vehicle_stock', function (Blueprint $table) {
+        Schema::hasTable('vehicle_stock') || Schema::create('vehicle_stock', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->unsignedBigInteger('vehicle_variant_id')->nullable()->index();

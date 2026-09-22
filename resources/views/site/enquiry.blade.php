@@ -1,19 +1,39 @@
 @extends('site.layout')
 
-@section('title', 'Enquire About This Vehicle')
+@php $enquiryForModel = request()->route('model') && ! empty($vehicle['name']); @endphp
+@section('title', $enquiryForModel ? 'Enquire About ' . $vehicle['name'] : 'Enquire About an Autorickshaw')
+@section('description', $enquiryForModel
+    ? 'Enquire about the ' . $vehicle['name'] . ': get the on-road price, finance and EMI options and current offers from the AutoBazaar team.'
+    : 'Send an enquiry for any autorickshaw model and get the on-road price, finance options and current offers from the AutoBazaar team.')
 
 @section('content')
 
 @php $default = $locations['default']; @endphp
 
-<div class="ab-container py-4">
-    <x-ui.breadcrumb :items="[
+@php
+    /*
+     * The brand and model steps only exist when there is a real auto behind the
+     * page. With an empty catalogue those slugs are blank, and route() refuses a
+     * blank parameter, which used to take the whole page down.
+     */
+    $enquiryCrumbs = [
         ['label' => 'Home', 'href' => route('site.home')],
         ['label' => 'Vehicles', 'href' => route('site.new-autos')],
-        ['label' => $vehicle['brand'], 'href' => route('site.brand', $vehicle['brand_slug'])],
-        ['label' => $vehicle['name'], 'href' => route('site.model', [$vehicle['brand_slug'], $vehicle['model_slug']])],
-        ['label' => 'Enquire Now'],
-    ]" />
+    ];
+
+    if (! empty($vehicle['brand_slug'])) {
+        $enquiryCrumbs[] = ['label' => $vehicle['brand'], 'href' => route('site.brand', $vehicle['brand_slug'])];
+
+        if (! empty($vehicle['model_slug'])) {
+            $enquiryCrumbs[] = ['label' => $vehicle['name'], 'href' => route('site.model', [$vehicle['brand_slug'], $vehicle['model_slug']])];
+        }
+    }
+
+    $enquiryCrumbs[] = ['label' => 'Enquire Now'];
+@endphp
+
+<div class="ab-container py-4">
+    <x-ui.breadcrumb :items="$enquiryCrumbs" />
 </div>
 
 <section class="ab-container pb-10">
@@ -260,15 +280,21 @@
 
                 <x-ui.rating :rating="$vehicle['rating']" :reviews="$vehicle['reviews']" class="mt-1.5" />
 
-                <p class="mt-2 text-sm">
-                    <span class="text-muted">From</span>
-                    <span class="font-extrabold">₹{{ number_format($vehicle['from_price'] / 100000, 2) }} Lakh*</span>
-                </p>
+                {{-- Both need a real auto behind them; with an empty catalogue
+                     there is no price to quote and nowhere to link to. --}}
+                @if (! empty($vehicle['from_price']))
+                    <p class="mt-2 text-sm">
+                        <span class="text-muted">From</span>
+                        <span class="font-extrabold">₹{{ number_format($vehicle['from_price'] / 100000, 2) }} Lakh*</span>
+                    </p>
+                @endif
 
-                <a href="{{ route('site.model', [$vehicle['brand_slug'], $vehicle['model_slug']]) }}"
-                   class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand-500 underline underline-offset-2">
-                    View Full Details <x-ui.icon name="arrow-right" :size="13" />
-                </a>
+                @if (! empty($vehicle['brand_slug']) && ! empty($vehicle['model_slug']))
+                    <a href="{{ route('site.model', [$vehicle['brand_slug'], $vehicle['model_slug']]) }}"
+                       class="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand-500 underline underline-offset-2">
+                        View Full Details <x-ui.icon name="arrow-right" :size="13" />
+                    </a>
+                @endif
             </div>
 
             <div class="ab-card bg-brand-50 p-4">

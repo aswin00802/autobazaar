@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Order ' . $order['id'])
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

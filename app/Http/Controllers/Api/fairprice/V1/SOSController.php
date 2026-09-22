@@ -92,7 +92,7 @@ class SOSController extends Controller
         } catch (\Throwable $e) {
             Log::error('FairPrice SOS admin notification failed.', [
                 'sos_id' => $sos->id,
-                'error' => $e->getMessage(),
+                'error' => safeApiMessage($e),
             ]);
         }
 

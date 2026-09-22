@@ -17,7 +17,7 @@ class StateController extends Controller
         $this->middleware(['permission:edit_state'])->only(['edit', 'update']);
         // $this->middleware(['permission:delete_state'])->only(['delete']);
     }
-    public function index()
+    public function index(Request $request)
     {
         $data = array(
             'breadcrumbs'   => array(
@@ -26,7 +26,22 @@ class StateController extends Controller
             ),
             'page_head'     =>  "State",
         );
-        $states = State::all();
+
+        // 4,092 states, and the country name used to be a separate query per row.
+        // with() fetches the countries in one go; per_page decides how many rows
+        // reach the browser (config/admin_lists.php, 0 = all of them).
+        $query = State::with('country:id,name')->orderBy('name')->orderBy('id');
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('country', fn ($c) => $c->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        $perPage = (int) config('admin_lists.per_page.state', 50);
+        $states = $perPage > 0 ? $query->paginate($perPage)->withQueryString() : $query->get();
+
         return view('admin.masters.state.index',compact('data','states'));
     }
 

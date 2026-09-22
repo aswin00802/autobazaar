@@ -3,19 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @unless (app()->environment('production'))
-        <meta name="robots" content="noindex, nofollow">
-    @endunless
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', $site['brand']['name']) — {{ $site['brand']['name'] }}</title>
-    <meta name="description" content="@yield('description', 'India\'s trusted auto marketplace. Compare autorickshaws, check on-road price, calculate EMI and shop accessories.')">
+    {{-- Title, description, canonical, social previews, icons and structured data --}}
+    @include('site.partials.seo')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    {{-- Typeface is a switch: config/site_design.php → font ('poppins' | 'roboto' | 'default') --}}
+    @php
+        $siteFont = config('site_design.font', 'default');
+        $fontFamilyParam = [
+            'poppins' => 'Poppins:wght@400;500;600;700;800',
+            'roboto'  => 'Roboto:wght@400;500;600;700;800',
+        ][$siteFont] ?? 'Plus+Jakarta+Sans:wght@400;500;600;700;800';
+    @endphp
+    <link href="https://fonts.googleapis.com/css2?family={{ $fontFamilyParam }}&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- Optional design add-ons, each switchable in config/site_design.php --}}
+    @include('site.partials.design-refresh')
 
     {{-- Reveal animations start at opacity 0 and are switched on by JS. If the
          bundle fails to load, this makes sure the page is still readable
@@ -28,6 +36,9 @@
      before Alpine has booted. --}}
 <body class="min-h-screen bg-canvas text-ink"
       data-cart-count="{{ app(\App\Services\CartService::class)->itemCount() }}">
+
+    {{-- First-visit splash + top progress bar. Inline so it paints before the bundle. --}}
+    @include('site.partials.loader')
 
     {{-- Skip link: the header is tall, keyboard users need a way past it. --}}
     <a href="#main"

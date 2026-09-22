@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Frequently Asked Questions')
+@section('description', 'Answers about buying an autorickshaw with AutoBazaar: on-road price, booking, finance and EMI, documents, delivery, service areas and accessories orders.')
 
 @section('content')
 
@@ -32,6 +33,22 @@
         ],
     ];
 @endphp
+
+{{-- The same questions, in the form Google reads for FAQ rich results --}}
+@push('schema')
+    @php
+        $faqSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => collect($faqs)->flatten(1)->map(fn ($qa) => [
+                '@type' => 'Question',
+                'name' => $qa[0],
+                'acceptedAnswer' => ['@type' => 'Answer', 'text' => strip_tags((string) $qa[1])],
+            ])->values()->all(),
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+@endpush
 
 <x-ui.page-hero title="Frequently Asked Questions"
                 lede="Buying, finance and accessories — the questions drivers ask us most."

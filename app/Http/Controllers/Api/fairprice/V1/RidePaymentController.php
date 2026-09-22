@@ -66,7 +66,7 @@ class RidePaymentController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage(),
+                'message' => safeApiMessage($e),
             ], 500);
         }
     }
@@ -139,7 +139,7 @@ class RidePaymentController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Payment verification failed: ' . $e->getMessage(),
+                'message' => 'Payment verification failed: ' . safeApiMessage($e),
             ], 422);
         }
     }

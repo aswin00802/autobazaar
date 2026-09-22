@@ -1,4 +1,10 @@
-@props(['vehicles' => []])
+@props([
+    'vehicles' => [],
+    // Which filter groups to show. Used Autos hides seating and use case: that data does not exist for them.
+    'groups' => ['fuels', 'brand', 'seating', 'use_case'],
+    'priceMin' => 100000,
+    'priceMax' => 500000,
+])
 
 {{--
     Vehicle filter rail. Presentational only — the parent page owns the
@@ -66,6 +72,7 @@
                 @endforeach
             </fieldset>
 
+            @if (in_array('seating', $groups, true))
             <fieldset class="mb-4">
                 <legend class="ab-label">Seating Capacity</legend>
                 @foreach ($seating as $seats)
@@ -79,9 +86,11 @@
                 @endforeach
             </fieldset>
 
+            @endif
+
             <div class="mb-4">
                 <span class="ab-label">Price Range</span>
-                <input type="range" min="100000" max="500000" step="10000"
+                <input type="range" min="{{ (int) $priceMin }}" max="{{ (int) $priceMax }}" step="10000"
                        x-model.number="maxPrice" @input="onMaxChange()"
                        class="w-full accent-brand-500" aria-label="Maximum price">
                 <p class="mt-1 text-xs font-semibold">
@@ -90,6 +99,7 @@
                 </p>
             </div>
 
+            @if (in_array('use_case', $groups, true))
             <fieldset>
                 <legend class="ab-label">Use Case</legend>
                 @foreach ($useCases as $key => $label)
@@ -102,6 +112,7 @@
                     </label>
                 @endforeach
             </fieldset>
+            @endif
         </div>
     </div>
 </div>

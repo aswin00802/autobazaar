@@ -7,8 +7,16 @@ use Illuminate\Support\Facades\Log;
 
 class SmsService
 {
-    private const GATEWAY_URL = 'http://site.ping4sms.com/api/smsapi';
-    private const GATEWAY_KEY = '0bc8ea57e5adc287cc8d163c82693450';
+    /** Gateway address and key both come from .env — see config/services.php. */
+    private function gatewayUrl(): string
+    {
+        return (string) config('services.ping4sms.url', 'http://site.ping4sms.com/api/smsapi');
+    }
+
+    private function gatewayKey(): string
+    {
+        return (string) config('services.ping4sms.key');
+    }
 
     private const OTP_SENDER = 'PNGOTP';
     private const OTP_TEMPLATE_ID = '1507165967974501361';
@@ -44,7 +52,7 @@ class SmsService
         try {
             $client = new Client(['connect_timeout' => 5, 'timeout' => 10]);
             $params = [
-                'key'        => self::GATEWAY_KEY,
+                'key'        => $this->gatewayKey(),
                 'route'      => 2,
                 'sender'     => $sender,
                 'number'     => $number,
@@ -53,8 +61,8 @@ class SmsService
             ];
 
             $response = strtoupper($method) === 'GET'
-                ? $client->get(self::GATEWAY_URL, ['query' => $params])
-                : $client->post(self::GATEWAY_URL, ['form_params' => $params]);
+                ? $client->get($this->gatewayUrl(), ['query' => $params])
+                : $client->post($this->gatewayUrl(), ['form_params' => $params]);
 
             $statusCode = $response->getStatusCode();
             $responseBody = trim((string) $response->getBody()->getContents());

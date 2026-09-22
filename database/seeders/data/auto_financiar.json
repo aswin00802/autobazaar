@@ -1,0 +1,93 @@
+[
+    {
+        "id": 1,
+        "user_id": 10,
+        "finance_name": "Daily Finance",
+        "finance_type": "Daily Finance",
+        "location": "Madipakkam, chennai",
+        "address": "Madipakkam, chennai",
+        "contact": 8939345665,
+        "image": null,
+        "status_id": 2,
+        "created_at": "2025-02-06 05:25:42.000000",
+        "updated_at": "2025-12-25 11:05:56.000000"
+    },
+    {
+        "id": 5,
+        "user_id": 2027,
+        "finance_name": "Bajaj Finance",
+        "finance_type": "Monthly Finance",
+        "location": "Madipakkam, chennai",
+        "address": "Madipakkam",
+        "contact": 9940897896,
+        "image": "uploads/finance/finance_image.png",
+        "status_id": 3,
+        "created_at": "2025-12-23 15:57:52.000000",
+        "updated_at": "2025-12-23 15:59:01.000000"
+    },
+    {
+        "id": 6,
+        "user_id": 10,
+        "finance_name": "Bajaj auto credit",
+        "finance_type": "3 wheeler loan provider",
+        "location": "chennai",
+        "address": "1, Bhanumathi Ramakrishna Rd, Bharani Colony, Vijayaraghavapuram, Vadapalani, Chennai, Tamil Nadu 600093",
+        "contact": 9751535189,
+        "image": "uploads/finance/finance_image1766581905.jpg",
+        "status_id": 1,
+        "created_at": "2025-12-24 23:41:45.000000",
+        "updated_at": "2025-12-24 23:41:45.000000"
+    },
+    {
+        "id": 7,
+        "user_id": 10,
+        "finance_name": "HINDUJA LEYLAND FINANCE",
+        "finance_type": "COMMERCIAL VEHICLE PVT FINANCE",
+        "location": "CHENNAI",
+        "address": "Communication Address\r\nNo. 27 A, Developed Industrial Estate, Guindy, Chennai - 600032",
+        "contact": 9751535185,
+        "image": "uploads/finance/finance_image1766624381.png",
+        "status_id": 1,
+        "created_at": "2025-12-25 11:29:41.000000",
+        "updated_at": "2025-12-25 11:29:41.000000"
+    },
+    {
+        "id": 8,
+        "user_id": 10,
+        "finance_name": "IDFC BANK",
+        "finance_type": "COMMERCIAL VEHICLE PVT FINANCE",
+        "location": "CHENNAI",
+        "address": "New No 67, Old No 32, Ground Floor, Near Siet College, Kavignar Bharathidasan Road, Teynampet, Chennai-600018, Tamil Nadu",
+        "contact": 8883218485,
+        "image": "uploads/finance/finance_image1766624606.png",
+        "status_id": 1,
+        "created_at": "2025-12-25 11:33:26.000000",
+        "updated_at": "2025-12-25 11:33:26.000000"
+    },
+    {
+        "id": 9,
+        "user_id": 10,
+        "finance_name": "TVS AUTO CREDIT",
+        "finance_type": "COMMERCIAL VEHICLE PVT FINANCE",
+        "location": "CHENNAI",
+        "address": "No 29, 3rd Floor, Jayalakshmi Estate, Haddows Road, Nungambakkam, Chennai-600034, Tamil Nadu",
+        "contact": 888832184,
+        "image": "uploads/finance/finance_image1766624896.png",
+        "status_id": 1,
+        "created_at": "2025-12-25 11:38:16.000000",
+        "updated_at": "2025-12-25 11:38:16.000000"
+    },
+    {
+        "id": 10,
+        "user_id": 10,
+        "finance_name": "indusind bank",
+        "finance_type": "COMMERCIAL VEHICLE PVT FINANCE",
+        "location": "CHENNAI",
+        "address": "No 3, East India Chambers, Ground Floor, Opposite Harrisons Hotel, Village Road, Nungambakkam High Road, Nungambakkam, Chennai-600034, Tamil Nadu",
+        "contact": 8885858458,
+        "image": "uploads/finance/finance_image1766625247.jpg",
+        "status_id": 1,
+        "created_at": "2025-12-25 11:44:07.000000",
+        "updated_at": "2025-12-25 11:44:07.000000"
+    }
+]

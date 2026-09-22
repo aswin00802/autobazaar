@@ -13,12 +13,17 @@ use App\Http\Controllers\Web\Shop\CartController;
 use App\Http\Controllers\Web\Shop\CheckoutController;
 use Illuminate\Support\Facades\Route;
 
+/* Search engines: generated so they always carry the right domain and catalogue */
+Route::get('/sitemap.xml', [\App\Http\Controllers\Web\SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [\App\Http\Controllers\Web\SeoController::class, 'robots'])->name('robots');
+
 Route::name('site.')->group(function () {
     Route::get('/', [SiteController::class, 'home'])->name('home');
 
     /* ------------------------------------------------------------ vehicles */
     Route::get('/new-autos', [SiteController::class, 'newAutos'])->name('new-autos');
     Route::get('/used-autos', [SiteController::class, 'usedAutos'])->name('used-autos');
+    Route::get('/used-autos/{id}/{slug?}', [SiteController::class, 'usedAuto'])->whereNumber('id')->name('used-auto');
     Route::get('/new-autos/{brand}', [SiteController::class, 'brand'])->name('brand');
     Route::get('/new-autos/{brand}/{model}', [SiteController::class, 'model'])->name('model');
 
@@ -49,16 +54,19 @@ Route::name('site.')->group(function () {
     Route::get('/accessories/shop', [SiteController::class, 'shop'])->name('accessories.shop');
 
     /* ------------------------------------------------- cart (public, guests ok) */
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->name('cart.coupon');
-    Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
+    // Guests and customers may change the cart; staff accounts may only look (see CustomerOnly).
+    Route::middleware('customer.only')->group(function () {
+        Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+        Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+        Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+        Route::post('/cart/coupon', [CartController::class, 'applyCoupon'])->name('cart.coupon');
+        Route::post('/cart/coupon/remove', [CartController::class, 'removeCoupon'])->name('cart.coupon.remove');
+    });
     Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
     Route::get('/cart', [CartController::class, 'show'])->name('cart');
 
     /* --------------------------------------- checkout + orders (login required) */
-    Route::middleware('UserAuth')->group(function () {
+    Route::middleware(['UserAuth', 'customer.only'])->group(function () {
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
         Route::post('/checkout/address', [CheckoutController::class, 'storeAddress'])->name('checkout.address');
         Route::post('/checkout/place-order', [CheckoutController::class, 'placeOrder'])->name('checkout.place');
@@ -66,7 +74,7 @@ Route::name('site.')->group(function () {
     });
 
     /* ------------------------------------------- account (the customer's own data) */
-    Route::middleware('UserAuth')->group(function () {
+    Route::middleware(['UserAuth', 'customer.only'])->group(function () {
         Route::get('/account', [SiteController::class, 'account'])->name('account');
         Route::get('/account/orders', [SiteController::class, 'orders'])->name('account.orders');
         Route::get('/account/orders/{id}', [SiteController::class, 'order'])->name('account.order');

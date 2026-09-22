@@ -9,6 +9,13 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasColumn('fairprice_fare_settings', 'passenger_1_base_fare')) {
+            return;
+        }
+
         Schema::table('fairprice_fare_settings', function (Blueprint $table) {
             $table->decimal('passenger_1_base_fare', 10, 2)->default(50)->after('base_km');
             $table->decimal('passenger_1_per_km', 10, 2)->default(10)->after('passenger_1_base_fare');

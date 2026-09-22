@@ -97,14 +97,14 @@ class LoginController extends Controller
             return response()->json([
                 'status' => 500,
                 'message' => 'A database error occurred. Please try again later.',
-                'error_details' => $e->getMessage(),
+                'error_details' => safeApiMessage($e),
             ], 500);
         } catch (\Exception $e) {
 
             return response()->json([
                 'status' => 500,
                 'message' => 'An unexpected error occurred. Please try again later.',
-                'error_details' => $e->getMessage(),
+                'error_details' => safeApiMessage($e),
             ], 500);
         }
     }

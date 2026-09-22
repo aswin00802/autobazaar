@@ -40,13 +40,13 @@ class RegisterController extends Controller
             return response()->json([
                 'status' => 404,
                 'message' => 'Database error occurred. Please try again later.',
-                'error_details' => $e->getMessage(),
+                'error_details' => safeApiMessage($e),
             ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 404,
                 'message' => 'An unexpected error occurred. Please try again later.',
-                'error_details' => $e->getMessage(),
+                'error_details' => safeApiMessage($e),
             ], 500);
         }
     }

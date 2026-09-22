@@ -27,9 +27,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/test-v1', function () {
-    return response()->json(['message' => 'API v1 is working']);
-});
 
 // New-vehicle catalogue (public): cards, detail, EMI maths, lead + review forms
 Route::prefix('vehicles')->group(function () {
@@ -43,17 +40,17 @@ Route::prefix('vehicles')->group(function () {
 });
 
 //user register
-Route::post('auth/register', [RegisterController::class, 'register']);
+Route::post('auth/register', [RegisterController::class, 'register'])->middleware('throttle:api-login');
 
 //Normal User Login
-Route::post('auth/login', [LoginController::class, 'login']);
+Route::post('auth/login', [LoginController::class, 'login'])->middleware('throttle:api-login');
 
 //user send otp
-Route::post('auth/sendOtp', [OTPAuthController::class, 'sendOtp'])->name('auth.sendOtp');
-Route::post('auth/user-sendOtp', [OTPAuthController::class, 'sendOtpNew'])->name('auth.user-sendOtp');
+Route::post('auth/sendOtp', [OTPAuthController::class, 'sendOtp'])->middleware('throttle:otp-send')->name('auth.sendOtp');
+Route::post('auth/user-sendOtp', [OTPAuthController::class, 'sendOtpNew'])->middleware('throttle:otp-send')->name('auth.user-sendOtp');
 //user verify otp
-Route::post('auth/verifyOtp', [OTPAuthController::class, 'verifyOtp'])->name('auth.verifyOtp');
-Route::post('auth/user-verifyOtp', [OTPAuthController::class, 'verifyOtpNew'])->name('auth.user-verifyOtp');
+Route::post('auth/verifyOtp', [OTPAuthController::class, 'verifyOtp'])->middleware('throttle:otp-verify')->name('auth.verifyOtp');
+Route::post('auth/user-verifyOtp', [OTPAuthController::class, 'verifyOtpNew'])->middleware('throttle:otp-verify')->name('auth.user-verifyOtp');
 
 //OAuth Login
 Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'apiRedirectToProvider']);
@@ -182,8 +179,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //FairPrice routes
 // V1
 Route::prefix('fairprice/v1')->group(function () {
-    Route::post('/customer/auth/sendOtp', [App\Http\Controllers\Api\fairprice\V1\Auth\OTPAuthController::class, 'sendOTP']);
-    Route::post('/customer/auth/verifyOtp', [App\Http\Controllers\Api\fairprice\V1\Auth\OTPAuthController::class, 'verifyOTP']);
+    Route::post('/customer/auth/sendOtp', [App\Http\Controllers\Api\fairprice\V1\Auth\OTPAuthController::class, 'sendOTP'])->middleware('throttle:otp-send');
+    Route::post('/customer/auth/verifyOtp', [App\Http\Controllers\Api\fairprice\V1\Auth\OTPAuthController::class, 'verifyOTP'])->middleware('throttle:otp-verify');
 
     Route::middleware(['auth:customer'])->group(function () {
         Route::post('/customer/profile-update', [App\Http\Controllers\Api\fairprice\V1\ProfileController::class, 'profileUpdate']);
@@ -214,10 +211,6 @@ Route::prefix('fairprice/v1')->group(function () {
 
 // V2
 Route::prefix('fairprice/v2')->group(function () {
-
-    Route::get('/v2-test', function () {
-        return response()->json(["success" => true, "message" => "V2 WORKING"]);
-    });
 
     Route::middleware(['auth:customer'])->group(function () {
         

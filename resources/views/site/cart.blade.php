@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Your Cart')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 
@@ -11,6 +12,8 @@
         ['label' => 'Accessories Shop', 'href' => route('site.accessories.shop')],
         ['label' => 'Cart'],
     ]" />
+
+    <h1 class="sr-only">Your Cart</h1>
 
     @if (session('success'))
         <p class="mt-4 flex items-center gap-2 rounded-lg bg-brand-50 px-4 py-3 text-sm font-semibold text-brand-600">

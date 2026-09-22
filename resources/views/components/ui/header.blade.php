@@ -116,8 +116,21 @@
                     </span>
                 </a>
 
-                {{-- Account: real OTP login for guests, account area once signed in --}}
-                @auth
+                {{-- Account: real OTP login for guests, account area once signed in.
+                     Staff share the same login session as customers, so for them this
+                     becomes a way back to the admin panel (customer pages are closed
+                     to staff by the CustomerOnly middleware). --}}
+                @php $isStaffViewer = auth()->check() && auth()->user()->isStaff(); @endphp
+                @if ($isStaffViewer)
+                    <a href="{{ route('dashboard') }}"
+                       class="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-canvas">
+                        <x-ui.icon name="shield" class="text-brand-500" />
+                        <span class="hidden leading-tight sm:block">
+                            <span class="block text-sm font-semibold">Admin Panel</span>
+                            <span class="block text-[11px] text-muted">Signed in as staff</span>
+                        </span>
+                    </a>
+                @elseauth
                     <a href="{{ route('site.account') }}"
                        class="flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-canvas">
                         <x-ui.icon name="user" class="text-ink-soft" />
@@ -134,7 +147,8 @@
                     </a>
                 @endauth
 
-                {{-- Cart --}}
+                {{-- Cart (not shown to staff: they cannot check out) --}}
+                @unless ($isStaffViewer)
                 <a href="{{ route('site.cart') }}" class="relative rounded-lg p-2 transition-colors hover:bg-canvas"
                    aria-label="Cart">
                     <x-ui.icon name="cart" class="text-ink-soft" :size="22" />
@@ -147,6 +161,7 @@
                           class="absolute -right-0.5 -top-0.5 grid h-4.5 min-w-4.5 place-items-center rounded-full
                                  bg-danger px-1 text-[10px] font-bold text-white"></span>
                 </a>
+                @endunless
 
                 {{-- Mobile menu toggle --}}
                 <button type="button" @click="mobileOpen = true"
@@ -161,8 +176,17 @@
     {{-- ---------------------------------------------------------- row 2 --}}
     <nav class="hidden bg-brand-500 lg:block" aria-label="Main">
         <div class="ab-container flex items-stretch">
+            {{-- Shorter menu (config/site_design.php → short_menu): the listed routes move
+                 into one "More" dropdown. Switch it off and all items sit in the bar again.
+                 The phone drawer below always shows the full list. --}}
+            @php
+                $navMoreRoutes = config('site_design.short_menu') ? (array) config('site_design.short_menu_routes', []) : [];
+                $navMain = array_values(array_filter($site['nav'], fn ($i) => ! in_array($i['route'], $navMoreRoutes, true)));
+                $navMore = array_values(array_filter($site['nav'], fn ($i) => in_array($i['route'], $navMoreRoutes, true)));
+                $navMoreActive = collect($navMore)->contains(fn ($i) => request()->routeIs($i['route']));
+            @endphp
             <ul class="flex flex-1 items-stretch">
-                @foreach ($site['nav'] as $item)
+                @foreach ($navMain as $item)
                     @php $isActive = request()->routeIs($item['route']); @endphp
                     <li>
                         <a href="{{ route($item['route']) }}"
@@ -176,10 +200,28 @@
                         </a>
                     </li>
                 @endforeach
+
+                @if (count($navMore))
+                    <li class="ab-more">
+                        <button type="button" class="ab-more-btn {{ $navMoreActive ? 'is-active' : '' }}" aria-haspopup="true">
+                            {{ config('site_design.short_menu_label', 'More') }}
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        <ul class="ab-more-menu">
+                            @foreach ($navMore as $item)
+                                <li>
+                                    <a href="{{ route($item['route']) }}" @if(request()->routeIs($item['route'])) aria-current="page" @endif>
+                                        {{ $item['label'] }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
             </ul>
 
             <a href="{{ route('site.enquiry') }}"
-               class="my-1.5 ml-3 flex items-center rounded-md bg-accent-500 px-6 text-sm font-bold text-ink
+               class="ab-glow my-1.5 ml-3 flex items-center rounded-md bg-accent-500 px-6 text-sm font-bold text-ink
                       transition-colors hover:bg-accent-600">
                 Enquire Now
             </a>

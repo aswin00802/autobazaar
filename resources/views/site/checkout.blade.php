@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Cart & Checkout')
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'India\'s Trusted Auto Marketplace')
+@section('description', 'Compare new and used autorickshaws from TVS, Bajaj, Piaggio, Mahindra and Atul. Check on-road price, calculate EMI, explore offers and shop genuine accessories.')
 
 @section('content')
 
@@ -269,7 +270,7 @@
                 <li class="flex items-center gap-2.5" data-reveal>
                     <x-ui.icon :name="$stat['icon']" :size="26" class="shrink-0 text-accent-500" />
                     <span class="leading-tight">
-                        <span class="block text-base font-extrabold">{{ $stat['value'] }}</span>
+                        <span class="block text-base font-extrabold" data-ab-count>{{ $stat['value'] }}</span>
                         <span class="block whitespace-nowrap text-[11px] text-white/75">{{ $stat['label'] }}</span>
                     </span>
                 </li>

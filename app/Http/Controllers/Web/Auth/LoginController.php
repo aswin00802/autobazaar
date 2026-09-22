@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Web\Auth\Concerns\RendersAuthPage;
 use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
+    use RendersAuthPage;
+
     public function index()
     {
         // Already signed in: the login form has nothing to offer.
@@ -14,6 +17,6 @@ class LoginController extends Controller
             return redirect()->route('site.account');
         }
 
-        return view('web.auth.login');
+        return $this->authView('login');
     }
 }

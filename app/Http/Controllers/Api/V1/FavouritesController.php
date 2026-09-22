@@ -104,7 +104,7 @@ class FavouritesController extends Controller
                 return ResponseService::success($result, "Favourites Listed Successfully."); // Return the flattened result here
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 }

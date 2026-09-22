@@ -152,6 +152,7 @@ if (!function_exists('deleteSettingFile')) {
                 unlink($filePath);
             }
             Setting::where('key', $key)->update(['value' => null]);
+            Setting::flushCache();
 
             return true;
         }
@@ -161,17 +162,108 @@ if (!function_exists('deleteSettingFile')) {
 }
 
 if (!function_exists('getSetting')) {
+    /**
+     * Reads from the cached settings map (one query per cache window, not one per call).
+     * Same return values as before: social settings only when active.
+     */
     function getSetting($key, $default = null) {
-        $setting = Setting::where('key', $key)->first();
+        $setting = Setting::cachedRow((string) $key);
         if (!$setting) {
             return $default;
         }
-        if ($setting->type === 'social') {
+        if ($setting['type'] === 'social') {
             // for socials, only return if active
-            return $setting->status_id == 1 ? $setting->value : $default;
+            return $setting['status_id'] == 1 ? $setting['value'] : $default;
         }
-        return $setting->value ?? $default;
-        // return Setting::where('key', $key)->value('value') ?? $default;
+        return $setting['value'] ?? $default;
+    }
+}
+
+if (!function_exists('safeApiMessage')) {
+    /**
+     * Message that is safe to send to a mobile app for a caught exception.
+     * Business messages ("Ride not found", "Razorpay is not enabled") pass through;
+     * database, PHP and filesystem errors are logged and replaced, so SQL, table
+     * names and file paths never leave the server. The response shape is unchanged.
+     */
+    function safeApiMessage(\Throwable $e, string $fallback = 'Something went wrong. Please try again.'): string
+    {
+        $internal = $e instanceof \PDOException
+            || $e instanceof \Error
+            || $e instanceof \ErrorException
+            || $e instanceof \Illuminate\Database\QueryException
+            || $e instanceof \Illuminate\Contracts\Container\BindingResolutionException;
+
+        $message = (string) $e->getMessage();
+
+        // Belt and braces: anything that looks like SQL or a server path is internal too.
+        if (!$internal && preg_match('/SQLSTATE|select\s.+\sfrom\s|insert\s+into|\bvendor[\/\\\\]|\.php\b|[A-Za-z]:\\\\|\/var\/|\/home\//i', $message)) {
+            $internal = true;
+        }
+
+        if ($internal || $message === '') {
+            \Illuminate\Support\Facades\Log::error('api.internal_error', [
+                'exception' => get_class($e),
+                'message'   => $message,
+                'file'      => $e->getFile() . ':' . $e->getLine(),
+                'url'       => request()?->fullUrl(),
+            ]);
+
+            return $fallback;
+        }
+
+        return $message;
+    }
+}
+
+if (!function_exists('isReviewLogin')) {
+    /**
+     * App store reviewers sign in with a fixed phone + OTP because they cannot
+     * receive our SMS. It is controlled from Admin > Settings > General so it can
+     * be switched off outside review windows. With no saved setting it behaves
+     * exactly as the app always has.
+     *
+     * @param string $app 'driver' (AutoBazaar app) or 'customer' (FairPrice app)
+     */
+    function isReviewLogin(string $app, $phone, $otp): bool
+    {
+        $expectedOtp = reviewLoginOtp($app, $phone);
+
+        return $expectedOtp !== null && hash_equals($expectedOtp, (string) $otp);
+    }
+}
+
+if (!function_exists('reviewLoginOtp')) {
+    /**
+     * The fixed OTP for a reviewer phone number, or null when the number is not a
+     * reviewer number or review login is switched off.
+     */
+    function reviewLoginOtp(string $app, $phone): ?string
+    {
+        $defaults = [
+            'driver_phone'   => '9094262603',
+            'customer_phone' => '8939345008',
+            'otp'            => '2203',
+        ];
+
+        $row = Setting::cachedRow('review_login');
+
+        if ($row) {
+            if ((int) $row['status_id'] !== 1) {
+                return null;
+            }
+            $config = array_merge($defaults, array_filter(json_decode((string) $row['value'], true) ?: []));
+        } else {
+            $config = $defaults;
+        }
+
+        $expectedPhone = (string) ($config[$app . '_phone'] ?? '');
+
+        if ($expectedPhone === '' || !hash_equals($expectedPhone, (string) $phone)) {
+            return null;
+        }
+
+        return (string) $config['otp'];
     }
 }
 

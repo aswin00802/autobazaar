@@ -15,7 +15,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('finance_lender_rates', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('finance_lender_rates') || Schema::create('finance_lender_rates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('auto_financiar_id')->unique();       // auto_financiar.id
             $table->decimal('interest_rate', 5, 2)->default(11.50);          // % p.a.

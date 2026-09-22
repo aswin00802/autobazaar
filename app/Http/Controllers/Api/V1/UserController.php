@@ -49,7 +49,7 @@ class UserController extends Controller
             return ResponseService::error('Invalid file or no file uploaded');
         } catch (\Exception $e) {
 
-            return ResponseService::error("An error occurred while updating the profile picture: " . $e->getMessage());
+            return ResponseService::error("An error occurred while updating the profile picture: " . safeApiMessage($e));
         }
     }
     
@@ -173,7 +173,7 @@ class UserController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 
@@ -238,7 +238,7 @@ class UserController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         } catch(\Exception $e){
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -342,7 +342,7 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json([
                 'status'  => false,
-                'message' => $e->getMessage()
+                'message' => safeApiMessage($e)
             ],500);
 
         }

@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', $heading)
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

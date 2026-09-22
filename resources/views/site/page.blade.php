@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', $title)
+@section('description', $title . ' of AutoBazaar, the autorickshaw marketplace for new and used autos, finance help and accessories.')
 
 @section('content')
 

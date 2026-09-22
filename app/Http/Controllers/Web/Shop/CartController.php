@@ -91,7 +91,7 @@ class CartController extends Controller
     public function show()
     {
         return view('site.cart', [
-            'site' => require resource_path('fixtures/site.php'),
+            'site' => \App\Support\SiteData::site(),
             'locations' => require resource_path('fixtures/locations.php'),
             'totals' => $this->cart->totals('standard'),
         ]);

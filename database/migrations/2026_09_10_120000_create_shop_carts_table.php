@@ -18,7 +18,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('shop_carts', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('shop_carts') || Schema::create('shop_carts', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable()->index();
             $table->string('session_id', 100)->nullable()->index();
@@ -29,7 +31,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
         });
 
-        Schema::create('shop_cart_items', function (Blueprint $table) {
+        Schema::hasTable('shop_cart_items') || Schema::create('shop_cart_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cart_id')->index();
 

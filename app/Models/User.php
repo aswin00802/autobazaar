@@ -130,4 +130,42 @@ class User extends Authenticatable
     {
         return $this->hasMany(RideRequest::class,'driver_id');
     }
+    /**
+     * Cheap pre-filter for "drivers near a point": a lat/lng square that fully
+     * contains the search circle, so the indexed coordinates narrow the rows
+     * before the exact distance formula runs. It never removes a driver the
+     * distance check would have kept.
+     */
+    public function scopeNearBox($query, $lat, $lng, $radiusKm)
+    {
+        $lat = (float) $lat;
+        $lng = (float) $lng;
+        $km  = max((float) $radiusKm, 0.1) * 1.15; // 15% safety margin
+
+        $latDelta = $km / 111.0;
+        $lngDelta = $km / (111.0 * max(cos(deg2rad($lat)), 0.01));
+
+        return $query
+            ->whereBetween('latitude', [$lat - $latDelta, $lat + $latDelta])
+            ->whereBetween('longitude', [$lng - $lngDelta, $lng + $lngDelta]);
+    }
+    /** Per-request answer to isStaff(); not a database column. */
+    protected ?bool $staffMemo = null;
+
+    /** role_id values that mean "customer / app user", not staff. */
+    public const CUSTOMER_ROLE_IDS = [null, 0, 1000];
+
+    /**
+     * Staff = anyone who may use the admin panel. Customers and staff share this
+     * table and the same login session, so both the admin guard (EnsureStaff) and
+     * the website guard (CustomerOnly) ask this one question.
+     */
+    public function isStaff(): bool
+    {
+        // Asked by the header on every page, so answer from memory after the first time.
+        return $this->staffMemo ??= (
+            ! in_array($this->role_id, self::CUSTOMER_ROLE_IDS, false)
+            || $this->roles()->where('name', '!=', 'user')->exists()
+        );
+    }
 }

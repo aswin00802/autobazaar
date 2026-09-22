@@ -15,12 +15,12 @@ class AutoEnquiryController extends Controller
     }
     public function index()
     {
-        $used_auto_enquirys = Enquiry::with(['user','user.autoAreas','auto', 'auto.autoBrands'])
+        $used_auto_enquirys = Enquiry::with(['user','user.autoAreas','auto', 'auto.autoBrands', 'auto.autoFueltype'])
         ->whereHas('auto', function($query){
             $query->whereIn('auto_usage_status', ['used_auto', 'private_cargo', 'bajaj']);
         })->orderBy('id', 'Desc')->get();
 
-        $new_auto_enquirys = Enquiry::with(['user','user.autoAreas','auto', 'auto.autoBrands'])
+        $new_auto_enquirys = Enquiry::with(['user','user.autoAreas','auto', 'auto.autoBrands', 'auto.autoFueltype'])
         ->whereHas('auto', function($query){
             $query->where('auto_usage_status', 'new_auto');
         })->orderBy('id', 'Desc')->get();

@@ -1,7 +1,13 @@
 @extends('site.layout')
 
-@section('title', 'Compare Auto Rickshaws')
-@section('description', 'Compare specifications, price, mileage, features and running cost across autorickshaw models.')
+@php
+    $compareNames = collect($selected)->pluck('name')->all();
+    $compareReady = count($selected) >= 2;          // a comparison needs at least two autos
+@endphp
+@section('title', $compareReady ? implode(' vs ', $compareNames) . ' — Compare' : 'Compare Auto Rickshaws')
+@section('description', $compareReady
+    ? 'Compare ' . implode(' vs ', $compareNames) . ': price, EMI, mileage, specifications, running cost and which one suits you best.'
+    : 'Pick 2 to 4 autorickshaw models and compare specifications, price, mileage, features and running cost side by side.')
 
 @section('content')
 
@@ -66,7 +72,9 @@
 
     $urlFor = function (array $slugs) {
         $slugs = array_values(array_unique($slugs));
-        return count($slugs) >= 2
+        // Every selection keeps its own URL, including a single auto. The old rule sent
+        // "fewer than two" to the plain page, which used to reload a default four.
+        return count($slugs) >= 1
             ? route('site.compare.combo', implode('-vs-', $slugs))
             : route('site.compare');
     };
@@ -100,6 +108,55 @@
 
         {{-- ===================================================== compare table --}}
         <div class="min-w-0 lg:col-span-7">
+            @if (! $compareReady)
+                @php
+                    // Ready-made pairs so nobody faces a blank page, and Google gets a path to each comparison.
+                    $popularPairs = collect([[0, 1], [0, 2], [1, 2], [0, 5], [3, 4], [2, 5]])
+                        ->filter(fn ($p) => isset($all[$p[0]], $all[$p[1]]))
+                        ->map(fn ($p) => ['label' => $all[$p[0]]['name'] . ' vs ' . $all[$p[1]]['name'], 'url' => $urlFor([$all[$p[0]]['slug'], $all[$p[1]]['slug']])])
+                        ->values();
+                @endphp
+                <style>
+                    .ab-cmp-start { padding: 34px 24px; text-align: center; }
+                    .ab-cmp-badge { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #E8F3EE; color: #0B5D3B; }
+                    .ab-cmp-start h2 { margin: 14px 0 6px; font-size: 20px; font-weight: 800; letter-spacing: -.01em; }
+                    .ab-cmp-start p { margin: 0 auto; max-width: 460px; font-size: 14px; line-height: 1.6; color: #6B7671; }
+                    .ab-cmp-steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 13px; font-weight: 600; color: #3F4744; }
+                    .ab-cmp-steps b { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 6px; border-radius: 50%; background: #FFC107; color: #1A1D1B; font-size: 11px; }
+                    .ab-cmp-start .ab-cmp-picked { max-width: none; color: #1A1D1B; display: inline-flex; align-items: center; gap: 8px; margin: 20px auto 0; padding: 8px 14px; border-radius: 999px; background: #FFF8E1; border: 1px solid #FFD54F; font-size: 13px; font-weight: 700; }
+                    .ab-cmp-pairs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+                    .ab-cmp-pairs a { display: inline-block; padding: 7px 13px; border-radius: 999px; border: 1px solid #C9E3D6; background: #fff; font-size: 12px; font-weight: 600; color: #0B5D3B; text-decoration: none; transition: background-color .15s ease, border-color .15s ease; }
+                    .ab-cmp-pairs a:hover { background: #E8F3EE; border-color: #6BB08F; }
+                    .ab-cmp-start .ab-cmp-or { max-width: none; margin: 26px auto 0; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #6B7671; }
+                </style>
+                <div class="ab-card ab-cmp-start" data-reveal>
+                    <span class="ab-cmp-badge"><x-ui.icon name="scales" :size="30" /></span>
+                    <h2>Pick 2 to 4 autos to compare</h2>
+                    <p>Choose from the list below. As soon as you pick two, price, EMI, mileage, specifications and running cost line up side by side.</p>
+
+                    <ol class="ab-cmp-steps">
+                        <li><b>1</b>Pick your autos below</li>
+                        <li><b>2</b>See them side by side</li>
+                        <li><b>3</b>Enquire on the winner</li>
+                    </ol>
+
+                    @if (count($selected) === 1)
+                        <p class="ab-cmp-picked">
+                            <x-ui.icon name="check" :size="15" class="text-brand-500" />
+                            {{ $selected[0]['name'] }} selected · add one more to compare
+                        </p>
+                    @endif
+
+                    @if ($popularPairs->isNotEmpty())
+                        <p class="ab-cmp-or">Or start with a popular comparison</p>
+                        <ul class="ab-cmp-pairs">
+                            @foreach ($popularPairs as $pair)
+                                <li><a href="{{ $pair['url'] }}">{{ $pair['label'] }}</a></li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            @else
             <p class="mb-2 flex items-center gap-1.5 text-[11px] font-semibold text-muted lg:hidden"><x-ui.icon name="arrow-right" :size="12" /> Swipe sideways to see all models</p>
             <div class="ab-card overflow-x-auto" data-reveal>
                 <table class="w-full min-w-3xl border-collapse text-xs">
@@ -171,16 +228,20 @@
                     </tbody>
                 </table>
             </div>
+            @endif
 
             {{-- ------------------------------------------- add another model --}}
             <div class="ab-card mt-4 p-4">
                 <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <h2 class="text-sm font-bold">
-                        Add a Model to Compare
+                        {{ $compareReady ? 'Add a Model to Compare' : 'Choose Autos to Compare' }}
                         <span class="font-normal text-muted">(<span x-text="resultCount"></span> match your filters)</span>
                     </h2>
                     <span class="text-[11px] text-muted">
                         {{ count($selectedSlugs) }} of 4 selected
+                        @if (count($selectedSlugs) < 2)
+                            <span class="font-semibold text-brand-600">· pick at least 2</span>
+                        @endif
                     </span>
                 </div>
 
@@ -219,6 +280,7 @@
             </div>
 
             {{-- ------------------------------------------------------- charts --}}
+            @if ($compareReady)
             <div class="mt-5 grid gap-4 sm:grid-cols-2" data-reveal-group>
 
                 {{-- EMI comparison --}}
@@ -279,6 +341,7 @@
                     </ul>
                 </div>
             </div>
+            @endif
         </div>
 
         {{-- ============================================================ aside --}}
@@ -306,7 +369,7 @@
             </div>
 
             {{-- Expert recommendation --}}
-            @if ($pick)
+            @if ($compareReady && $pick)
                 <div class="ab-card bg-accent-50 p-4">
                     <h2 class="mb-2 flex items-center gap-2 text-sm font-bold">
                         <x-ui.icon name="trophy" :size="17" class="text-accent-600" />
@@ -335,7 +398,7 @@
             @endif
 
             {{-- Running-cost saving --}}
-            @if ($saving > 0)
+            @if ($compareReady && $saving > 0)
                 <div class="ab-card bg-violet-50 p-4">
                     <h2 class="mb-1 flex items-center gap-2 text-sm font-bold">
                         <x-ui.icon name="gear" :size="17" class="text-violet-600" />

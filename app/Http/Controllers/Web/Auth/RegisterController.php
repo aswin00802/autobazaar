@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Web\Auth;
 use Illuminate\Http\Request;
 use App\Models\Masters\AutoAreas;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Web\Auth\Concerns\RendersAuthPage;
 
 class RegisterController extends Controller
 {
+    use RendersAuthPage;
+
     public function index()
     {
         // Areas are loaded per district on demand (see areas()); printing all
@@ -15,7 +18,7 @@ class RegisterController extends Controller
         $cities = \Illuminate\Support\Facades\DB::table('tbl_auto_cities')->orderBy('id')->get(['id', 'name']);
         $areas = [];
 
-        return view('web.auth.register', compact('areas', 'cities'));
+        return $this->authView('register', compact('areas', 'cities'));
     }
 
     /** GET user/areas/{city} — area options for one district (0 = every other district). */

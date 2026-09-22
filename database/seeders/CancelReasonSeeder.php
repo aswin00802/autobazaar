@@ -37,22 +37,15 @@ class CancelReasonSeeder extends Seeder
             'Other',
         ];
 
-        foreach ($customerReasons as $reason) {
-            DB::table('cancel_reasons')->insert([
-                'type'       => 'C',
-                'name'       => $reason,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        foreach ($driverReasons as $reason) {
-            DB::table('cancel_reasons')->insert([
-                'type'       => 'D',
-                'name'       => $reason,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        // updateOrInsert, not insert: running the seeders twice used to leave
+        // two of every reason in the list.
+        foreach (['C' => $customerReasons, 'D' => $driverReasons] as $type => $reasons) {
+            foreach ($reasons as $reason) {
+                DB::table('cancel_reasons')->updateOrInsert(
+                    ['type' => $type, 'name' => $reason],
+                    ['updated_at' => now(), 'created_at' => now()],
+                );
+            }
         }
     }
 }

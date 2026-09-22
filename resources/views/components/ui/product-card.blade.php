@@ -66,7 +66,16 @@
         @endif
 
         @unless ($compact)
-            @if (! empty($product['product_model_id']))
+            @if (auth()->check() && auth()->user()->isStaff())
+                {{-- Staff see the shop as customers do, but cannot order from an admin account --}}
+                <div class="mt-3.5">
+                    <button type="button" disabled class="ab-btn ab-btn-primary w-full px-2 py-2 text-xs disabled:opacity-60">
+                        <x-ui.icon name="cart" :size="15" />
+                        <span>Add to Cart</span>
+                    </button>
+                    <p class="mt-1 text-center text-[10px] text-muted">Ordering is off for staff accounts</p>
+                </div>
+            @elseif (! empty($product['product_model_id']))
                 <div x-data="addToCart({
                         productModelId: {{ $product['product_model_id'] }},
                         url: @js(route('site.cart.add')),

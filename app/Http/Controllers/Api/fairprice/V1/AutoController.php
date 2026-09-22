@@ -170,6 +170,7 @@ class AutoController extends Controller
                 ->having("distance","<=",$radius)
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
+                ->nearBox($latitude, $longitude, $radius)
                 ->whereHas('userInfo', function($q){
                     $q->whereNotNull('fuel_id');
                 })
@@ -227,6 +228,7 @@ class AutoController extends Controller
                 ->having("distance","<=",$radius)
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
+                ->nearBox($latitude, $longitude, $radius)
                 ->where('fair_price_enabled', 1)
                 ->where('is_online', 1)
                 ->where('is_available', 1)
@@ -270,6 +272,7 @@ class AutoController extends Controller
                     [$lat, $lng, $lat])
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
+                ->nearBox($lat, $lng, $radius)
                 // ->where('is_online',1)
                 // ->where('is_available',1)
 
@@ -624,14 +627,14 @@ class AutoController extends Controller
 
             Log::error('ride_create.failed', [
                 'customer_id'   => $customer?->id,
-                'message'       => $e->getMessage(),
+                'message'       => safeApiMessage($e),
                 'line'          => $e->getLine(),
                 'file'          => $e->getFile(),
             ]);
 
             return response()->json([
                 'status' => false,
-                'message'=> $e->getMessage()
+                'message'=> safeApiMessage($e)
             ]);
         }
     }
@@ -1256,7 +1259,7 @@ class AutoController extends Controller
             return response()->json([
                 'status' => false,
                 'message'=> 'Error',
-                'error'  => $e->getMessage()
+                'error'  => safeApiMessage($e)
             ]);
         }
     }

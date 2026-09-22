@@ -16,7 +16,7 @@ class CountryController extends Controller
         $this->middleware(['permission:edit_country'])->only(['edit', 'update']);
         // $this->middleware(['permission:delete_country'])->only(['delete']);
     }
-    public function index()
+    public function index(Request $request)
     {
         $data = array(
             'breadcrumbs'   => array(
@@ -25,7 +25,17 @@ class CountryController extends Controller
             ),
             'page_head'     =>  "Country",
         );
-        $countrys = Country::all();
+
+        // Same search and paging as the State and City screens beside it.
+        $query = Country::orderBy('name')->orderBy('id');
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $perPage = (int) config('admin_lists.per_page.country', 50);
+        $countrys = $perPage > 0 ? $query->paginate($perPage)->withQueryString() : $query->get();
+
         return view('admin.masters.country.index',compact('data','countrys'));
     }
 

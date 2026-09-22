@@ -93,16 +93,20 @@
                 </p>
 
                 <div class="mt-5 grid grid-cols-2 gap-3">
-                    @foreach (['Google Play', 'App Store'] as $store)
-                        <div class="rounded-lg bg-white p-2">
-                            {{-- Placeholder QR: a real code is generated at build time --}}
-                            <svg viewBox="0 0 21 21" class="w-full" shape-rendering="crispEdges"
-                                 role="img" aria-label="{{ $store }} QR code placeholder">
-                                <rect width="21" height="21" fill="#fff"/>
-                                <path fill="#0B5D3B" d="M0 0h7v7H0zM14 0h7v7h-7zM0 14h7v7H0zM2 2h3v3H2zM16 2h3v3h-3zM2 16h3v3H2zM9 0h1v2H9zM11 1h1v3h-1zM9 3h2v1H9zM13 8h1v2h-1zM9 9h3v1H9zM10 11h1v2h-1zM0 9h2v1H0zM3 9h2v1H3zM6 10h2v1H6zM9 14h2v2H9zM12 15h2v1h-2zM15 17h2v1h-2zM9 18h4v1H9zM14 19h3v1h-3zM18 9h3v1h-3zM17 11h2v1h-2zM19 12h2v2h-2z"/>
-                            </svg>
-                        </div>
-                    @endforeach
+                    {{-- Real code: encodes config('site_links.play_url') --}}
+                    <a href="{{ config('site_links.play_url') }}" target="_blank" rel="noopener" class="block rounded-lg bg-white p-2">
+                        <img src="{{ asset('assets/site/app-qr-play.svg') }}" width="200" height="200" class="w-full"
+                             alt="QR code: scan to get the AutoBazaar app on Google Play">
+                        <span class="mt-1 block text-center text-[10px] font-bold text-brand-600">Google Play</span>
+                    </a>
+                    {{-- No iPhone app yet, so no code to scan --}}
+                    <div class="flex flex-col items-center justify-center rounded-lg border border-dashed border-white/40 bg-white/10 p-2 text-center">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" class="text-white/90" aria-hidden="true">
+                            <path d="M16.4 12.7c0-2.2 1.8-3.3 1.9-3.4-1-1.5-2.6-1.7-3.2-1.7-1.4-.1-2.7.8-3.3.8-.7 0-1.7-.8-2.8-.8-1.5 0-2.8.8-3.6 2.1-1.5 2.6-.4 6.5 1.1 8.6.7 1 1.6 2.2 2.7 2.2 1.1 0 1.5-.7 2.8-.7s1.6.7 2.8.7c1.2 0 1.9-1 2.6-2.1.8-1.2 1.2-2.4 1.2-2.5-.1 0-2.2-.9-2.2-3.2ZM14.2 5.8c.6-.7 1-1.7.9-2.8-.9 0-2 .6-2.6 1.3-.6.6-1.1 1.7-.9 2.7 1 .1 2-.5 2.6-1.2Z"/>
+                        </svg>
+                        <span class="mt-2 block text-xs font-bold text-white">iPhone app</span>
+                        <span class="mt-0.5 block text-[10px] font-semibold uppercase tracking-wide text-accent-500">Coming soon</span>
+                    </div>
                 </div>
 
                 <div class="mt-4 space-y-2">

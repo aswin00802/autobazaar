@@ -12,7 +12,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('shop_coupons', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('shop_coupons') || Schema::create('shop_coupons', function (Blueprint $table) {
             $table->id();
             $table->string('code', 50)->unique();
             $table->string('label')->nullable();
@@ -31,7 +33,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
         });
 
-        Schema::create('shop_coupon_usages', function (Blueprint $table) {
+        Schema::hasTable('shop_coupon_usages') || Schema::create('shop_coupon_usages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('coupon_id')->index();
             $table->integer('user_id')->index();

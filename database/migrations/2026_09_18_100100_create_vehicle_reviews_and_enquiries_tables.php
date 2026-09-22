@@ -15,7 +15,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vehicle_reviews', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('vehicle_reviews') || Schema::create('vehicle_reviews', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('vehicle_model_id')->index();
             $table->integer('user_id')->nullable()->index();
@@ -32,7 +34,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
         });
 
-        Schema::create('vehicle_enquiries', function (Blueprint $table) {
+        Schema::hasTable('vehicle_enquiries') || Schema::create('vehicle_enquiries', function (Blueprint $table) {
             $table->id();
             $table->string('enquiry_no', 30)->unique();                      // VE-0001
             $table->unsignedBigInteger('vehicle_model_id')->nullable()->index();

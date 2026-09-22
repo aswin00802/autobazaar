@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth', 'check.Userstatus', 'staff']], function () {
     Route::get('/dashboard', [App\Http\Controllers\admin\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/attention', [App\Http\Controllers\admin\DashboardController::class, 'attention'])->name('dashboard.attention');
+    Route::get('/admin-search', [App\Http\Controllers\admin\SearchController::class, 'index'])->middleware('throttle:60,1')->name('admin.search');
     Route::post('/brand/get-model', [App\Http\Controllers\admin\CommonController::class, 'get_model'])->name('brand.get-model');
     Route::group(['prefix' => 'masters'], function () {
         Route::get('/country', [App\Http\Controllers\admin\master\CountryController::class, 'index'])->name('masters.country');

@@ -7,7 +7,7 @@
     The 404 page keeps its own richer template.
 --}}
 @php
-    $site = require resource_path('fixtures/site.php');
+    $site = \App\Support\SiteData::site();
     $hasBuild = file_exists(public_path('build/manifest.json'));
     $retry = $retry ?? false;
 @endphp

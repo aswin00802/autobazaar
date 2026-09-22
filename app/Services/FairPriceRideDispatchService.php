@@ -78,6 +78,7 @@ class FairPriceRideDispatchService
                 * sin(radians(latitude)))) AS distance', [$lat, $lng, $lat])
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
+            ->nearBox($lat, $lng, $radiusKm)
             ->having('distance', '<=', $radiusKm)
             ->orderBy('distance');
 
@@ -187,6 +188,7 @@ class FairPriceRideDispatchService
                     * sin(radians(latitude)))) AS distance', [$lat, $lng, $lat])
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
+                ->nearBox($lat, $lng, $radius)
                 ->having('distance', '<=', $radius)
                 ->orderBy('distance');
 

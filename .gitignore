@@ -25,3 +25,8 @@ Thumbs.db
 docs/fairprice-phase1-new-apis.txt
 docs/fairprice-live-schema.sql
 docs/fairprice-live-deploy.txt
+# Uploaded pictures are server content, not source code. They are restored from
+# a backup, never from Git. A page that cannot find one falls back on its own —
+# the product cards, used autos and finance lenders all handle it.
+/public/uploads/*
+!/public/uploads/.gitkeep

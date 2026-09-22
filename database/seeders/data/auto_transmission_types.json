@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "name": "MT",
+        "status": 1
+    },
+    {
+        "id": 2,
+        "name": "AT",
+        "status": 1
+    },
+    {
+        "id": 3,
+        "name": "SAT",
+        "status": 1
+    },
+    {
+        "id": 4,
+        "name": "CVT",
+        "status": 1
+    },
+    {
+        "id": 5,
+        "name": "Electric Motor Drive",
+        "status": 1
+    },
+    {
+        "id": 6,
+        "name": "Direct Drive Transmission",
+        "status": 1
+    }
+]

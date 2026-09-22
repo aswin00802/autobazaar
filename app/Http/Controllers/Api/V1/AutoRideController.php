@@ -217,14 +217,14 @@ class AutoRideController extends Controller
             Log::error('ride_accept.failed', [
                 'ride_id'           => $request->ride_id,
                 'driver_id_attempt' => $driver?->id,
-                'message'           => $e->getMessage(),
+                'message'           => safeApiMessage($e),
                 'line'              => $e->getLine(),
                 'file'              => $e->getFile(),
             ]);
 
             return response()->json([
                 'status'  => false,
-                'message' => $e->getMessage()
+                'message' => safeApiMessage($e)
             ]);
         }
     }
@@ -298,7 +298,7 @@ class AutoRideController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage(),
+                'message' => safeApiMessage($e),
             ], 500);
         }
     }
@@ -824,7 +824,7 @@ class AutoRideController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => false,
-                'message' => $e->getMessage(),
+                'message' => safeApiMessage($e),
             ], 500);
         }
     }
@@ -890,7 +890,7 @@ class AutoRideController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Payment verification failed: ' . $e->getMessage(),
+                'message' => 'Payment verification failed: ' . safeApiMessage($e),
             ], 422);
         }
     }
@@ -1015,7 +1015,7 @@ class AutoRideController extends Controller
             return response()->json([
                 'status' => false,
                 'message'=> 'Error',
-                'error'  => $e->getMessage()
+                'error'  => safeApiMessage($e)
             ]);
         }
     }

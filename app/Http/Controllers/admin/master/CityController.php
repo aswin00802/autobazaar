@@ -17,7 +17,7 @@ class CityController extends Controller
         $this->middleware(['permission:edit_city'])->only(['edit', 'update']);
         // $this->middleware(['permission:delete_city'])->only(['delete']);
     }
-    public function index()
+    public function index(Request $request)
     {
         $data = array(
             'breadcrumbs'   => array(
@@ -26,7 +26,23 @@ class CityController extends Controller
             ),
             'page_head'     =>  "City",
         );
-        $citys = City::all();
+
+        // There are ~48,000 cities. Printing them all took about two minutes,
+        // almost all of it one separate query per row for the state name.
+        // with() fetches the states in one go; per_page decides how many rows
+        // reach the browser (config/admin_lists.php, 0 = all of them).
+        $query = City::with('state:id,name')->orderBy('name')->orderBy('id');
+
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhereHas('state', fn ($s) => $s->where('name', 'like', "%{$search}%"));
+            });
+        }
+
+        $perPage = (int) config('admin_lists.per_page.city', 50);
+        $citys = $perPage > 0 ? $query->paginate($perPage)->withQueryString() : $query->get();
+
         return view('admin.masters.city.index',compact('data','citys'));
     }
 

@@ -1,6 +1,38 @@
 @extends('site.layout')
 
 @section('title', $vehicle['name'])
+@section('og_type', 'product')
+@section('og_image', asset($vehicle['image']))
+
+@section('schema')
+    @php
+        $productSchema = array_filter([
+            '@context'    => 'https://schema.org',
+            '@type'       => 'Product',
+            'name'        => $vehicle['name'],
+            'description' => \Illuminate\Support\Str::limit(strip_tags((string) $vehicle['description']), 300),
+            'image'       => asset($vehicle['image']),
+            'category'    => 'Autorickshaw',
+            'brand'       => ['@type' => 'Brand', 'name' => $vehicle['brand']],
+            'offers'      => ! empty($vehicle['on_road_price']) ? [
+                '@type'         => 'Offer',
+                'url'           => url()->current(),
+                'priceCurrency' => 'INR',
+                'price'         => (int) round($vehicle['on_road_price']),
+                'availability'  => 'https://schema.org/InStock',
+                'itemCondition' => 'https://schema.org/NewCondition',
+                'seller'        => ['@id' => url('/') . '#organization'],
+            ] : null,
+            // Only when real customer reviews exist; never invent a rating for Google.
+            'aggregateRating' => (($vehicle['reviews'] ?? 0) > 0 && ($vehicle['rating'] ?? 0) > 0) ? [
+                '@type'       => 'AggregateRating',
+                'ratingValue' => round((float) $vehicle['rating'], 1),
+                'reviewCount' => (int) $vehicle['reviews'],
+            ] : null,
+        ]);
+    @endphp
+    <script type="application/ld+json">{!! json_encode($productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+@endsection
 @section('description', $vehicle['description'])
 
 @section('content')

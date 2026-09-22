@@ -57,7 +57,7 @@ class SearchController extends Controller
 
             return ResponseService::success($result, "Autos matched successfully.");
         } catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 }

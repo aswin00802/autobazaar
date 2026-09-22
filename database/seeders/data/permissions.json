@@ -1,0 +1,1034 @@
+[
+    {
+        "id": 1,
+        "name": "dashboard",
+        "group_name": "dashboard",
+        "guard_name": "web",
+        "created_at": "2025-08-08 15:02:38",
+        "updated_at": "2025-08-08 15:02:38"
+    },
+    {
+        "id": 2,
+        "name": "roles",
+        "group_name": "role",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 3,
+        "name": "add_roles",
+        "group_name": "role",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 4,
+        "name": "edit_roles",
+        "group_name": "role",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 5,
+        "name": "permissions",
+        "group_name": "permission",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 6,
+        "name": "add_permissions",
+        "group_name": "permission",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 7,
+        "name": "edit_permissions",
+        "group_name": "permission",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 8,
+        "name": "role_has_permission",
+        "group_name": "role&permission",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 9,
+        "name": "edit_role_has_permission",
+        "group_name": "role&permission",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 10,
+        "name": "country",
+        "group_name": "country",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 11,
+        "name": "add_country",
+        "group_name": "country",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 12,
+        "name": "edit_country",
+        "group_name": "country",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 13,
+        "name": "state",
+        "group_name": "state",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 14,
+        "name": "add_state",
+        "group_name": "state",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 15,
+        "name": "edit_state",
+        "group_name": "state",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 16,
+        "name": "city",
+        "group_name": "city",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 17,
+        "name": "add_city",
+        "group_name": "city",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 18,
+        "name": "edit_city",
+        "group_name": "city",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 19,
+        "name": "auto_enquiry_list",
+        "group_name": "auto_enquiry",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 20,
+        "name": "auto_enquiry_update",
+        "group_name": "auto_enquiry",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 21,
+        "name": "auto_emergency_list",
+        "group_name": "auto_emergency",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 22,
+        "name": "auto_emergency_update",
+        "group_name": "auto_emergency",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 23,
+        "name": "solid_autos_list",
+        "group_name": "solid_autos",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 24,
+        "name": "auto_driver_list",
+        "group_name": "auto_driver",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 25,
+        "name": "auto_driver_approved",
+        "group_name": "auto_driver",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 26,
+        "name": "auto_driver_delete",
+        "group_name": "auto_driver",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 27,
+        "name": "auto_brand",
+        "group_name": "auto_brand",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 28,
+        "name": "add_auto_brand",
+        "group_name": "auto_brand",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 29,
+        "name": "edit_auto_brand",
+        "group_name": "auto_brand",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 30,
+        "name": "delete_auto_brand",
+        "group_name": "auto_brand",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 31,
+        "name": "auto_brand_model",
+        "group_name": "auto_brand_model",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 32,
+        "name": "add_auto_brand_model",
+        "group_name": "auto_brand_model",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 33,
+        "name": "edit_auto_brand_model",
+        "group_name": "auto_brand_model",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 34,
+        "name": "delete_auto_brand_model",
+        "group_name": "auto_brand_model",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 35,
+        "name": "auto_fuel_type",
+        "group_name": "auto_fuel_type",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 36,
+        "name": "add_auto_fuel_type",
+        "group_name": "auto_fuel_type",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 37,
+        "name": "edit_auto_fuel_type",
+        "group_name": "auto_fuel_type",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 38,
+        "name": "delete_auto_fuel_type",
+        "group_name": "auto_fuel_type",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 39,
+        "name": "auto_seller",
+        "group_name": "auto_seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 40,
+        "name": "add_auto_seller",
+        "group_name": "auto_seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 41,
+        "name": "edit_auto_seller",
+        "group_name": "auto_seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 42,
+        "name": "delete_auto_seller",
+        "group_name": "auto_seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 43,
+        "name": "auto_finance",
+        "group_name": "auto_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 44,
+        "name": "add_auto_finance",
+        "group_name": "auto_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 45,
+        "name": "edit_auto_finance",
+        "group_name": "auto_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 46,
+        "name": "delete_auto_finance",
+        "group_name": "auto_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 47,
+        "name": "gas_station",
+        "group_name": "gas_station",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 48,
+        "name": "add_gas_station",
+        "group_name": "gas_station",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 49,
+        "name": "edit_gas_station",
+        "group_name": "gas_station",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 50,
+        "name": "delete_gas_station",
+        "group_name": "gas_station",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 51,
+        "name": "mechanic",
+        "group_name": "mechanic",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 52,
+        "name": "add_mechanic",
+        "group_name": "mechanic",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 53,
+        "name": "edit_mechanic",
+        "group_name": "mechanic",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 54,
+        "name": "delete_mechanic",
+        "group_name": "mechanic",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 55,
+        "name": "insurance",
+        "group_name": "insurance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 56,
+        "name": "re_finance",
+        "group_name": "re_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 57,
+        "name": "rto",
+        "group_name": "rto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 58,
+        "name": "user_list",
+        "group_name": "user management",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 59,
+        "name": "user_info",
+        "group_name": "user management",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 60,
+        "name": "used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 61,
+        "name": "add_used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 62,
+        "name": "edit_used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 63,
+        "name": "sell_used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 64,
+        "name": "delete_used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 65,
+        "name": "view_details_used_auto",
+        "group_name": "used auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 66,
+        "name": "private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 67,
+        "name": "add_private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 68,
+        "name": "edit_private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 69,
+        "name": "sell_private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 70,
+        "name": "delete_private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 71,
+        "name": "view_details_private_cargo_auto",
+        "group_name": "private cargo auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 72,
+        "name": "bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 73,
+        "name": "add_bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 74,
+        "name": "edit_bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 75,
+        "name": "sell_bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 76,
+        "name": "delete_bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 77,
+        "name": "view_details_bajaj_refinance_auto",
+        "group_name": "bajaj refinance auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 78,
+        "name": "new_auto",
+        "group_name": "new auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 79,
+        "name": "add_new_auto",
+        "group_name": "new auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 80,
+        "name": "edit_new_auto",
+        "group_name": "new auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 81,
+        "name": "view_details_new_auto",
+        "group_name": "new auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 82,
+        "name": "delete_new_auto",
+        "group_name": "new auto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 83,
+        "name": "general_setting",
+        "group_name": "settings",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 84,
+        "name": "smtp_setting",
+        "group_name": "settings",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 85,
+        "name": "emailtemplate_setting",
+        "group_name": "settings",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 86,
+        "name": "payment_setting",
+        "group_name": "settings",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 87,
+        "name": "user_post_auto_list",
+        "group_name": "approval",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 88,
+        "name": "user_post_auto_approval",
+        "group_name": "approval",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 89,
+        "name": "re_finance_update",
+        "group_name": "re_finance",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 90,
+        "name": "rto_update",
+        "group_name": "rto",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 91,
+        "name": "sparepart_categories",
+        "group_name": "sparepart categories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 92,
+        "name": "add_sparepart_categories",
+        "group_name": "sparepart categories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 93,
+        "name": "edit_sparepart_categories",
+        "group_name": "sparepart categories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 94,
+        "name": "delete_sparepart_categories",
+        "group_name": "sparepart categories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 95,
+        "name": "sparepart_subcategories",
+        "group_name": "sparepart Subcategories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 96,
+        "name": "add_sparepart_subcategories",
+        "group_name": "sparepart Subcategories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 97,
+        "name": "edit_sparepart_subcategories",
+        "group_name": "sparepart Subcategories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 98,
+        "name": "delete_sparepart_subcategories",
+        "group_name": "sparepart Subcategories",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 99,
+        "name": "sparepart_product",
+        "group_name": "sparepart products",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 100,
+        "name": "add_sparepart_product",
+        "group_name": "sparepart products",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 101,
+        "name": "edit_sparepart_product",
+        "group_name": "sparepart products",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 102,
+        "name": "delete_sparepart_product",
+        "group_name": "sparepart products",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 103,
+        "name": "sparepart_pendingorders",
+        "group_name": "sparepart orders",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 104,
+        "name": "sparepart_successorders",
+        "group_name": "sparepart orders",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 105,
+        "name": "sparepart_cancelorders",
+        "group_name": "sparepart orders",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 106,
+        "name": "quotation",
+        "group_name": "quotation",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 107,
+        "name": "quotation_status_update",
+        "group_name": "quotation",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 108,
+        "name": "authorized_seller",
+        "group_name": "authorized seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 109,
+        "name": "add_authorized_seller",
+        "group_name": "authorized seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 110,
+        "name": "edit_authorized_seller",
+        "group_name": "authorized seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 111,
+        "name": "delete_authorized_seller",
+        "group_name": "authorized seller",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 112,
+        "name": "events_announce",
+        "group_name": "events announce",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 113,
+        "name": "add_events_announce",
+        "group_name": "events announce",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 114,
+        "name": "edit_events_announce",
+        "group_name": "events announce",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 115,
+        "name": "delete_events_announce",
+        "group_name": "events announce",
+        "guard_name": "web",
+        "created_at": "2023-11-09 16:02:38",
+        "updated_at": "2023-11-09 16:02:38"
+    },
+    {
+        "id": 116,
+        "name": "upload_gas_station",
+        "group_name": "gas_station",
+        "guard_name": "web",
+        "created_at": "2025-12-29 20:52:44",
+        "updated_at": "2025-12-29 20:52:44"
+    },
+    {
+        "id": 117,
+        "name": "fairprice_ride_list",
+        "group_name": "fairprice",
+        "guard_name": "web",
+        "created_at": "2026-08-12 15:04:01",
+        "updated_at": "2026-08-12 15:04:01"
+    },
+    {
+        "id": 119,
+        "name": "fairprice_fare_setting",
+        "group_name": "fairprice",
+        "guard_name": "web",
+        "created_at": "2026-08-12 15:04:01",
+        "updated_at": "2026-08-12 15:04:01"
+    },
+    {
+        "id": 121,
+        "name": "ecommerce_orders",
+        "group_name": "",
+        "guard_name": "web",
+        "created_at": "2026-09-10 18:27:28",
+        "updated_at": "2026-09-10 18:27:28"
+    },
+    {
+        "id": 122,
+        "name": "ecommerce_coupons",
+        "group_name": "",
+        "guard_name": "web",
+        "created_at": "2026-09-10 18:27:28",
+        "updated_at": "2026-09-10 18:27:28"
+    },
+    {
+        "id": 123,
+        "name": "add_ecommerce_coupons",
+        "group_name": "",
+        "guard_name": "web",
+        "created_at": "2026-09-10 18:27:28",
+        "updated_at": "2026-09-10 18:27:28"
+    },
+    {
+        "id": 124,
+        "name": "edit_ecommerce_coupons",
+        "group_name": "",
+        "guard_name": "web",
+        "created_at": "2026-09-10 18:27:28",
+        "updated_at": "2026-09-10 18:27:28"
+    },
+    {
+        "id": 125,
+        "name": "delete_ecommerce_coupons",
+        "group_name": "",
+        "guard_name": "web",
+        "created_at": "2026-09-10 18:27:28",
+        "updated_at": "2026-09-10 18:27:28"
+    },
+    {
+        "id": 126,
+        "name": "vehicle_catalog",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    },
+    {
+        "id": 127,
+        "name": "add_vehicle_catalog",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    },
+    {
+        "id": 128,
+        "name": "edit_vehicle_catalog",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    },
+    {
+        "id": 129,
+        "name": "delete_vehicle_catalog",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    },
+    {
+        "id": 130,
+        "name": "vehicle_reviews",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    },
+    {
+        "id": 131,
+        "name": "vehicle_leads",
+        "group_name": "vehicles",
+        "guard_name": "web",
+        "created_at": "2026-09-18 13:38:34",
+        "updated_at": "2026-09-18 13:38:34"
+    }
+]

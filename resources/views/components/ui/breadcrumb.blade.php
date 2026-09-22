@@ -2,6 +2,24 @@
 
 {{-- $items: [['label' => 'Home', 'href' => '...'], ['label' => 'TVS King Deluxe']] --}}
 
+@if (count($items) > 1)
+    @push('schema')
+        @php
+            $crumbSchema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'BreadcrumbList',
+                'itemListElement' => collect($items)->values()->map(fn ($item, $i) => array_filter([
+                    '@type' => 'ListItem',
+                    'position' => $i + 1,
+                    'name' => $item['label'],
+                    'item' => $item['href'] ?? url()->current(),
+                ]))->all(),
+            ];
+        @endphp
+        <script type="application/ld+json">{!! json_encode($crumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+    @endpush
+@endif
+
 <nav aria-label="Breadcrumb" {{ $attributes->merge(['class' => 'text-xs']) }}>
     <ol class="flex flex-wrap items-center gap-1.5">
         @foreach ($items as $index => $item)

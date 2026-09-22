@@ -84,7 +84,7 @@ class CommonController extends Controller
                 return ResponseService::success($cities, "Cities listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -98,7 +98,7 @@ class CommonController extends Controller
                 return ResponseService::success($model, "Model listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
         
     }
@@ -113,7 +113,7 @@ class CommonController extends Controller
                 return ResponseService::success($categories, "Product Categories listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -127,7 +127,7 @@ class CommonController extends Controller
                 return ResponseService::success($subcategories, "Product SubCategories listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -147,7 +147,7 @@ class CommonController extends Controller
                 return ResponseService::success($finance, "finance listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -167,7 +167,7 @@ class CommonController extends Controller
                 return ResponseService::success($sellers, "Authorized Seller listed successfully.");
             }
         } catch (\Exception $e) {
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 

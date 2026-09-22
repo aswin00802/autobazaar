@@ -3,6 +3,8 @@
 Payments Setting
 @endsection
 
+@include('admin.include.secret-toggle')
+
 @section('content')
 <div class="row">
     <div class="col-12">
@@ -41,7 +43,7 @@ Payments Setting
                             @foreach ($gateway['fields'] as $field => $meta)
                                 @php $input = "{$key}_{$field}"; @endphp
                                 <div class="form-floating form-floating-outline mb-4 {{ $key }} d-none">
-                                    <input type="text"
+                                    <input type="{{ !empty($meta['secret']) ? 'password' : 'text' }}" @if (!empty($meta['secret'])) data-secret autocomplete="new-password" @endif
                                            class="form-control @error($input) is-invalid @enderror"
                                            name="{{ $input }}"
                                            id="{{ $input }}"

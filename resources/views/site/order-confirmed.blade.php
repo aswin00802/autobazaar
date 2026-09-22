@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Order ' . $order->order_number)
+@section('robots', 'noindex, nofollow')
 
 @section('content')
 

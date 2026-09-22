@@ -152,7 +152,7 @@ class CheckoutController extends Controller
     private function shared(): array
     {
         return [
-            'site'      => require resource_path('fixtures/site.php'),
+            'site'      => \App\Support\SiteData::site(),
             'locations' => require resource_path('fixtures/locations.php'),
         ];
     }

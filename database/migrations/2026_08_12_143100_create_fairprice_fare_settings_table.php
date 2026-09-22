@@ -12,7 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fairprice_fare_settings', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('fairprice_fare_settings') || Schema::create('fairprice_fare_settings', function (Blueprint $table) {
             $table->id();
             $table->decimal('trip_per_km_rate', 10, 2)->default(18);
             $table->decimal('pickup_per_km_rate', 10, 2)->default(18);

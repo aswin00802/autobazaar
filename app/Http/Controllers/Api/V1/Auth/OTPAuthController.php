@@ -175,7 +175,7 @@ class OTPAuthController extends Controller
             'auto_area_id'  => 'required|numeric',
         ]);
         //playstore checking loing
-        if($validatedData['phone'] == 9094262603 && $validatedData['type'] == 'login' && $validatedData['otp'] == 2203){
+        if($validatedData['type'] == 'login' && isReviewLogin('driver', $validatedData['phone'], $validatedData['otp'])){
 
             $user = User::where('phone_number', $validatedData['phone'])->first();
 
@@ -285,7 +285,7 @@ class OTPAuthController extends Controller
             // Set API URL and Parameters for Ping4SMS API
             $url = 'http://site.ping4sms.com/api/smsapi';
             $params = [
-                'key'        => '0bc8ea57e5adc287cc8d163c82693450',
+                'key'        => config('services.ping4sms.key'),
                 'route'      => 2,
                 'sender'     => 'PNGOTP',
                 'number'     => $request->phone,
@@ -329,7 +329,7 @@ class OTPAuthController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::error('Validation Error',[$e->errors()]);
         } catch (\Exception $e) {
-            return ResponseService::error('Some went wrong',[$e->getMessage()]);
+            return ResponseService::error('Some went wrong',[safeApiMessage($e)]);
         }
     }
 
@@ -341,7 +341,7 @@ class OTPAuthController extends Controller
             'fcm_token' => 'required',
             'device_id' => 'required',
         ]);
-        if($request->phone == 9094262603 && $request->otp == 2203){
+        if(isReviewLogin('driver', $request->phone, $request->otp)){
 
             $user = User::where('phone_number', $request->phone)->first();
 

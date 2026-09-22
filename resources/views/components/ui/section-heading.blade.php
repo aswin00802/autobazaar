@@ -8,7 +8,7 @@
 
 <div data-reveal {{ $attributes->merge(['class' => 'mb-5 flex flex-wrap items-end justify-between gap-3']) }}>
     <div>
-        <{{ $level }} class="text-xl font-extrabold tracking-tight sm:text-2xl">{{ $title }}</{{ $level }}>
+        <{{ $level }} class="ab-h text-xl font-extrabold tracking-tight sm:text-2xl">{{ $title }}</{{ $level }}>
 
         @if ($lede)
             <p class="mt-1.5 max-w-2xl text-sm text-muted">{{ $lede }}</p>

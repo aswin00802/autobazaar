@@ -95,6 +95,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.Userstatus' => \App\Http\Middleware\CheckUserStatus::class,
             'UserAuth' => \App\Http\Middleware\UserAuth::class,
             'staff' => \App\Http\Middleware\EnsureStaff::class,
+            'customer.only' => \App\Http\Middleware\CustomerOnly::class,
             'sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
 

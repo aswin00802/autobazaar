@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Contact Us')
+@section('description', 'Talk to AutoBazaar in Thiruvallur, Chennai. Call or WhatsApp us for autorickshaw prices, finance help, exchange and accessories. Open Monday to Saturday.')
 
 @section('content')
 

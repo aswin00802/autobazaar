@@ -11,10 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trips', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('trips') || Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->foreignId('target_id')->constrained()->cascadeOnDelete();
+            // The column only. This migration is dated before create_targets_table,
+            // so constraining it here fails on a fresh database — the foreign key
+            // is added at the end instead, once every table exists.
+            $table->unsignedBigInteger('target_id');
             $table->decimal('amount', 10, 2); // trip amount
             $table->string('source')->nullable()->index(); // meter / extra / parcel / tips
             $table->timestamps();

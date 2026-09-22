@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasColumn('users', 'avatar')) {
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             $table->string('avatar')->nullable()->after('device_token');
             $table->string('provider_name')->nullable()->after('avatar');

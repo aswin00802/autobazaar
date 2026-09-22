@@ -11,6 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasIndex('users', 'users_latitude_longitude_index')) {
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             $table->index(['latitude','longitude']);
             $table->index('is_online');

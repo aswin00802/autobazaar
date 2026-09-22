@@ -8,6 +8,8 @@ SMTP Setting
 <link rel="stylesheet" href="{{asset('admin/assets/vendor/libs/bootstrap-select/bootstrap-select.css')}}" />
 @endpush
 
+@include('admin.include.secret-toggle')
+
 @section('content')
 <div class="row justify-content-md-center">
     <div class="col-md-6">
@@ -20,53 +22,64 @@ SMTP Setting
             </div>
             <div class="card-content collapse show">
                 <div class="card-body">
-                    <form class="form" action="{{ route('settings.smtp-settings.update') }}" method="post">
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    <form class="form" action="{{ route('settings.smtp-settings.update') }}" method="post" autocomplete="off">
                         @csrf
-                        
+
+                        @php $mailer = old('mailer', $smtp['mailer'] ?? 'smtp'); @endphp
                         <div class="mb-3">
-                            <input type="hidden" name="types[]" value="MAIL_MAILER">
-                            <label class="form-label" for="employeename">Type</label>
+                            <label class="form-label" for="mailer">Type</label>
                             <div class="position-relative has-icon-left">
-                                <select class="select2 form-select" name="MAIL_MAILER" id="MAIL_MAILER" required data-allow-clear="true">
-                                    <option value="sendmail" @if (env('MAIL_MAILER') == 'sendmail') selected @endif>Sendmail</option>
-                                    <option value="smtp" @if (env('MAIL_MAILER') == 'smtp') selected @endif>SMTP</option>
+                                <select class="select2 form-select" name="mailer" id="mailer" required data-allow-clear="true">
+                                    <option value="sendmail" @selected($mailer == 'sendmail')>Sendmail</option>
+                                    <option value="smtp" @selected($mailer == 'smtp')>SMTP</option>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_HOST" class="">Mail Host</label>
-                            <input type="hidden" name="types[]" value="MAIL_HOST">
-                            <input type="text" id="MAIL_HOST"  value="{{ env('MAIL_HOST') }}" class="form-control" placeholder="Enter Mail Host" name="MAIL_HOST">
+                            <label class="form-label" for="host">Mail Host</label>
+                            <input type="text" id="host" value="{{ old('host', $smtp['host'] ?? '') }}" class="form-control @error('host') is-invalid @enderror" placeholder="Enter Mail Host" name="host">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_PORT" class="">Mail Port</label>
-                            <input type="hidden" name="types[]" value="MAIL_PORT">
-                            <input type="text" id="MAIL_PORT"  value="{{ env('MAIL_PORT') }}" class="form-control" placeholder="Enter Mail Port" name="MAIL_PORT">
+                            <label class="form-label" for="port">Mail Port</label>
+                            <input type="text" inputmode="numeric" id="port" value="{{ old('port', $smtp['port'] ?? '') }}" class="form-control @error('port') is-invalid @enderror" placeholder="Enter Mail Port" name="port">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_USERNAME" class="">Mail Username</label>
-                            <input type="hidden" name="types[]" value="MAIL_USERNAME">
-                            <input type="text" id="MAIL_USERNAME"  value="{{ env('MAIL_USERNAME') }}" class="form-control" placeholder="Enter Mail Username" name="MAIL_USERNAME">
+                            <label class="form-label" for="username">Mail Username</label>
+                            <input type="text" id="username" value="{{ old('username', $smtp['username'] ?? '') }}" class="form-control @error('username') is-invalid @enderror" placeholder="Enter Mail Username" name="username" autocomplete="off">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_PASSWORD" class="">Mail Password</label>
-                            <input type="hidden" name="types[]" value="MAIL_PASSWORD">
-                            <input type="text" id="MAIL_PASSWORD"  value="{{ env('MAIL_PASSWORD') }}" class="form-control" placeholder="Enter Mail Password" name="MAIL_PASSWORD">
+                            <label class="form-label" for="password">Mail Password</label>
+                            <div class="position-relative">
+                                <input type="password" data-secret id="password" value="{{ old('password', $smtp['password'] ?? '') }}" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Mail Password" name="password" autocomplete="new-password">
+                            </div>
+                        </div>
+                        @php $encryption = old('encryption', $smtp['encryption'] ?? 'tls'); @endphp
+                        <div class="mb-3">
+                            <label class="form-label" for="encryption">Mail Encryption</label>
+                            <select class="form-select @error('encryption') is-invalid @enderror" name="encryption" id="encryption">
+                                <option value="tls" @selected($encryption == 'tls')>TLS (port 587)</option>
+                                <option value="ssl" @selected($encryption == 'ssl')>SSL (port 465)</option>
+                                <option value="none" @selected($encryption == 'none')>None</option>
+                            </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_ENCRYPTION" class="">Mail Encryption</label>
-                            <input type="hidden" name="types[]" value="MAIL_ENCRYPTION">
-                            <input type="text" id="MAIL_ENCRYPTION"  value="{{ env('MAIL_ENCRYPTION') }}" class="form-control" placeholder="Enter Mail Encryption" name="MAIL_ENCRYPTION">
+                            <label class="form-label" for="from_address">Mail From Address</label>
+                            <input type="email" id="from_address" value="{{ old('from_address', $smtp['from_address'] ?? '') }}" class="form-control @error('from_address') is-invalid @enderror" placeholder="Enter Mail From Address" name="from_address" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label" for="MAIL_FROM_ADDRESS" class="">Mail From Address</label>
-                            <input type="hidden" name="types[]" value="MAIL_FROM_ADDRESS">
-                            <input type="text" id="MAIL_FROM_ADDRESS"  value="{{ env('MAIL_FROM_ADDRESS') }}" class="form-control" placeholder="Enter Mail From Address" name="MAIL_FROM_ADDRESS">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="MAIL_FROM_NAME" class="">Mail From Name</label>
-                            <input type="hidden" name="types[]" value="MAIL_FROM_NAME">
-                            <input type="text" id="MAIL_FROM_NAME"  value="{{ env('MAIL_FROM_NAME') }}" class="form-control" placeholder="Enter Mail From Name" name="MAIL_FROM_NAME">
+                            <label class="form-label" for="from_name">Mail From Name</label>
+                            <input type="text" id="from_name" value="{{ old('from_name', $smtp['from_name'] ?? '') }}" class="form-control @error('from_name') is-invalid @enderror" placeholder="Enter Mail From Name" name="from_name" required>
                         </div>
                         <div class="mb-3">
                             <hr class="mt-0" />

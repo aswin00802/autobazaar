@@ -17,16 +17,16 @@ class PaymentSettingController extends Controller
             'label' => 'Razorpay',
             'fields' => [
                 'key_id'         => ['label' => 'Razorpay Key ID',         'required' => true],
-                'key_secret'     => ['label' => 'Razorpay Key Secret',     'required' => true],
-                'webhook_secret' => ['label' => 'Razorpay Webhook Secret', 'required' => false],
+                'key_secret'     => ['label' => 'Razorpay Key Secret',     'required' => true,  'secret' => true],
+                'webhook_secret' => ['label' => 'Razorpay Webhook Secret', 'required' => false, 'secret' => true],
             ],
         ],
         'stripe' => [
             'label' => 'Stripe',
             'fields' => [
                 'publishable_key' => ['label' => 'Stripe Publishable Key', 'required' => true],
-                'secret_key'      => ['label' => 'Stripe Secret Key',      'required' => true],
-                'webhook_secret'  => ['label' => 'Stripe Webhook Secret',  'required' => false],
+                'secret_key'      => ['label' => 'Stripe Secret Key',      'required' => true,  'secret' => true],
+                'webhook_secret'  => ['label' => 'Stripe Webhook Secret',  'required' => false, 'secret' => true],
             ],
         ],
     ];
@@ -42,7 +42,7 @@ class PaymentSettingController extends Controller
 
         foreach (self::GATEWAYS as $key => $gateway) {
             $setting = Setting::where('key', $key)->first();
-            $values  = $setting ? (json_decode($setting->value, true) ?: []) : [];
+            $values  = $setting ? Setting::decodeCredentials($setting->value, self::secretFields($key)) : [];
             $enabled = $setting ? (int) $setting->status_id === 1 : false;
 
             // First run: no saved Razorpay row yet, so prefill from .env and show it enabled.
@@ -82,8 +82,10 @@ class PaymentSettingController extends Controller
 
             if ($enabled) {
                 $data = [];
-                foreach (array_keys($gateway['fields']) as $field) {
-                    $data[$field] = trim((string) $request->input("{$key}_{$field}"));
+                foreach ($gateway['fields'] as $field => $meta) {
+                    $value = trim((string) $request->input("{$key}_{$field}"));
+                    // Secrets are encrypted at rest with the app key.
+                    $data[$field] = !empty($meta['secret']) ? Setting::encryptSecret($value) : $value;
                 }
 
                 Setting::updateOrInsert(
@@ -107,6 +109,19 @@ class PaymentSettingController extends Controller
             }
         }
 
+        Setting::flushCache();
+
         return back()->with('success', 'Payment Settings saved successfully!');
+    }
+
+    /**
+     * Field names of a gateway that are stored encrypted.
+     */
+    public static function secretFields(string $gateway): array
+    {
+        return array_keys(array_filter(
+            self::GATEWAYS[$gateway]['fields'] ?? [],
+            fn ($meta) => !empty($meta['secret'])
+        ));
     }
 }

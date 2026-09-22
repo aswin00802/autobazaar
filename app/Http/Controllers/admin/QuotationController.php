@@ -13,9 +13,26 @@ class QuotationController extends Controller
         $this->middleware(['permission:quotation'])->only(['index']);
         $this->middleware(['permission:quotation_status_update'])->only(['update_stauts']);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $quotations = Quotation::with(['user','user.autoAreas','auto', 'auto.autoBrands'])->latest()->get();
+        $query = Quotation::with(['user','user.autoAreas','auto', 'auto.autoBrands', 'auto.autoFueltype'])->latest();
+
+        // Searching runs over every quotation, not just the page on screen.
+        if ($search = trim((string) $request->query('q'))) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%")
+                                                  ->orWhere('phone_number', 'like', "%{$search}%"))
+                  ->orWhereHas('auto', fn ($a) => $a->where('auto_unique_id', 'like', "%{$search}%")
+                                                     ->orWhere('specific_model', 'like', "%{$search}%")
+                                                     ->orWhereHas('autoBrands', fn ($b) => $b->where('brand_name', 'like', "%{$search}%")));
+            });
+        }
+
+        // Shows every quotation in one page, with the table's own search and
+        // export, like the rest of the admin lists (config/admin_lists.php).
+        $perPage = (int) config('admin_lists.per_page.quotations', 0);
+        $quotations = $perPage > 0 ? $query->paginate($perPage)->withQueryString() : $query->get();
+
         return view('admin.quotatioin.index',compact('quotations'));
     }
 

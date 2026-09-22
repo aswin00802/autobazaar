@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_brand_model_images', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('product_brand_model_images') || Schema::create('product_brand_model_images', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_brand_model_id')
                 ->constrained('product_brand_models')

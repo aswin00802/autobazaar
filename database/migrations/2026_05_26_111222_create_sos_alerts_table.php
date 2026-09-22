@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sos_alerts', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('sos_alerts') || Schema::create('sos_alerts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ride_id')->nullable()->constrained('ride_requests')->nullOnDelete();
             $table->decimal('latitude', 10, 7)->nullable();

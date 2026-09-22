@@ -20,8 +20,9 @@ class OTPAuthController extends Controller
         $phone = $validatedData['phone'];
         // Generate OTP
         // $otp = rand(1000, 9999);
-        if ($request->phone == 8939345008) {
-            $otp = 2203;
+        $reviewOtp = reviewLoginOtp('customer', $request->phone);
+        if ($reviewOtp !== null) {
+            $otp = (int) $reviewOtp;
         } else {
             $otp = rand(1000, 9999);
         }
@@ -30,7 +31,7 @@ class OTPAuthController extends Controller
         // Set API URL and Parameters for Ping4SMS API
         $url = 'http://site.ping4sms.com/api/smsapi';
         $params = [
-            'key'        => '0bc8ea57e5adc287cc8d163c82693450',
+            'key'        => config('services.ping4sms.key'),
             'route'      => 2,
             'sender'     => 'PNGOTP',
             'number'     => $phone,
@@ -98,7 +99,7 @@ class OTPAuthController extends Controller
         } catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         }
-        if($request->phone == 8939345008 && $request->otp == 2203){
+        if(isReviewLogin('customer', $request->phone, $request->otp)){
 
             $user = Customer::where('phone', $request->phone)->first();
 
@@ -111,7 +112,7 @@ class OTPAuthController extends Controller
                 return ResponseService::success(['user' => $user,'token' => $token],'Login Successfully',200);
             } else {
                 $user = Customer::create([
-                    'phone'         => '8939345008',
+                    'phone'         => (string) $request->phone,
                     'name'          => 'Customer',
                     'last_login'    => now(),
                     'family_details' => $validatedData['family_details'] ?? null,

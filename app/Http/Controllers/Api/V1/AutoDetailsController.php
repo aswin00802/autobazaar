@@ -141,7 +141,7 @@ class AutoDetailsController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 
@@ -235,7 +235,7 @@ class AutoDetailsController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 
@@ -311,7 +311,7 @@ class AutoDetailsController extends Controller
             ];
             return ResponseService::success($result, "Auto posts listed successfully.");
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 
@@ -372,7 +372,7 @@ class AutoDetailsController extends Controller
             ];
             return ResponseService::success($result, "Auto posts listed successfully.");
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 
@@ -479,7 +479,7 @@ class AutoDetailsController extends Controller
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
 
         } catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
     }
 }

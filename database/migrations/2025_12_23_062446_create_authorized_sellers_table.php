@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authorized_sellers', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('authorized_sellers') || Schema::create('authorized_sellers', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('brand_id');

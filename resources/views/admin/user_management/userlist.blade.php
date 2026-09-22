@@ -10,6 +10,11 @@ Users List
 @endpush
 
 @section('content')
+@php
+    // Paged (the normal case) or every user at once — config/admin_lists.php.
+    $paged = $users instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator;
+    $rowOffset = $paged ? $users->firstItem() - 1 : 0;
+@endphp
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 mb-3">
         <div class="card">
@@ -60,35 +65,48 @@ Users List
         <div class="card">
             <h5 class="card-header">Other User's Details</h5>
             <div class="card-body">
-                <table class="datatables-fixed2 table table-bordered table-responsive">
+                @if ($paged)
+                    @include('admin.include.list-search', ['placeholder' => 'Search by name, phone, email or area'])
+                @endif
+
+                {{-- Paged: a plain table, because the search and paging are done by
+                     the server. Unpaged: the old DataTable. --}}
+                <table class="{{ $paged ? '' : 'datatables-fixed2' }} table table-bordered table-responsive">
                     <thead>
                         <tr>
-                            <th>Sl.no</th>  
-                            <th>Name</th> 
-                            <th>Phone</th> 
-                            <th>User Area</th>                          
+                            <th>Sl.no</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>User Area</th>
                             <th>Reg. Date</th>
                             <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if(!empty($users))
-                            @foreach ($users as $user)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>                                      
-                                    <td>{{ $user->name ?? 'Not Available'}}</td>
-                                    <td>{{ $user->phone_number ?? 'Not Available' }}</td>
-                                    <td class="{{ $user->autoAreas?->name ? '' : 'text-danger' }}">
-                                        {{ $user->autoAreas?->name ?? 'Not Available' }}
-                                    </td>
-                                    <td>{{ $user->created_at->toDateString() }}</td>
-                                    <td><a href="{{ route('user-management.users-info' , Crypt::encryptString($user->id)) }}" class="btn btn-primary text-white p-2">More Info</a></td>
-                                    
-                                </tr>
-                            @endforeach
-                        @endif
+                        @forelse ($users as $user)
+                            <tr>
+                                <td>{{ $rowOffset + $loop->iteration }}</td>
+                                <td>{{ $user->name ?? 'Not Available'}}</td>
+                                <td>{{ $user->phone_number ?? 'Not Available' }}</td>
+                                <td class="{{ $user->autoAreas?->name ? '' : 'text-danger' }}">
+                                    {{ $user->autoAreas?->name ?? 'Not Available' }}
+                                </td>
+                                <td>{{ $user->created_at?->toDateString() }}</td>
+                                <td><a href="{{ route('user-management.users-info' , Crypt::encryptString($user->id)) }}" class="btn btn-primary text-white p-2">More Info</a></td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    No users found{{ request()->filled('q') ? ' for “' . request('q') . '”' : '' }}.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
+
+                @if ($paged)
+                    @include('admin.include.list-pager', ['rows' => $users, 'noun' => 'users'])
+                @endif
             </div>
         </div>
     </div>
@@ -99,5 +117,5 @@ Users List
 <script src="{{asset('admin/js/custom-datatable.js')}}"></script>
 <script src="{{asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 <script src="{{asset('admin/assets/js/extended-ui-sweetalert2.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+<script src="{{ asset('admin/assets/vendor/libs/block-ui/jquery.blockUI.min.js') }}"></script>
 @endpush

@@ -7,17 +7,26 @@
 
     <div class="navbar-nav-right d-flex align-items-center justify-content-end" id="navbar-collapse">
         <!-- Search -->
-        <div class="navbar-nav align-items-center">
-            <div class="nav-item navbar-search-wrapper mb-0">
-                <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
-                <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
-                </a>
+        <div class="navbar-nav align-items-center flex-grow-1 me-3">
+            <div class="admin-search w-100" id="adminSearch" data-url="{{ route('admin.search') }}">
+                <i class="icon-base ri ri-search-line icon-20px admin-search-icon"></i>
+                <input type="search" class="form-control admin-search-input" id="adminSearchInput"
+                       placeholder="Search users, autos, rides, orders…  ( / )" autocomplete="off"
+                       aria-label="Search" aria-controls="adminSearchResults" aria-expanded="false" />
+                <div class="admin-search-results shadow" id="adminSearchResults" role="listbox" hidden></div>
             </div>
         </div>
 
         <!-- /Search -->
 
         <ul class="navbar-nav flex-row align-items-center ms-md-auto">
+
+            <!-- Light / dark -->
+            <li class="nav-item me-2">
+                <button type="button" class="btn btn-icon btn-text-secondary rounded-pill" id="themeToggle" title="Switch between light and dark" aria-label="Switch between light and dark">
+                    <i class="icon-base ri ri-moon-clear-line icon-22px" id="themeToggleIcon"></i>
+                </button>
+            </li>
 
             <!-- User -->
             <li class="nav-item navbar-dropdown dropdown-user dropdown">

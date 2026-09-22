@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('spareparts_sub_categories', function (Blueprint $table) {
+        // Skips a table that is already there: the live database was built
+        // from a dump, so many tables exist without this ever having run.
+        Schema::hasTable('spareparts_sub_categories') || Schema::create('spareparts_sub_categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('spareparts_categories')->cascadeOnDelete(); 
             $table->string('name');

@@ -1,167 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>OTP Verification - JP Autozone</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if(getSetting('fav_icon'))
-        <link rel="icon" type="image/x-icon" href="{{ asset(getSetting('fav_icon')) }}" />
-    @else
-        <link rel="icon" type="image/x-icon" href="{{asset('assets/images/favicon-32x32.png')}}" />
-    @endif
-    <!-- <link rel="icon" href="{{ url('/') }}/assets/images/favicon-32x32.png" type="image/png" /> -->
+@extends('site.layout')
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{asset('css/auth.css')}}">
+@section('title', 'Verify Your Number')
+@section('description', 'Enter the 4-digit code we sent to your mobile number to finish signing in to your AutoBazaar account.')
+@section('robots', 'noindex, nofollow')
 
-</head>
-<body>
+@section('content')
 
-    <!-- Tagline -->
-    <div class="tagline">Verify Your OTP</div>
+@php
+    // 9876543210 -> 98765 43210, easier to check at a glance against the phone.
+    $prettyPhone = preg_match('/^\d{10}$/', $phone_number)
+        ? substr($phone_number, 0, 5) . ' ' . substr($phone_number, 5)
+        : $phone_number;
+    $backTo = $type === 'register' ? route('user.register') : route('user.login');
+@endphp
 
-    <!-- OTP Box -->
-    <div class="otp-box">
-        <h5 class="text-center mb-3">Enter OTP sent to your mobile {{ $phone_number }}</h5>
-        <form name="opt_form" id="opt_form" class="opt_form" method="POST">
-            @csrf
-            <div class="d-flex justify-content-center mb-3">
-                <input type="hidden" id="phone_number" name="phone_number" value="{{$phone_number}}">
-                <input type="hidden" id="type" name="type" value="{{$type}}">
-                <input type="text" maxlength="1" class="otp-input" name="opt_1" id="opt_1" required>
-                <input type="text" maxlength="1" class="otp-input" name="opt_2" id="opt_2" required>
-                <input type="text" maxlength="1" class="otp-input" name="opt_3" id="opt_3" required>
-                <input type="text" maxlength="1" class="otp-input" name="opt_4" id="opt_4" required>
-                <input type="hidden" name="otp" id="fullOtp" />
-            </div>
+<x-ui.auth-shell
+    heading="Just one more step"
+    lede="We sent a 4-digit code to your mobile. Enter it below and you are in."
+    :points="[
+        ['clock', 'The code works for 10 minutes'],
+        ['refresh', 'Not arrived? Ask for a new one below'],
+        ['lock', 'AutoBazaar staff will never ask you for this code'],
+    ]"
+    footnote="Trouble signing in? Call us and we will sort it out.">
 
-            <button type="submit" class="btn btn-primary w-100 rounded-pill">Verify OTP</button>
+    <h1 class="text-2xl font-extrabold tracking-tight">Enter the code</h1>
+    <p class="mt-1.5 text-sm text-muted">
+        Sent to <span class="font-semibold text-ink">+91 {{ $prettyPhone }}</span>
+        &middot; <a href="{{ $backTo }}" class="font-semibold text-brand-500 hover:underline">change number</a>
+    </p>
 
-        </form>
-    </div>
+    <form id="ab-otp-form" method="POST" novalidate class="mt-7">
+        @csrf
+        <input type="hidden" name="phone_number" value="{{ $phone_number }}">
+        <input type="hidden" name="type" value="{{ $type }}">
+        <input type="hidden" name="otp" id="fullOtp">
 
-    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <div class="ab-otp-row" role="group" aria-label="4-digit code">
+            @foreach (range(1, 4) as $i)
+                <input type="text" inputmode="numeric" maxlength="1" class="ab-otp-box"
+                       aria-label="Digit {{ $i }}" autocomplete="{{ $i === 1 ? 'one-time-code' : 'off' }}"
+                       @if ($i === 1) autofocus @endif>
+            @endforeach
+        </div>
 
-    <!-- Auto-focus next input -->
+        <p id="ab-auth-msg" class="ab-auth-msg mt-4" role="alert" aria-live="polite" hidden></p>
+
+        <button type="submit" class="ab-btn ab-btn-primary mt-4 w-full py-3">Verify &amp; Continue</button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-muted">
+        Didn't get the code?
+        <button type="button" id="ab-otp-resend" class="font-semibold text-brand-500 hover:underline disabled:text-muted disabled:no-underline" disabled>
+            Resend
+        </button>
+        <span id="ab-otp-timer" class="text-muted"></span>
+    </p>
+
+    <style>
+        .ab-otp-row { display: flex; gap: 12px; }
+        .ab-otp-box {
+            width: 56px; height: 60px; text-align: center; font-size: 22px; font-weight: 700;
+            border: 1px solid var(--color-line, #E3E8E5); border-radius: 12px; background: #fff; color: #10231A;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+        .ab-otp-box:focus { outline: none; border-color: #0E7A4D; box-shadow: 0 0 0 3px rgba(14, 122, 77, .14); }
+        .ab-otp-box.is-filled { border-color: #0E7A4D; }
+    </style>
+
     <script>
-        document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
-            input.addEventListener('input', () => {
-                if (input.value.length === 1 && index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
+    (function () {
+        var form   = document.getElementById('ab-otp-form');
+        var boxes  = Array.prototype.slice.call(form.querySelectorAll('.ab-otp-box'));
+        var hidden = document.getElementById('fullOtp');
+        var button = form.querySelector('button[type="submit"]');
+        var msg    = document.getElementById('ab-auth-msg');
+        var resend = document.getElementById('ab-otp-resend');
+        var timer  = document.getElementById('ab-otp-timer');
+
+        function say(text, kind) { msg.textContent = text; msg.className = 'ab-auth-msg mt-4 is-' + kind; msg.hidden = false; }
+        function code() { return boxes.map(function (b) { return b.value; }).join(''); }
+
+        boxes.forEach(function (box, i) {
+            box.addEventListener('input', function () {
+                this.value = this.value.replace(/\D+/g, '').slice(0, 1);
+                this.classList.toggle('is-filled', this.value !== '');
+                msg.hidden = true;
+                if (this.value && i < boxes.length - 1) { boxes[i + 1].focus(); }
+                // All four in: no reason to make anyone reach for the button.
+                if (code().length === 4) { form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true })); }
             });
-            input.addEventListener('keydown', (e) => {
-                if (e.key === 'Backspace' && index > 0 && !input.value) {
-                    inputs[index - 1].focus();
-                }
+
+            box.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && ! this.value && i > 0) { boxes[i - 1].focus(); }
+                if (e.key === 'ArrowLeft' && i > 0) { boxes[i - 1].focus(); }
+                if (e.key === 'ArrowRight' && i < boxes.length - 1) { boxes[i + 1].focus(); }
+            });
+
+            // Most people paste the whole code, or the phone fills it in.
+            box.addEventListener('paste', function (e) {
+                var digits = (e.clipboardData || window.clipboardData).getData('text').replace(/\D+/g, '').slice(0, 4);
+                if (! digits) { return; }
+                e.preventDefault();
+                boxes.forEach(function (b, n) { b.value = digits[n] || ''; b.classList.toggle('is-filled', !! digits[n]); });
+                boxes[Math.min(digits.length, 3)].focus();
+                if (digits.length === 4) { form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event('submit', { cancelable: true })); }
             });
         });
-    </script>
-    <!-- timer -->
-    <!-- <script>
-        let seconds = 30;
 
-        const countdownElement = document.getElementById('countdown');
+        var busy = false;
 
-        const timer = setInterval(() => {
-            seconds--;
-
-            // Format seconds as MM:SS
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-
-            countdownElement.textContent =
-                `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-
-            if (seconds <= 0) {
-                clearInterval(timer);
-                countdownElement.textContent = "00:00";
-                // Optionally enable the "Resend OTP" button here
-            }
-        }, 1000);
-    </script> -->
-
-    <script type="text/javascript">
-        $('.opt_form').on('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             e.preventDefault();
-            $('#phone_number').val('')
-            $('#type').val('')
-            $('#fullOtp').val('')
-            let otp1 = $('#opt_1').val()
-            let otp2 = $('#opt_2').val()
-            let otp3 = $('#opt_3').val()
-            let otp4 = $('#opt_4').val()
-            let otp = otp1 + otp2 + otp3 + otp4
+            if (busy) { return; }
 
-            //to get url parameter
-            const pathname = window.location.pathname;
-            // Example: "/otp/123/login"
-            const segments = pathname.split('/');
-            const mobile = segments[6]; // assuming "/otp/{mobile}/{type}"
-            const type = segments[7];
-            //to set hidden input value
-            $('#fullOtp').val(otp)
-            $('#phone_number').val(mobile)
-            $('#type').val(type)
+            if (code().length !== 4) { say('Enter all four digits.', 'error'); return; }
 
-            $.ajax({
-                url: "{{ route('user.otp.verify') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success == true) {
-                        Swal.fire({
-                            icon: 'Success',
-                            title: 'OTP!',
-                            text: response.message,
-                            timer: 2000,
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false
-                        }).then(function() {
-                            window.location.href = response.redirect_url;
-                        });
-                    } else if (response.success == false) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: response.message,
-                            timer: 2000,
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false
-                        });
-                    } else if (response.success == 'invalid') {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: response.message,
-                            timer: 2000,
-                            toast: true,
-                            position: 'top-end',
-                            showConfirmButton: false
-                        }).then(function() {
-                            window.location.href = response.redirect_url;
-                        });
-                    }
+            busy = true;
+            hidden.value = code();
+            button.classList.add('ab-auth-busy');
+            button.textContent = 'Verifying…';
 
-                },
-                error: function(xhr) {
-                    let errors = xhr.responseJSON.errors;
-                    let allErrors = Object.values(errors).map(err => err[0]).join('<br>');
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Validation Error',
-                        html: allErrors
-                    });
+            fetch(@json(route('user.otp.verify')), {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                body: new FormData(form),
+            })
+            .then(function (r) {
+                if (r.status === 429) { throw new Error('Too many attempts. Please wait a minute and try again.'); }
+                return r.json().catch(function () { throw new Error('Something went wrong. Please try again.'); });
+            })
+            .then(function (data) {
+                if (data.success === true || (data.success === 'invalid' && data.redirect_url)) {
+                    say(data.message || 'Verified. Taking you in…', data.success === true ? 'ok' : 'error');
+                    window.location.href = data.redirect_url;
+                    return;
                 }
+                throw new Error(data.message || 'That code did not match.');
+            })
+            .catch(function (err) {
+                say(err.message, 'error');
+                busy = false;
+                button.classList.remove('ab-auth-busy');
+                button.textContent = 'Verify & Continue';
+                boxes.forEach(function (b) { b.value = ''; b.classList.remove('is-filled'); });
+                boxes[0].focus();
             });
         });
-    </script>
 
-</body>
-</html>
+        /* ---- Resend -------------------------------------------------------
+           Always sent as a login request: by this point the account exists
+           (a sign-up creates it before the first code goes out), and a second
+           'register' request would be refused as "already registered".      */
+        var left = 30;
+        function tick() {
+            timer.textContent = left > 0 ? 'in ' + left + 's' : '';
+            resend.disabled = left > 0;
+            if (left-- > 0) { setTimeout(tick, 1000); }
+        }
+        tick();
+
+        resend.addEventListener('click', function () {
+            resend.disabled = true;
+            timer.textContent = 'sending…';
+
+            var body = new FormData();
+            body.append('_token', form.querySelector('input[name="_token"]').value);
+            body.append('phone_number', @json($phone_number));
+            body.append('type', 'login');
+
+            fetch(@json(route('user.otp.send')), {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                body: body,
+            })
+            .then(function (r) {
+                if (r.status === 429) { throw new Error('Too many attempts. Please wait a minute and try again.'); }
+                return r.json();
+            })
+            .then(function (data) {
+                if (! data.success) { throw new Error(data.message || 'Could not send a new code.'); }
+                say('A new code is on its way.', 'ok');
+                boxes.forEach(function (b) { b.value = ''; b.classList.remove('is-filled'); });
+                boxes[0].focus();
+                left = 30; tick();
+            })
+            .catch(function (err) { say(err.message, 'error'); timer.textContent = ''; resend.disabled = false; });
+        });
+    })();
+    </script>
+</x-ui.auth-shell>
+
+@endsection

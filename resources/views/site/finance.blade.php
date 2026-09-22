@@ -5,9 +5,25 @@
 
 @section('content')
 
-@php $lead = $vehicles[0]; @endphp
+@php
+    /*
+     * The calculators are built around one example auto. A server whose
+     * vehicle catalogue has not been filled in yet has none, and reaching
+     * straight for $vehicles[0] took the whole page down with it, so fall
+     * back to a typical autorickshaw instead and keep the page working.
+     */
+    $lead = $vehicles[0] ?? [
+        'name' => 'Autorickshaw',
+        'on_road_price' => 300000,
+        'operating_cost_fuels' => [
+            ['key' => 'petrol', 'label' => 'Petrol', 'price' => 103, 'mileage' => 35, 'unit' => 'km/l'],
+            ['key' => 'cng', 'label' => 'CNG', 'price' => 91.5, 'mileage' => 26, 'unit' => 'km/kg'],
+            ['key' => 'electric', 'label' => 'Electric', 'price' => 18, 'mileage' => 45, 'unit' => 'km/unit'],
+        ],
+    ];
+@endphp
 
-<x-ui.page-hero title="Finance &amp; EMI"
+<x-ui.page-hero title="Finance & EMI"
                 lede="Work out what your autorickshaw actually costs — monthly EMI, daily running cost, and the finance options open to you."
                 :breadcrumb="[
                     ['label' => 'Home', 'href' => route('site.home')],

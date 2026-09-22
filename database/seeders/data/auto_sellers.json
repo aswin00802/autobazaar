@@ -1,0 +1,74 @@
+[
+    {
+        "id": 7,
+        "user_id": 10,
+        "seller_name": "SRI VENKATESHWARA AUTO",
+        "seller_type": "MULTI BRAND",
+        "location": "KOLATHUR",
+        "address": "PRH ROAD LAKSHMIPURAM",
+        "contact": 8680809348,
+        "status_id": 1,
+        "created_at": "2025-02-19 23:56:52.000000",
+        "updated_at": "2025-02-19 23:56:52.000000"
+    },
+    {
+        "id": 8,
+        "user_id": 10,
+        "seller_name": "PACHAIYAMMAN AUTO CONSULTANT",
+        "seller_type": "MULTI BRAND",
+        "location": "MR NAGAR",
+        "address": "SIDCO NEAR MR NAGAR POLICE STATION - 9003071718",
+        "contact": 9444182367,
+        "status_id": 1,
+        "created_at": "2025-02-20 00:02:06.000000",
+        "updated_at": "2025-02-20 00:02:06.000000"
+    },
+    {
+        "id": 9,
+        "user_id": 10,
+        "seller_name": "PANNA AUTO FINANCE",
+        "seller_type": "NEW OLD / MULTI BRAND",
+        "location": "MR NAGAR",
+        "address": "SIDCO NAGAR  - 9840044425",
+        "contact": 9841760489,
+        "status_id": 1,
+        "created_at": "2025-02-20 00:10:34.000000",
+        "updated_at": "2025-02-20 00:10:34.000000"
+    },
+    {
+        "id": 10,
+        "user_id": 10,
+        "seller_name": "MAHARAJA AUTO CONSULTANT",
+        "seller_type": "NEW USED MULTIBRAND",
+        "location": "SHARMANAGAR",
+        "address": "SHARMA NAGAR MAIN ROAD",
+        "contact": 9042955585,
+        "status_id": 1,
+        "created_at": "2025-02-20 01:18:18.000000",
+        "updated_at": "2025-02-20 01:18:18.000000"
+    },
+    {
+        "id": 11,
+        "user_id": 10,
+        "seller_name": "PUGAZH",
+        "seller_type": "USED MULTIBRAND",
+        "location": "WEST MAMBALAM",
+        "address": "WET MAMBALAM",
+        "contact": 7358664515,
+        "status_id": 1,
+        "created_at": "2025-02-20 04:53:01.000000",
+        "updated_at": "2025-02-20 04:53:01.000000"
+    },
+    {
+        "id": 12,
+        "user_id": 10,
+        "seller_name": "SSJ",
+        "seller_type": "MULTIBRAND USED",
+        "location": "KOLATHUR",
+        "address": "120 PRH ROAD , KALPALAYAM , CHENNAI - 600099 - 9976747890",
+        "contact": 9840444890,
+        "status_id": 1,
+        "created_at": "2025-03-08 23:02:40.000000",
+        "updated_at": "2025-03-08 23:02:40.000000"
+    }
+]

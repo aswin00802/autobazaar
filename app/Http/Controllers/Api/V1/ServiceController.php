@@ -71,7 +71,7 @@ class ServiceController extends Controller
             // }
 
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
 
     }
@@ -87,7 +87,7 @@ class ServiceController extends Controller
             }
 
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
 
     }
@@ -149,7 +149,7 @@ class ServiceController extends Controller
             }
 
         }  catch (\Exception $e) {
-            return ResponseService::error('An error occurred. Please try again.', ['error' => $e->getMessage()], 500);
+            return ResponseService::error('An error occurred. Please try again.', ['error' => safeApiMessage($e)], 500);
         }
 
     }
@@ -299,7 +299,7 @@ class ServiceController extends Controller
             }
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return ResponseService::error('Validation failed: ' . $e->getMessage());
+            return ResponseService::error('Validation failed: ' . safeApiMessage($e));
         } catch (\Exception $e) {
             return ResponseService::error('Sorry, something went wrong with your request.');
         }

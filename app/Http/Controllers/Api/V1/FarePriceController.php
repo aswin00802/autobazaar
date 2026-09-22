@@ -118,7 +118,7 @@ class FarePriceController extends Controller
         } catch (\Throwable $e) {
             Log::error('FairPrice driver SOS admin notification failed.', [
                 'sos_id' => $sos->id,
-                'error' => $e->getMessage(),
+                'error' => safeApiMessage($e),
             ]);
         }
 
@@ -153,7 +153,7 @@ class FarePriceController extends Controller
         } catch (\Throwable $e) {
             Log::error('FairPrice driver SOS nearby drivers notification failed.', [
                 'sos_id' => $sos->id,
-                'error' => $e->getMessage(),
+                'error' => safeApiMessage($e),
             ]);
         }
 

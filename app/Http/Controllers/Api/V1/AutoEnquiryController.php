@@ -74,7 +74,7 @@ class AutoEnquiryController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         } catch(\Exception $e){
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 
@@ -130,7 +130,7 @@ class AutoEnquiryController extends Controller
         }catch (\Illuminate\Validation\ValidationException $e) {
             return ResponseService::validationError('Validation failed.', $e->errors(), 422);
         } catch(\Exception $e){
-            return ResponseService::error("An error occurred: " . $e->getMessage());
+            return ResponseService::error("An error occurred: " . safeApiMessage($e));
         }
     }
 }

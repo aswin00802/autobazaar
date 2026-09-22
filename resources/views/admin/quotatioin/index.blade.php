@@ -10,11 +10,22 @@ Quotation Auto List
 @endpush
 
 @section('content')
+@php
+    // Paged (the normal case) or every quotation at once — config/admin_lists.php.
+    $paged = $quotations instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator;
+    $rowOffset = $paged ? $quotations->firstItem() - 1 : 0;
+@endphp
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card">
             <div class="card-body">
-                <table class="datatables-fixed1 table table-bordered table-responsive">
+                @if ($paged)
+                    @include('admin.include.list-search', ['placeholder' => 'Search by customer, phone or auto ID'])
+                @endif
+
+                {{-- Paged: a plain table, because the search and paging are done by
+                     the server. Unpaged: the old DataTable. --}}
+                <table class="{{ $paged ? '' : 'datatables-fixed1' }} table table-bordered table-responsive">
                     <thead>
                         <tr>
                             <th>Sl.no</th>
@@ -32,7 +43,7 @@ Quotation Auto List
                         @if(!empty($quotations))
                             @foreach ($quotations as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $rowOffset + $loop->iteration }}</td>
                                     <td>{{ $item->user->name }}</td>
                                     <td>{{ $item->user->phone_number }}</td>
                                     <td>{{ $item->user->autoAreas->name ?? 'N/A' }}</td>
@@ -85,8 +96,19 @@ Quotation Auto List
                                 </tr>
                             @endforeach
                         @endif
+                        @if (! count($quotations))
+                            <tr>
+                                <td colspan="9" class="text-center text-muted py-4">
+                                    No quotations found{{ request()->filled('q') ? ' for “' . request('q') . '”' : '' }}.
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
+
+                @if ($paged)
+                    @include('admin.include.list-pager', ['rows' => $quotations, 'noun' => 'quotations'])
+                @endif
             </div>
         </div>
     </div>
@@ -306,7 +328,7 @@ Quotation Auto List
 <script src="{{asset('admin/js/custom-datatable.js')}}"></script>
 <script src="{{asset('admin/assets/vendor/libs/sweetalert2/sweetalert2.js')}}"></script>
 <script src="{{asset('admin/assets/js/extended-ui-sweetalert2.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+<script src="{{ asset('admin/assets/vendor/libs/block-ui/jquery.blockUI.min.js') }}"></script>
 
 <script type="text/javascript">
     $(document).ready(function() {

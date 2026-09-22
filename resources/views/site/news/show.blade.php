@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', $post['title'])
+@section('og_type', 'article')
 @section('description', $post['excerpt'])
 
 @section('content')

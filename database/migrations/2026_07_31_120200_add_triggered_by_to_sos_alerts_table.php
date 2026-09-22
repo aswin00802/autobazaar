@@ -9,6 +9,13 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // The base schema already has this, so on a fresh install there is
+        // nothing left to add here. On an older database the guard is false
+        // and this runs exactly as it always did.
+        if (Schema::hasColumn('sos_alerts', 'triggered_by')) {
+            return;
+        }
+
         Schema::table('sos_alerts', function (Blueprint $table) {
             $table->string('triggered_by')->nullable()->after('ride_id')->comment('customer, driver');
             $table->unsignedBigInteger('triggered_by_id')->nullable()->after('triggered_by');

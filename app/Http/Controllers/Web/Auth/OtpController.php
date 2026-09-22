@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Web\Auth\Concerns\RendersAuthPage;
 use App\Models\AutoOtp;
 use App\Models\User;
 use Carbon\Carbon;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Validator;
 
 class OtpController extends Controller
 {
+    use RendersAuthPage;
+
     /** An OTP is good for this long after it is sent. */
     private const OTP_VALID_MINUTES = 10;
 
@@ -23,8 +26,14 @@ class OtpController extends Controller
     {
         $phone_number = $mobile;
         $type         = $otp_type;
-        
-        return view('web.auth.otp', compact('phone_number', 'type'));
+
+        // Anything else in the address is someone poking at the URL, not a code
+        // we sent: send them back to the form rather than show a dead screen.
+        if (! preg_match('/^\d{10}$/', (string) $phone_number) || ! in_array($type, ['login', 'register'], true)) {
+            return redirect()->route('user.login');
+        }
+
+        return $this->authView('otp', compact('phone_number', 'type'));
     }
 
     public function sendOTP(Request $request)
@@ -77,10 +86,10 @@ class OtpController extends Controller
 
         // Send SMS
         $sms    = "Dear Customer, $otp is your verification code - PNGOTP";
-        $url    = 'http://site.ping4sms.com/api/smsapi';
+        $url    = config('services.ping4sms.url');
         $params = [
-            // Set PING4SMS_KEY in .env; the fallback keeps SMS working until then.
-            'key'        => config('services.ping4sms.key', '0bc8ea57e5adc287cc8d163c82693450'),
+            // Both come from .env (PING4SMS_KEY). No key = no OTP, by design.
+            'key'        => config('services.ping4sms.key'),
             'route'      => 2,
             'sender'     => 'PNGOTP',
             'number'     => $request->phone_number,

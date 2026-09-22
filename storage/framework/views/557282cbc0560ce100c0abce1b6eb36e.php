@@ -67,6 +67,15 @@
     <!--? Config: Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file. -->
 
     <script src="<?php echo e(asset('admin/assets/js/config.js')); ?>"></script>
+    <!-- Apply the saved light/dark choice before the page paints, so there is no flash. -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('adminTheme');
+                if (saved === 'dark' || saved === 'light') { document.documentElement.setAttribute('data-bs-theme', saved); }
+            } catch (e) {}
+        })();
+    </script>
   </head>
 
   <body>
@@ -148,6 +157,7 @@
     <!-- Page JS -->
     <!-- <script src="<?php echo e(asset('admin/assets/js/dashboards-crm.js')); ?>"></script> -->
 
+    <?php echo $__env->make('admin.include.topbar-tools', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <?php echo $__env->yieldPushContent('scripts'); ?>
 
     <?php echo $__env->yieldContent('scripts'); ?>
