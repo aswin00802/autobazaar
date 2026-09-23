@@ -41,14 +41,20 @@ if (($argv[1] ?? '') !== '--checks') {
     DB::statement("DROP DATABASE IF EXISTS `{$scratch}`");
     DB::statement("CREATE DATABASE `{$scratch}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
 
-    // structure of everything, plus the contents of the migrations table so the
-    // copy knows exactly which migrations the real database has already run
+    /*
+     * The rows come too, not just the structure.
+     *
+     * An earlier version copied structure only, and that quietly hid a real
+     * problem: the migration adding "one SOS per ride" cannot be applied while
+     * repeats already exist, and with no rows in the copy there was nothing to
+     * clash with. A deploy rehearsal that leaves the data out does not rehearse
+     * the deploy.
+     */
     $dump = sys_get_temp_dir() . '/ab-livecopy.sql';
-    exec(escapeshellarg($mysqldump) . " {$auth} --no-data --routines --skip-add-locks {$live} > " . escapeshellarg($dump), $o, $e1);
-    exec(escapeshellarg($mysqldump) . " {$auth} --no-create-info --skip-add-locks {$live} migrations >> " . escapeshellarg($dump), $o, $e2);
-    exec(escapeshellarg($mysql) . " {$auth} {$scratch} < " . escapeshellarg($dump), $o, $e3);
+    exec(escapeshellarg($mysqldump) . " {$auth} --routines --skip-add-locks {$live} > " . escapeshellarg($dump), $o, $e1);
+    exec(escapeshellarg($mysql) . " {$auth} {$scratch} < " . escapeshellarg($dump), $o, $e2);
 
-    if ($e1 || $e2 || $e3) { exit("Could not copy the database (mysqldump exit {$e1}/{$e2}/{$e3}).\n"); }
+    if ($e1 || $e2) { exit("Could not copy the database (mysqldump exit {$e1}/{$e2}).\n"); }
 
     // remember the structure before the upgrade
     $before = snapshot($scratch);
@@ -117,8 +123,8 @@ foreach (glob('database/migrations/*.php') as $f) {
     if (! DB::table('migrations')->where('migration', basename($f, '.php'))->exists()) { $pending++; }
 }
 ok('every migration is now recorded as run', $pending === 0, $pending . ' still pending');
-ok('the row counts are untouched (structure-only copy)', DB::table('migrations')->count() > 100,
-   DB::table('migrations')->count() . ' migrations recorded');
+ok('the rows are all still there', DB::table('users')->count() > 1000,
+   number_format(DB::table('users')->count()) . ' users, ' . DB::table('migrations')->count() . ' migrations recorded');
 
 echo "\n==================== RESULT: {$pass} passed, {$fail} failed\n";
 echo "If this passes, `php artisan migrate` is safe to run on the live server.\n";

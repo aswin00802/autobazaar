@@ -100,7 +100,14 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [\App\Http\Middleware\SecurityHeaders::class]);
-        
+
+        // Notes when each person was last active. Runs after the response has
+        // gone out, writes at most once every few minutes per person, and
+        // swallows its own errors — so it cannot slow down or break anything,
+        // on the website or in either app.
+        $middleware->web(append: [\App\Http\Middleware\RecordLastSeen::class]);
+        $middleware->api(append: [\App\Http\Middleware\RecordLastSeen::class]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(function ($request, $throwable) {

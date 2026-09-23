@@ -1,0 +1,628 @@
+{
+    "api/get-auto-brands": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "brand_name": "string",
+                    "created_at": "string",
+                    "id": "int",
+                    "profile": "string",
+                    "status": "int",
+                    "updated_at": "string"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-fuel-types": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "created_at": "string",
+                    "id": "int",
+                    "name": "string",
+                    "price": "string",
+                    "status": "int",
+                    "updated_at": "string"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-owners": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "name": "string",
+                    "status": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-transmission-types": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "name": "string",
+                    "status": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-auto-body-types": {
+        "status": 200,
+        "shape": {
+            "data": "[]",
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-price-ranges": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "price_range": "string",
+                    "status": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-cities": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "name": "string",
+                    "state_id": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-areas": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "city_id": "int",
+                    "id": "int",
+                    "name": "string",
+                    "status": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-finance": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "address": "string",
+                    "contact": "int",
+                    "created_at": "string",
+                    "finance_name": "string",
+                    "finance_type": "string",
+                    "id": "int",
+                    "image": "null",
+                    "location": "string",
+                    "status_id": "int",
+                    "updated_at": "string",
+                    "user_id": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-mechanic": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "address": "string",
+                    "alternate": "null",
+                    "category": "string",
+                    "contact": "string",
+                    "created_at": "string",
+                    "id": "int",
+                    "location": "string",
+                    "shop_name": "string",
+                    "status_id": "int",
+                    "updated_at": "string",
+                    "user_id": "int"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-events": {
+        "status": 200,
+        "shape": {
+            "data": "[]",
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-product-categories": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "image": "null",
+                    "name": "string"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-profile": {
+        "status": 200,
+        "shape": {
+            "data": {
+                "auto_area": "string",
+                "auto_area_id": "int",
+                "driver_request_status": "null",
+                "email": "null",
+                "fair_price_enabled": "int",
+                "id": "int",
+                "name": "string",
+                "phone_number": "string",
+                "profile": "null",
+                "role_id": "int",
+                "user_info": {
+                    "blood_group": "null",
+                    "brand": "null",
+                    "brand_id": "null",
+                    "dob": "null",
+                    "driving_license_expiry": "null",
+                    "driving_license_no": "null",
+                    "fuel": "null",
+                    "fuel_id": "null",
+                    "gender": "null",
+                    "insurance_expiry": "null",
+                    "millage": "null",
+                    "model": "null",
+                    "model_id": "null",
+                    "permit_expiry": "null",
+                    "permit_no": "null",
+                    "rc_book_no": "null",
+                    "seating_capacity": "null",
+                    "vehicle_no": "null"
+                }
+            },
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-favourites": {
+        "status": 200,
+        "shape": {
+            "data": "[]",
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-user-auto": {
+        "status": 200,
+        "shape": {
+            "data": {
+                "brand_id": "string",
+                "fuel_id": "string",
+                "millage": "string",
+                "model_id": "string",
+                "user_id": "int",
+                "username": "string",
+                "vehicle_no": "string"
+            },
+            "message": "string",
+            "success": "bool"
+        }
+    },
+    "api/get-sold-auto": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "address": "null",
+                    "auto_body_type": "null",
+                    "auto_brand": "string",
+                    "auto_fuel_type": "string",
+                    "auto_id": "int",
+                    "auto_model": "string",
+                    "auto_status": "string",
+                    "auto_usage_status": "string",
+                    "city": "null",
+                    "condition": "string",
+                    "crass_weight": "null",
+                    "descriptions": "null",
+                    "engine_cc": "null",
+                    "fav_status": "int",
+                    "fav_user_id": "int",
+                    "fc_status": "string",
+                    "finance_arrangements": "null",
+                    "financial_availability": "string",
+                    "free_service": "null",
+                    "gear": "null",
+                    "ground_clearance": "null",
+                    "image_1": "string",
+                    "image_2": "string",
+                    "image_3": "string",
+                    "image_4": "null",
+                    "image_5": "null",
+                    "image_6": "null",
+                    "insurance": "string",
+                    "kilometer": "string",
+                    "millage": "string",
+                    "mobile_number": "string",
+                    "name": "string",
+                    "noc_status": "string",
+                    "orp": "null",
+                    "owner": "string",
+                    "passenger_capacity": "null",
+                    "permit_status": "string",
+                    "price_expectations": "string",
+                    "rc_status": "string",
+                    "registration_number": "string",
+                    "registration_year": "string",
+                    "rto": "string",
+                    "vehicle_suitable": "null"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-auto-enquiries": {
+        "status": 200,
+        "shape": {
+            "data": "[]",
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/get-all-posts": {
+        "status": 200,
+        "shape": {
+            "data": {
+                "bajaj_refinance": [
+                    {
+                        "address": "\u2026",
+                        "auto_body_type": "\u2026",
+                        "auto_brand": "\u2026",
+                        "auto_fuel_type": "\u2026",
+                        "auto_id": "\u2026",
+                        "auto_model": "\u2026",
+                        "auto_status": "\u2026",
+                        "auto_usage_status": "\u2026",
+                        "city": "\u2026",
+                        "condition": "\u2026",
+                        "crass_weight": "\u2026",
+                        "descriptions": "\u2026",
+                        "emi_amount": "\u2026",
+                        "engine_cc": "\u2026",
+                        "fav_status": "\u2026",
+                        "fav_user_id": "\u2026",
+                        "fc_status": "\u2026",
+                        "finance_arrangements": "\u2026",
+                        "financial_availability": "\u2026",
+                        "first_payment": "\u2026",
+                        "free_service": "\u2026",
+                        "gear": "\u2026",
+                        "ground_clearance": "\u2026",
+                        "image_1": "\u2026",
+                        "image_2": "\u2026",
+                        "image_3": "\u2026",
+                        "image_4": "\u2026",
+                        "image_5": "\u2026",
+                        "image_6": "\u2026",
+                        "insurance": "\u2026",
+                        "kilometer": "\u2026",
+                        "loan_amount": "\u2026",
+                        "millage": "\u2026",
+                        "mobile_number": "\u2026",
+                        "name": "\u2026",
+                        "no_of_months": "\u2026",
+                        "noc_status": "\u2026",
+                        "orp": "\u2026",
+                        "owner": "\u2026",
+                        "passenger_capacity": "\u2026",
+                        "permit_status": "\u2026",
+                        "price_expectations": "\u2026",
+                        "rc_status": "\u2026",
+                        "registration_number": "\u2026",
+                        "registration_year": "\u2026",
+                        "rto": "\u2026",
+                        "vehicle_suitable": "\u2026"
+                    }
+                ],
+                "new_auto": [
+                    {
+                        "address": "\u2026",
+                        "auto_body_type": "\u2026",
+                        "auto_brand": "\u2026",
+                        "auto_fuel_type": "\u2026",
+                        "auto_id": "\u2026",
+                        "auto_model": "\u2026",
+                        "auto_status": "\u2026",
+                        "auto_usage_status": "\u2026",
+                        "city": "\u2026",
+                        "condition": "\u2026",
+                        "crass_weight": "\u2026",
+                        "descriptions": "\u2026",
+                        "emi_amount": "\u2026",
+                        "engine_cc": "\u2026",
+                        "fav_status": "\u2026",
+                        "fav_user_id": "\u2026",
+                        "fc_status": "\u2026",
+                        "finance_arrangements": "\u2026",
+                        "financial_availability": "\u2026",
+                        "first_payment": "\u2026",
+                        "free_service": "\u2026",
+                        "gear": "\u2026",
+                        "ground_clearance": "\u2026",
+                        "image_1": "\u2026",
+                        "image_2": "\u2026",
+                        "image_3": "\u2026",
+                        "image_4": "\u2026",
+                        "image_5": "\u2026",
+                        "image_6": "\u2026",
+                        "insurance": "\u2026",
+                        "kilometer": "\u2026",
+                        "loan_amount": "\u2026",
+                        "millage": "\u2026",
+                        "mobile_number": "\u2026",
+                        "name": "\u2026",
+                        "no_of_months": "\u2026",
+                        "noc_status": "\u2026",
+                        "orp": "\u2026",
+                        "owner": "\u2026",
+                        "passenger_capacity": "\u2026",
+                        "permit_status": "\u2026",
+                        "price_expectations": "\u2026",
+                        "rc_status": "\u2026",
+                        "registration_number": "\u2026",
+                        "registration_year": "\u2026",
+                        "rto": "\u2026",
+                        "vehicle_suitable": "\u2026"
+                    }
+                ],
+                "used_auto": [
+                    {
+                        "address": "\u2026",
+                        "auto_body_type": "\u2026",
+                        "auto_brand": "\u2026",
+                        "auto_fuel_type": "\u2026",
+                        "auto_id": "\u2026",
+                        "auto_model": "\u2026",
+                        "auto_status": "\u2026",
+                        "auto_usage_status": "\u2026",
+                        "city": "\u2026",
+                        "condition": "\u2026",
+                        "crass_weight": "\u2026",
+                        "descriptions": "\u2026",
+                        "engine_cc": "\u2026",
+                        "fav_status": "\u2026",
+                        "fav_user_id": "\u2026",
+                        "fc_status": "\u2026",
+                        "finance_arrangements": "\u2026",
+                        "financial_availability": "\u2026",
+                        "free_service": "\u2026",
+                        "gear": "\u2026",
+                        "ground_clearance": "\u2026",
+                        "image_1": "\u2026",
+                        "image_2": "\u2026",
+                        "image_3": "\u2026",
+                        "image_4": "\u2026",
+                        "image_5": "\u2026",
+                        "image_6": "\u2026",
+                        "insurance": "\u2026",
+                        "kilometer": "\u2026",
+                        "millage": "\u2026",
+                        "mobile_number": "\u2026",
+                        "name": "\u2026",
+                        "noc_status": "\u2026",
+                        "orp": "\u2026",
+                        "owner": "\u2026",
+                        "passenger_capacity": "\u2026",
+                        "permit_status": "\u2026",
+                        "price_expectations": "\u2026",
+                        "rc_status": "\u2026",
+                        "registration_number": "\u2026",
+                        "registration_year": "\u2026",
+                        "rto": "\u2026",
+                        "vehicle_suitable": "\u2026"
+                    }
+                ]
+            },
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/auto_posts": {
+        "status": 200,
+        "shape": [
+            {
+                "accident_status": "null",
+                "address": "null",
+                "auto_body_type_id": "null",
+                "auto_brand_id": "int",
+                "auto_model_id": "int",
+                "auto_status": "null",
+                "auto_unique_id": "null",
+                "auto_usage_status": "string",
+                "chellan_status": "null",
+                "city": "null",
+                "condition": "null",
+                "crass_weight": "string",
+                "created_at": "string",
+                "descriptions": "null",
+                "emi_amount": "null",
+                "engine_cc": "null",
+                "fc_status": "null",
+                "finance_arrangements": "null",
+                "financial_availability": "string",
+                "first_payment": "null",
+                "free_service": "null",
+                "fuel_type_id": "int",
+                "gear": "string",
+                "ground_clearance": "string",
+                "id": "int",
+                "image_1": "string",
+                "image_2": "string",
+                "image_3": "string",
+                "image_4": "string",
+                "image_5": "string",
+                "image_6": "string",
+                "insurance": "null",
+                "kilometer": "null",
+                "loan_amount": "null",
+                "loan_status": "null",
+                "millage": "null",
+                "mobile_number": "null",
+                "name": "null",
+                "no_of_months": "null",
+                "noc_status": "null",
+                "orp": "string",
+                "owner": "null",
+                "passenger_capacity": "string",
+                "permit_status": "null",
+                "post_type": "string",
+                "price": "null",
+                "price_expectations": "string",
+                "rc_status": "null",
+                "registration_number": "null",
+                "registration_year": "null",
+                "remark": "null",
+                "rto": "null",
+                "specific_model": "null",
+                "status": "int",
+                "transmission_type_id": "null",
+                "updated_at": "string",
+                "user_id": "int",
+                "vehicle_suitable": "string"
+            }
+        ]
+    },
+    "api/get-lpg-cng-price": {
+        "status": 200,
+        "shape": {
+            "data": [
+                {
+                    "id": "int",
+                    "name": "string",
+                    "price": "string"
+                }
+            ],
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/fareprice/ride-cancel-reason": {
+        "status": 200,
+        "shape": {
+            "data": [
+                "string"
+            ],
+            "status": "bool"
+        }
+    },
+    "api/fareprice/ride-history": {
+        "status": 200,
+        "shape": {
+            "data": "[]",
+            "status": "bool"
+        }
+    },
+    "api/fareprice/driver/ride-history": {
+        "status": 200,
+        "shape": {
+            "message": "string",
+            "rides": "[]",
+            "status": "bool",
+            "summary": {
+                "cancelled_rides": "int",
+                "completed_rides": "int",
+                "total_earnings": "int",
+                "total_rides": "int"
+            }
+        }
+    },
+    "api/fairprice/v1/customer/profile": {
+        "status": 401,
+        "shape": {
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/fairprice/v1/customer/ride-cancel-reason": {
+        "status": 401,
+        "shape": {
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/fairprice/v1/customer/ride-history": {
+        "status": 401,
+        "shape": {
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "api/auto-meter/history": {
+        "status": 404,
+        "shape": {
+            "errors": "[]",
+            "message": "string",
+            "status": "int",
+            "success": "bool"
+        }
+    },
+    "__no_token__": {
+        "status": 401,
+        "shape": "refused"
+    }
+}

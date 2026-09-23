@@ -64,7 +64,29 @@ Users List
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <div class="card">
             <h5 class="card-header">Other User's Details</h5>
-            <div class="card-body">
+
+            {{-- One person is often several of these at once, so these are filters
+                 on what somebody has done, not separate kinds of account. --}}
+            <div class="card-body pb-0">
+                <ul class="nav nav-pills flex-wrap mb-3">
+                    @foreach ([
+                        'all' => 'All', 'online' => 'Online now', 'drivers' => 'Drivers',
+                        'sellers' => 'Sellers', 'buyers' => 'Buyers', 'inactive' => 'Inactive',
+                    ] as $key => $label)
+                        <li class="nav-item mb-1">
+                            <a class="nav-link {{ $show === $key ? 'active' : '' }}"
+                               href="{{ $key === 'all' ? url()->current() : url()->current() . '?show=' . $key }}">
+                                {{ $label }}
+                                <span class="badge {{ $show === $key ? 'bg-white text-primary' : 'bg-label-secondary' }} ms-1">
+                                    {{ number_format($tabCounts[$key] ?? 0) }}
+                                </span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="card-body pt-0">
                 @if ($paged)
                     @include('admin.include.list-search', ['placeholder' => 'Search by name, phone, email or area'])
                 @endif
@@ -78,12 +100,18 @@ Users List
                             <th>Name</th>
                             <th>Phone</th>
                             <th>User Area</th>
+                            <th>Is</th>
+                            <th>Last Active</th>
                             <th>Reg. Date</th>
                             <th>View</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($users as $user)
+                            @php
+                                $seen = $user->last_seen_at;
+                                $online = $seen && $seen->gt(now()->subMinutes(5));
+                            @endphp
                             <tr>
                                 <td>{{ $rowOffset + $loop->iteration }}</td>
                                 <td>{{ $user->name ?? 'Not Available'}}</td>
@@ -91,12 +119,44 @@ Users List
                                 <td class="{{ $user->autoAreas?->name ? '' : 'text-danger' }}">
                                     {{ $user->autoAreas?->name ?? 'Not Available' }}
                                 </td>
+
+                                {{-- What this person actually is, from what they have done --}}
+                                <td>
+                                    @if ($user->is_driver)
+                                        <span class="badge bg-label-primary">Driver</span>
+                                    @endif
+                                    @if ($user->listings_count)
+                                        <span class="badge bg-label-warning">Seller</span>
+                                    @endif
+                                    @if ($user->app_orders_count)
+                                        <span class="badge bg-label-success">Buyer</span>
+                                    @endif
+                                    @if (! $user->is_driver && ! $user->listings_count && ! $user->app_orders_count)
+                                        <span class="text-muted small">—</span>
+                                    @endif
+                                </td>
+
+                                {{-- A green dot means seen in the last five minutes --}}
+                                <td>
+                                    @if ($seen)
+                                        <span class="d-inline-block rounded-circle me-1 align-middle
+                                                     {{ $online ? 'bg-success' : 'bg-secondary opacity-50' }}"
+                                              style="width:8px; height:8px;"></span>
+                                        <span class="align-middle {{ $online ? 'text-success fw-medium' : '' }}"
+                                              title="{{ $seen->format('d M Y, g:i A') }}">
+                                            {{ $online ? 'Online now' : $seen->diffForHumans() }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted small">Not seen yet</span>
+                                    @endif
+                                </td>
+
                                 <td>{{ $user->created_at?->toDateString() }}</td>
                                 <td><a href="{{ route('user-management.users-info' , Crypt::encryptString($user->id)) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="More info"><i class="icon-base ri ri-eye-line icon-20px"></i></a></td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">
+                                <td colspan="8" class="text-center text-muted py-4">
                                     No users found{{ request()->filled('q') ? ' for “' . request('q') . '”' : '' }}.
                                 </td>
                             </tr>
