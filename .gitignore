@@ -30,3 +30,5 @@ docs/fairprice-live-deploy.txt
 # the product cards, used autos and finance lenders all handle it.
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+storage/*.json
