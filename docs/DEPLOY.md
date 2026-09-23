@@ -89,9 +89,10 @@ from `docs/sql/` **in this order**:
 4. `04_vehicle_catalog_permissions.sql`
 5. `05_performance_indexes.sql`
 6. `06_catalogue_content.sql`
+7. `07_activity_and_notifications.sql`
 
-All six are safe to run twice; each skips whatever is already there. This takes
-the database from **74 tables to 96**.
+All seven are safe to run twice; each skips whatever is already there. This takes
+the database from **74 tables to 97**.
 
 **That is the whole database step. No artisan commands, no seeders.**
 
@@ -99,6 +100,10 @@ File 06 exists because files 01–05 create the vehicle catalogue tables but put
 nothing in them, and an empty catalogue means an empty New Autos page, an empty
 Compare page and no lenders under Finance Options. It carries 306 rows across 12
 tables — the catalogue and the finance lenders. No personal data.
+
+File 07 adds two things that came later: the column behind "Last Active" on the
+admin Users list, and the table holding the messages a customer sees under My
+Account when an order moves. Without it those two screens cannot load.
 
 ---
 
@@ -110,6 +115,22 @@ tables — the catalogue and the finance lenders. No personal data.
 ```bash
 chmod -R 775 storage bootstrap/cache
 ```
+
+3. **Put a Firebase key at `storage/firebase_credentials.json`.**
+
+That file is what sends push notifications to both apps. It is not in Git — it
+holds a private key, and anyone who has it can notify every one of your app
+users.
+
+**Use a new one.** The old key was committed to the repository before this was
+noticed, so it has to be treated as public. In the Firebase console, under
+Project Settings → Service Accounts, delete
+`firebase-adminsdk-ore76@jp-autozone.iam.gserviceaccount.com`, generate a
+replacement, and put that file here.
+
+Without it the site and admin work normally and orders still update — the push
+simply does not go out, and the failure is written to the log rather than shown
+to anyone.
 
 ---
 
@@ -183,8 +204,8 @@ Not theory. On a copy of your real `auto_bazar`:
 
 | Check | Result |
 |---|---|
-| The six SQL files run in order | **74 → 96 tables** |
-| Everything the new features need exists afterwards | 11 tables checked |
+| The seven SQL files run in order | **74 → 97 tables** |
+| Everything the new features need exists afterwards | every table, and all 1,098 columns |
 | The site and admin open on the upgraded database | 12 pages |
 | Real data survives | users, listings, enquiries, quotations all intact |
 | New Autos lists autos, Finance Options lists all 5 lenders | verified |

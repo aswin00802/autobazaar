@@ -269,7 +269,7 @@ Use a separate customer account with a different mobile number.
 | `config/admin_lists.php` | How many rows City, State and Country show per page (0 = all of them, the old behaviour) |
 | `app/Support/SiteData.php` | Merges admin settings into the website's shared data |
 | `app/Services/UsedAutoService.php` | Turns `auto_posts` rows into website listings |
-| `docs/sql/` | Six SQL files for the live database |
+| `docs/sql/` | Seven SQL files for the live database |
 | `docs/tests/` | The two test scripts below |
 
 ### Testing before and after a deploy
@@ -300,15 +300,16 @@ Run these in order, in phpMyAdmin, after a full backup:
 4. `docs/sql/04_vehicle_catalog_permissions.sql` — admin permissions
 5. `docs/sql/05_performance_indexes.sql` — speed indexes
 6. `docs/sql/06_catalogue_content.sql` — the vehicle catalogue and finance lenders
+7. `docs/sql/07_activity_and_notifications.sql` — last-active column and customer notifications
 
-All six are safe to run twice. Each skips whatever already exists.
+All seven are safe to run twice. Each skips whatever already exists.
 
 After running them: `php artisan permission:cache-reset`, then `php artisan config:clear`.
 
 ### Checklist for going live
 
 - [ ] Set the environment to production, otherwise Google will never list the site
-- [ ] Run the six SQL files
+- [ ] Run the seven SQL files
 - [ ] Open Payment Settings and press Save once, so the keys are scrambled for this server
 - [ ] Check the phone number, email, address and social links in Settings
 - [ ] Switch the app store review login off unless an app update is under review

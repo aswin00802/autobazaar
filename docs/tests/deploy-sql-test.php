@@ -33,6 +33,7 @@ $sqlFiles = [
     'docs/sql/04_vehicle_catalog_permissions.sql',
     'docs/sql/05_performance_indexes.sql',
     'docs/sql/06_catalogue_content.sql',
+    'docs/sql/07_activity_and_notifications.sql',
 ];
 
 if (($argv[1] ?? '') !== '--checks') {
@@ -141,6 +142,42 @@ $stillMissing = array_diff($refTables, $copyTables, ['telescope_entries', 'teles
 
 ok('nothing the development database has is missing', ! $stillMissing,
    $stillMissing ? count($stillMissing) . ' missing: ' . implode(', ', array_slice($stillMissing, 0, 6)) : count($copyTables) . ' tables');
+
+/*
+ * Every column too, not just every table.
+ *
+ * Comparing table names alone let a real gap through: a column added to `users`
+ * by a later migration was in no SQL file, so a deploy done this way would have
+ * been missing it and the screen that reads it could not load. Anything added
+ * from here on is caught by this without anyone having to remember.
+ */
+function columnsOf(string $db): array {
+    $out = [];
+    foreach (DB::select(
+        'SELECT TABLE_NAME t, COLUMN_NAME c FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ?',
+        [$db]
+    ) as $r) {
+        $out[$r->t . '.' . $r->c] = true;
+    }
+
+    return $out;
+}
+
+$ignoreTables = ['telescope_entries', 'telescope_entries_tags', 'telescope_monitoring', 'tbl_auto_areas_old'];
+$devColumns = columnsOf($reference);
+$copyColumns = columnsOf(DB::getDatabaseName());
+
+$missingColumns = [];
+foreach (array_keys($devColumns) as $key) {
+    if (isset($copyColumns[$key])) { continue; }
+    if (in_array(explode('.', $key)[0], $ignoreTables, true)) { continue; }
+    $missingColumns[] = $key;
+}
+
+ok('and not a single column either', ! $missingColumns,
+   $missingColumns
+     ? count($missingColumns) . ' missing: ' . implode(', ', array_slice($missingColumns, 0, 6))
+     : number_format(count($devColumns)) . ' columns checked');
 
 section('THE SITE RUNS ON IT');
 foreach (['/', '/new-autos', '/used-autos', '/accessories/shop', '/finance-emi', '/contact', '/user/login'] as $uri) {
