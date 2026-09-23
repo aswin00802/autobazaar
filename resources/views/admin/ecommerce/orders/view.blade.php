@@ -64,6 +64,15 @@ E-commerce / Order {{ $order->order_number }}
     </div>
 
     <div class="d-flex align-items-center gap-2">
+        <a href="{{ route('ecommerce.orders.invoice', $order->id) }}" target="_blank" rel="noopener"
+           class="btn btn-sm btn-label-primary" title="Opens the invoice ready to print">
+            <i class="icon-base ri ri-printer-line icon-16px me-1"></i>Invoice
+        </a>
+        <a href="{{ route('ecommerce.orders.invoice.download', $order->id) }}"
+           class="btn btn-sm btn-text-secondary rounded-pill btn-icon" title="Download the invoice">
+            <i class="icon-base ri ri-download-2-line icon-20px"></i>
+        </a>
+
         <span class="badge {{ $badge[$order->order_status] ?? 'bg-label-secondary' }}">
             {{ ucfirst($order->order_status) }}
         </span>

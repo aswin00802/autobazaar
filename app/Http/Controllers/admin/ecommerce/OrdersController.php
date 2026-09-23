@@ -46,6 +46,31 @@ class OrdersController extends Controller
         ]);
     }
 
+    /** The invoice on screen, ready to print. */
+    public function invoice($id)
+    {
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.ecommerce.orders.invoice_pdf', [
+            'order' => $this->orderForInvoice($id),
+            'site'  => \App\Support\SiteData::site(),
+        ])->setPaper('a4', 'portrait')->stream('invoice.pdf');
+    }
+
+    /** The same thing as a file. */
+    public function invoiceDownload($id)
+    {
+        $order = $this->orderForInvoice($id);
+
+        return \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.ecommerce.orders.invoice_pdf', [
+            'order' => $order,
+            'site'  => \App\Support\SiteData::site(),
+        ])->setPaper('a4', 'portrait')->download('invoice-' . $order->order_number . '.pdf');
+    }
+
+    private function orderForInvoice($id): Order
+    {
+        return Order::with('items')->findOrFail($id);
+    }
+
     public function show($id)
     {
         return view('admin.ecommerce.orders.view', [

@@ -9,7 +9,9 @@ use App\Models\Shop\CouponUsage;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderItem;
 use App\Models\Shop\OrderStatusHistory;
+use App\Notifications\OrderStatusChanged;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -169,6 +171,28 @@ class OrderService
             'created_by' => Auth::id(),
             'ip_address' => request()->ip(),
         ]);
+
+        $this->tellTheCustomer($order, $status, $note);
+    }
+
+    /**
+     * Lets the customer know their order moved — on the site and, if their phone
+     * has registered with the app, as a push.
+     *
+     * Wrapped, because telling somebody is never worth failing the update that
+     * has already been saved above.
+     */
+    private function tellTheCustomer(Order $order, string $status, ?string $note): void
+    {
+        try {
+            $customer = $order->user;
+
+            if ($customer) {
+                $customer->notify(new OrderStatusChanged($order, $status, $note));
+            }
+        } catch (\Throwable $e) {
+            Log::warning("Could not notify the customer about order {$order->order_number}: " . $e->getMessage());
+        }
     }
 
     /** ABZ + yyyymmdd + zero-padded daily sequence, e.g. ABZ20260910C001 */

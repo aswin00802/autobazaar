@@ -28,7 +28,7 @@
 
     {{-- ============================================================ enquiries --}}
     {{-- Sections whose backend is not built yet: say so, never show sample data --}}
-    @if (in_array($section, ['saved', 'comparisons', 'payment-methods', 'notifications', 'refer'], true))
+    @if (in_array($section, ['saved', 'comparisons', 'payment-methods', 'refer'], true))
         <div class="ab-card mt-5 p-10 text-center">
             <x-ui.icon name="sparkle" :size="32" class="mx-auto text-line" />
             <p class="mt-3 text-base font-extrabold">{{ $active }} — coming soon</p>
@@ -201,25 +201,58 @@
     @elseif ($section === 'notifications')
         <p class="mt-1 text-sm text-muted">Updates on your orders, enquiries and offers.</p>
 
-        <ul class="mt-5 space-y-2">
-            @foreach ([
-                ['box', 'Your vehicle is ready for delivery', 'Order ABZ20250905C001 · 2 hours ago', true],
-                ['tag', 'New festival offer from TVS', 'Benefits up to ₹25,000 · Yesterday', true],
-                ['doc', 'Your enquiry has been received', 'Bajaj RE · 27 Aug 2026', false],
-                ['check-circle', 'Payment confirmed', '₹50,000 advance received · 05 Sep 2026', false],
-            ] as [$icon, $title, $meta, $unread])
-                <li class="ab-card flex items-start gap-3 p-4 {{ $unread ? 'bg-brand-50' : '' }}">
-                    <x-ui.icon :name="$icon" :size="18" class="mt-0.5 shrink-0 text-brand-500" />
-                    <span class="flex-1 leading-tight">
-                        <span class="block text-sm font-semibold">{{ $title }}</span>
-                        <span class="block text-[11px] text-muted">{{ $meta }}</span>
+        @php
+            // Real messages now, sent when an order moves. Opening this page
+            // marks them read, which is why "unread" is read before that happens.
+            $unreadIds = $notifications->whereNull('read_at')->pluck('id')->all();
+        @endphp
+
+        @forelse ($notifications as $note)
+            @php
+                $body = $note->data;
+                $unread = in_array($note->id, $unreadIds, true);
+                $icon = match ($body['status'] ?? '') {
+                    'delivered' => 'check-circle',
+                    'shipped' => 'truck',
+                    'packed' => 'box',
+                    'cancelled' => 'warning',
+                    default => 'bell',
+                };
+            @endphp
+
+            @if ($loop->first)<ul class="mt-5 space-y-2">@endif
+
+            <li class="ab-card flex items-start gap-3 p-4 {{ $unread ? 'bg-brand-50' : '' }}">
+                <x-ui.icon :name="$icon" :size="18" class="mt-0.5 shrink-0 text-brand-500" />
+
+                <span class="flex-1 leading-tight">
+                    <span class="block text-sm font-semibold">{{ $body['title'] ?? 'Update' }}</span>
+                    <span class="block text-xs text-ink-soft">{{ $body['body'] ?? '' }}</span>
+                    <span class="block text-[11px] text-muted">
+                        {{ $note->created_at->diffForHumans() }}
+                        @if (! empty($body['order_id']))
+                            &middot;
+                            <a href="{{ route('site.account.order', $body['order_id']) }}"
+                               class="font-semibold text-brand-500 hover:underline">View order</a>
+                        @endif
                     </span>
-                    @if ($unread)
-                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500" aria-label="Unread"></span>
-                    @endif
-                </li>
-            @endforeach
-        </ul>
+                </span>
+
+                @if ($unread)
+                    <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500" aria-label="Unread"></span>
+                @endif
+            </li>
+
+            @if ($loop->last)</ul>@endif
+        @empty
+            <div class="ab-card mt-5 p-8 text-center">
+                <x-ui.icon name="bell" :size="34" class="mx-auto text-muted" />
+                <p class="mt-3 text-sm font-semibold">Nothing yet</p>
+                <p class="mt-1 text-xs text-muted">
+                    When one of your orders moves — confirmed, packed, on its way — you will see it here.
+                </p>
+            </div>
+        @endforelse
 
     {{-- ================================================================ refer --}}
     @elseif ($section === 'refer')

@@ -32,3 +32,7 @@ docs/fairprice-live-deploy.txt
 !/public/uploads/.gitkeep
 
 storage/*.json
+
+# Google service account for push notifications. Never commit this: anyone who
+# has it can send notifications to every app user. Keep it on the server only.
+/storage/firebase_credentials.json

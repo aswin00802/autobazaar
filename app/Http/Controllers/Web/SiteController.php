@@ -533,9 +533,22 @@ class SiteController extends Controller
                 'phone' => $a->mobile,
             ])->all();
 
+        /*
+         * Order updates, newest first. Opening the page marks them read — the
+         * view reads which were unread before this runs, so the blue dots are
+         * still shown on the visit that clears them.
+         */
+        $notifications = collect();
+
+        if ($section === 'notifications') {
+            $notifications = $user->notifications()->latest()->limit(50)->get();
+            $user->unreadNotifications->markAsRead();
+        }
+
         return view('site.account.section', [
             ...$this->shared(),
             ...$this->accountChrome(),
+            'notifications' => $notifications,
             'section' => $section,
             'heading' => Str::headline($section),
             'addresses' => $addresses,

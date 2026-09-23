@@ -39,6 +39,9 @@ class UserListController extends Controller
         $query->when($show === 'drivers', fn ($q) => $q->has('userInfo'))
               ->when($show === 'sellers', fn ($q) => $q->has('auto'))
               ->when($show === 'buyers', fn ($q) => $q->has('sparepartOrders'))
+              // FairPrice: either switched on for them, or they have driven a ride.
+              ->when($show === 'fairprice', fn ($q) => $q->where(fn ($w) => $w->where('fair_price_enabled', 1)
+                                                                              ->orHas('driverRides')))
               ->when($show === 'online', fn ($q) => $q->where('last_seen_at', '>=', now()->subMinutes(5)))
               ->when($show === 'inactive', fn ($q) => $q->where(fn ($w) => $w->whereNull('last_seen_at')
                                                                              ->orWhere('last_seen_at', '<', now()->subDays(90))));
@@ -67,6 +70,7 @@ class UserListController extends Controller
             'drivers'  => $base()->has('userInfo')->count(),
             'sellers'  => $base()->has('auto')->count(),
             'buyers'   => $base()->has('sparepartOrders')->count(),
+            'fairprice' => $base()->where(fn ($w) => $w->where('fair_price_enabled', 1)->orHas('driverRides'))->count(),
             'online'   => $base()->where('last_seen_at', '>=', now()->subMinutes(5))->count(),
             'inactive' => $base()->where(fn ($w) => $w->whereNull('last_seen_at')
                                                       ->orWhere('last_seen_at', '<', now()->subDays(90)))->count(),

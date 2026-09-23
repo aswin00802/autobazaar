@@ -71,7 +71,8 @@ Users List
                 <ul class="nav nav-pills flex-wrap mb-3">
                     @foreach ([
                         'all' => 'All', 'online' => 'Online now', 'drivers' => 'Drivers',
-                        'sellers' => 'Sellers', 'buyers' => 'Buyers', 'inactive' => 'Inactive',
+                        'fairprice' => 'FairPrice', 'sellers' => 'Sellers', 'buyers' => 'Buyers',
+                        'inactive' => 'Inactive',
                     ] as $key => $label)
                         <li class="nav-item mb-1">
                             <a class="nav-link {{ $show === $key ? 'active' : '' }}"

@@ -71,19 +71,38 @@ foreach ([
         . " old_table_gone=" . (int) $noTable . " no_export=" . (int) $noExport);
 }
 
-echo "\n== Users and Quotations are back on the usual pattern\n";
-foreach ([
-    'Users list' => ['/user-management/users-list', 'datatables-fixed2', 4000],
-    'Quotations' => ['/quotation-list', 'datatables-fixed1', 1000],
-] as $name => [$uri, $tableClass, $atLeast]) {
-    [$status, $html] = get($uri);
-    $rows = max(0, preg_match_all('/<tr[\s>]/', $html) - 1);
-    $hasTable = str_contains($html, $tableClass);
-    $noPager = ! preg_match('#href="[^"]*page=2#', $html);
-    ok("$name: every row in one page, with the table's own search and export",
-        $status === 200 && $rows > $atLeast && $hasTable && $noPager,
-        number_format($rows) . ' rows, table=' . (int) $hasTable . ', no_pager=' . (int) $noPager);
+echo "\n== Quotations still prints in one go\n";
+[$status, $html] = get('/quotation-list');
+$rows = max(0, preg_match_all('/<tr[\s>]/', $html) - 1);
+ok("Quotations: every row in one page, with the table's own search and export",
+    $status === 200 && $rows > 1000 && str_contains($html, 'datatables-fixed1')
+    && ! preg_match('#href="[^"]*page=2#', $html),
+    number_format($rows) . ' rows');
+
+/*
+ * Users is paged now. It was one page of 4,600 rows, which took nearly three
+ * seconds to open, and it since gained tabs and a Last Active column on top of
+ * that. Tabs and the search box replace scrolling through the lot.
+ */
+echo "\n== the Users list is paged, with tabs\n";
+[$status, $html] = get('/user-management/users-list');
+$rows = max(0, preg_match_all('/<tr[\s>]/', $html) - 1);
+ok('Users: one page of 50, not all 4,600', $status === 200 && $rows > 40 && $rows < 80, "{$rows} rows");
+ok('Users: has page links', (bool) preg_match('#href="[^"]*page=2#', $html));
+
+$tabs = ['show=online', 'show=drivers', 'show=fairprice', 'show=sellers', 'show=buyers', 'show=inactive'];
+$missingTabs = array_values(array_filter($tabs, fn ($t) => ! str_contains($html, $t)));
+ok('Users: every filter tab is offered', ! $missingTabs,
+    $missingTabs ? 'missing ' . implode(', ', $missingTabs) : count($tabs) . ' tabs');
+
+foreach (['drivers', 'fairprice', 'buyers'] as $tab) {
+    [$s, $h] = get('/user-management/users-list?show=' . $tab);
+    $broken = preg_match('/Fatal error|SQLSTATE|Undefined (variable|array key)/i', $h);
+    ok("Users: the {$tab} tab opens", $s === 200 && ! $broken, "HTTP {$s}");
 }
+
+ok('Users: shows when each person was last active',
+    str_contains($html, 'Last Active') && (str_contains($html, 'Not seen yet') || str_contains($html, 'ago') || str_contains($html, 'Online now')));
 
 echo "\n== row numbers carry on from page to page\n";
 foreach (['/masters/city' => 50, '/masters/state' => 50, '/masters/country' => 50] as $uri => $per) {

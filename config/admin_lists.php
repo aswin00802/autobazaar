@@ -28,11 +28,14 @@ return [
         'state'      => 50,     //  4,092 rows
         'country'    => 50,     //    246 rows — paged so it matches State and City
 
-        // These two are back on the same footing as every other admin list: one
-        // page, the usual table, and the export built into it. They are small
-        // enough to print in one go (Users 3.4 MB in 1.7s, Quotations 3.2 MB in
-        // 1.7s). Put 50 here and they page and gain a search box instead.
-        'users'      => 0,
+        // Users is paged: 4,600 rows in one page made the screen slow to open,
+        // and it now carries tabs and a Last Active column on top of that. The
+        // tabs and the search box cover finding somebody. Put 0 back here for
+        // one page with the table's own search and export.
+        'users'      => 50,
+
+        // Quotations still prints in one go — 1,020 rows, 1.7s — so it keeps
+        // the usual table and the export built into it.
         'quotations' => 0,
     ],
 

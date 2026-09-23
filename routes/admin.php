@@ -234,6 +234,8 @@ Route::group(['middleware' => ['auth', 'check.Userstatus', 'staff']], function (
         Route::group(['prefix' => 'orders'], function () {
             Route::get('/', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'index'])->name('ecommerce.orders');
             Route::get('/view/{id}', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'show'])->name('ecommerce.orders.view');
+            Route::get('/invoice/{id}', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'invoice'])->name('ecommerce.orders.invoice');
+            Route::get('/invoice-download/{id}', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'invoiceDownload'])->name('ecommerce.orders.invoice.download');
             Route::post('/status-update', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'statusUpdate'])->name('ecommerce.orders.status-update');
             Route::post('/payment-update', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'paymentUpdate'])->name('ecommerce.orders.payment-update');
             Route::post('/delete', [App\Http\Controllers\admin\ecommerce\OrdersController::class, 'delete'])->name('ecommerce.orders.delete');

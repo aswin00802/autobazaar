@@ -39,13 +39,26 @@ $user = User::create([
 ]);
 $token = $user->createToken('contract-test')->plainTextToken;
 
-/** The shape of a value: keys and types, never the values themselves. */
+/**
+ * The shape of a value: keys and types, never the values themselves.
+ *
+ * For a list, every item is folded together rather than the first one being
+ * taken as a sample. Sampling made this wobble: whichever row happened to come
+ * back first decided the answer, so a row added or removed elsewhere looked
+ * like the contract had changed when it had not.
+ */
 function shape($value, int $depth = 0) {
     if ($depth > 3) { return '…'; }
 
     if (is_array($value)) {
         if ($value === []) { return '[]'; }
-        if (array_is_list($value)) { return [shape($value[0], $depth + 1)]; }   // one sample is enough
+
+        if (array_is_list($value)) {
+            $merged = null;
+            foreach ($value as $item) { $merged = mergeShapes($merged, shape($item, $depth + 1)); }
+
+            return [$merged];
+        }
 
         $out = [];
         foreach ($value as $k => $v) { $out[$k] = shape($v, $depth + 1); }
@@ -61,6 +74,35 @@ function shape($value, int $depth = 0) {
         is_null($value) => 'null',
         default => 'string',
     };
+}
+
+/**
+ * Folds two shapes into one.
+ *
+ * A field that is null on one row and filled on another is the same field, so
+ * the filled type wins — otherwise a row with an empty column would read as a
+ * different contract from one without.
+ */
+function mergeShapes($a, $b) {
+    if ($a === null) { return $b; }
+    if ($b === null) { return $a; }
+    if ($a === $b) { return $a; }
+
+    if ($a === 'null') { return $b; }
+    if ($b === 'null') { return $a; }
+
+    if (is_array($a) && is_array($b)) {
+        foreach ($b as $k => $v) {
+            $a[$k] = array_key_exists($k, $a) ? mergeShapes($a[$k], $v) : $v;
+        }
+        if (! array_is_list($a)) { ksort($a); }
+
+        return $a;
+    }
+
+    // int where another row had a string, and so on: record both so a genuine
+    // type change is still visible.
+    return is_string($a) && is_string($b) ? implode('|', array_unique([$a, $b])) : $a;
 }
 
 function call($method, $uri, $token, $body = []) {
