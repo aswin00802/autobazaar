@@ -13,6 +13,8 @@
     $listingRoutes = [
         'auto-management.used-auto', 'auto-management.used-auto.create', 'auto-management.used-auto.edit', 'auto-management.used-auto.view-details',
         'auto-management.new-auto', 'auto-management.new-auto.create', 'auto-management.new-auto.edit', 'auto-management.new-auto.view-details',
+        'auto-management.private-cargo-auto', 'auto-management.private-cargo-auto.create', 'auto-management.private-cargo-auto.edit', 'auto-management.private-cargo-auto.view-details',
+        'auto-management.bajaj-refinance-auto', 'auto-management.bajaj-refinance-auto.create', 'auto-management.bajaj-refinance-auto.edit', 'auto-management.bajaj-refinance-auto.view-details',
         'vehicles.catalogue', 'vehicles.catalogue.create', 'vehicles.catalogue.edit',
         'user-management.users-post-auto-list',
         'sold-auto.list',
@@ -147,6 +149,23 @@
                 <li class="menu-item {{ areActiveRoutes(['auto-management.new-auto','auto-management.new-auto.create','auto-management.new-auto.edit','auto-management.new-auto.view-details']) }}">
                     <a href="{{ route('auto-management.new-auto') }}" class="menu-link">
                         <div data-i18n="New Autos">New Autos</div>
+                    </a>
+                </li>
+                @endcan
+                {{-- These two screens existed with full add/edit/sell but were
+                     never linked from here, so they could only be reached by
+                     typing the address. --}}
+                @can('private_cargo_auto')
+                <li class="menu-item {{ areActiveRoutes(['auto-management.private-cargo-auto','auto-management.private-cargo-auto.create','auto-management.private-cargo-auto.edit','auto-management.private-cargo-auto.view-details']) }}">
+                    <a href="{{ route('auto-management.private-cargo-auto') }}" class="menu-link">
+                        <div data-i18n="Private &amp; Cargo Autos">Private &amp; Cargo Autos</div>
+                    </a>
+                </li>
+                @endcan
+                @can('bajaj_refinance_auto')
+                <li class="menu-item {{ areActiveRoutes(['auto-management.bajaj-refinance-auto','auto-management.bajaj-refinance-auto.create','auto-management.bajaj-refinance-auto.edit','auto-management.bajaj-refinance-auto.view-details']) }}">
+                    <a href="{{ route('auto-management.bajaj-refinance-auto') }}" class="menu-link">
+                        <div data-i18n="Bajaj Refinance Autos">Bajaj Refinance Autos</div>
                     </a>
                 </li>
                 @endcan

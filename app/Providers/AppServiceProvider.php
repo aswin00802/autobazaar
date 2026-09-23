@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Repositories\AutoRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Laravel's page links are Tailwind markup by default, which came out
+        // unstyled inside the Bootstrap admin theme. Only the admin paginates —
+        // the customer website has no page links anywhere — so this is safe.
+        Paginator::useBootstrapFive();
+
         $this->configureRateLimiters();
         $this->configureTokenIdleExpiry();
         $this->applyMailSettings();
