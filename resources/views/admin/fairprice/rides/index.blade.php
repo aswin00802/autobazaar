@@ -114,7 +114,7 @@ FairPrice Ride Requests
                                     <span class="badge rounded-pill {{ $statusClass }}">{{ ucfirst($ride->status) }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('fairprice.rides.show', $ride->id) }}" class="btn btn-sm btn-primary" title="View">
+                                    <a href="{{ route('fairprice.rides.show', $ride->id) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="View">
                                         <i class="icon-base ri ri-eye-line icon-20px"></i>
                                     </a>
                                 </td>

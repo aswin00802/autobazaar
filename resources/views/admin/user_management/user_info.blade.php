@@ -98,7 +98,7 @@ User Info
                                                             $view_route = route('auto-management.bajaj-refinance-auto.view-details',Crypt::encryptString($auto->id));
                                                         @endphp
                                                     @endif
-                                                    <a href="{{$view_route}}" class="btn btn-xs btn-twitter waves-effect waves-light text-white"><i class="icon-base ri ri-eye-line icon-16px me-2"></i>{{ $auto->auto_unique_id }}</a>
+                                                    <a href="{{$view_route}}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="View"><i class="icon-base ri ri-eye-line icon-16px me-2"></i>{{ $auto->auto_unique_id }}</a>
                                                 @endif
                                             </td>
                                             <td>{{ $auto->created_at }}</td>

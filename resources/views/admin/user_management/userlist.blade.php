@@ -42,7 +42,7 @@ Users List
                             <td>{{ $admin->email ??'Not Available'}}</td>
                             <td>{{ $admin->phone_number ?? 'Not Available' }}</td>
                             <td>{{ $admin->created_at ?? 'Not Available' }}</td>
-                            <td><a href="{{ route('user-management.users-info' ,  Crypt::encryptString($admin->id)) }}" class="btn btn-primary text-white p-2">More Info</a></td>
+                            <td><a href="{{ route('user-management.users-info' ,  Crypt::encryptString($admin->id)) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="More info"><i class="icon-base ri ri-eye-line icon-20px"></i></a></td>
                         </tr>
                         
                         <tr>
@@ -54,7 +54,7 @@ Users List
                             <td>{{ $playstore_test->email ??'Not Available'}}</td>
                             <td>{{ $playstore_test->phone_number ?? 'Not Available' }}</td>
                             <td>{{ $playstore_test->created_at ?? 'Not Available' }}</td>
-                            <td><a href="{{ route('user-management.users-info' ,  Crypt::encryptString($playstore_test->id)) }}" class="btn btn-primary text-white p-2">More Info</a></td>
+                            <td><a href="{{ route('user-management.users-info' ,  Crypt::encryptString($playstore_test->id)) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="More info"><i class="icon-base ri ri-eye-line icon-20px"></i></a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -92,7 +92,7 @@ Users List
                                     {{ $user->autoAreas?->name ?? 'Not Available' }}
                                 </td>
                                 <td>{{ $user->created_at?->toDateString() }}</td>
-                                <td><a href="{{ route('user-management.users-info' , Crypt::encryptString($user->id)) }}" class="btn btn-primary text-white p-2">More Info</a></td>
+                                <td><a href="{{ route('user-management.users-info' , Crypt::encryptString($user->id)) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="More info"><i class="icon-base ri ri-eye-line icon-20px"></i></a></td>
                             </tr>
                         @empty
                             <tr>

@@ -70,8 +70,8 @@ E-commerce / Coupons
                                     </td>
                                     <td>
                                         <a href="{{ route('ecommerce.coupons.edit', $coupon->id) }}"
-                                           class="btn btn-sm btn-primary">
-                                            <i class="icon-base ri ri-edit-line icon-16px"></i>
+                                           class="btn btn-sm btn-text-secondary rounded-pill btn-icon item-edit" title="Edit">
+                                            <i class="icon-base ri ri-edit-box-line icon-20px"></i>
                                         </a>
 
                                         <form method="POST" action="{{ route('ecommerce.coupons.delete') }}"
@@ -79,8 +79,8 @@ E-commerce / Coupons
                                               onsubmit="return confirm('Remove this coupon?')">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $coupon->id }}">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="icon-base ri ri-delete-bin-line icon-16px"></i>
+                                            <button type="submit" class="btn btn-sm btn-text-danger text-danger rounded-pill btn-icon item-delete" title="Delete">
+                                                <i class="icon-base ri ri-delete-bin-2-line icon-20px"></i>
                                             </button>
                                         </form>
                                     </td>

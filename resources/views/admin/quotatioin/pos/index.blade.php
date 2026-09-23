@@ -50,7 +50,7 @@
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->mobile }}</td>
                                     <td>
-                                        <a href="{{route('auto-management.new-auto.view-details',Crypt::encryptString($item->auto_id))}}" target="_blank" class="btn btn-xs btn-twitter waves-effect waves-light text-white">
+                                        <a href="{{route('auto-management.new-auto.view-details',Crypt::encryptString($item->auto_id))}}" target="_blank" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="View">
                                             <i class="icon-base ri ri-eye-line icon-16px me-2"></i>
                                             {{ $item->auto->auto_unique_id ?? null }}
                                         </a>

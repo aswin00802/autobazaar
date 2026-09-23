@@ -107,7 +107,7 @@ Vehicle Leads
                                     </select>
                                 </td>
                                 <td>
-                                    <a href="{{ route('vehicles.leads.view', $lead->id) }}" class="btn btn-sm btn-primary"><i class="icon-base ri ri-eye-line icon-16px"></i></a>
+                                    <a href="{{ route('vehicles.leads.view', $lead->id) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="View"><i class="icon-base ri ri-eye-line icon-20px"></i></a>
                                 </td>
                             </tr>
                         @endforeach

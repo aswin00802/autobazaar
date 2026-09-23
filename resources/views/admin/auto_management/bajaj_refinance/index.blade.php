@@ -62,7 +62,7 @@ Auto Management / Bajaj ReFinance Auto
                                     <td>{{ $auto->autoModel->model_name??'' }}</td>
                                     <td>
                                         @can('view_details_bajaj_refinance_auto')
-                                        <a href="{{ route('auto-management.bajaj-refinance-auto.view-details',Crypt::encryptString($auto->id)) }}" class="btn btn-xs btn-twitter waves-effect waves-light text-white"><i class="icon-base ri ri-eye-line icon-16px me-2"></i>More</a>
+                                        <a href="{{ route('auto-management.bajaj-refinance-auto.view-details',Crypt::encryptString($auto->id)) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="View"><i class="icon-base ri ri-eye-line icon-16px me-2"></i>More</a>
                                         @endcan
                                     </td>
                                     <td>

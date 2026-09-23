@@ -77,9 +77,7 @@
                                     <td>{{ $item->margin_amount ?? '' }}</td>
                                     <td>{{ $item->date ?? '' }}</td>
                                     <td>
-                                        <a href="{{ route('auto-meter.invoice.download',$item->id) }}" class="btn btn-sm btn-primary">
-                                            Download
-                                        </a>
+                                        <a href="{{ route('auto-meter.invoice.download',$item->id) }}" class="btn btn-sm btn-text-primary rounded-pill btn-icon" title="Download invoice"><i class="icon-base ri ri-download-2-line icon-20px"></i></a>
                                     </td>
                                 </tr>
                             @endforeach
